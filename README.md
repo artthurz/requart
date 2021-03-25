@@ -1,6 +1,6 @@
 # requart
 
-Inicializar o backend
+### Inicializar o backend
 
 Acessar a pasta PDM\backend
 
@@ -25,7 +25,7 @@ yarn dev
 
 ----
 
-Inicializar o aplicativo mobile
+### Inicializar o aplicativo mobile
 
 Acessar a pasta PDM\mobile
 
