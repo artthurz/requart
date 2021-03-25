@@ -35,5 +35,6 @@ Acessar a pasta PDM\mobile
 
 3- Executar o projecto usando o comando "expo start".
 
-4- Após isso o servidor de desenvolvimento estará rodando e poderá ser acessado através do QR Code, usando o aplicativo do Expo disponivel na Play Store ou caso tiver iPhone, pode acessar diretamente pela câmera dele.
+4- Após isso o servidor de desenvolvimento estará rodando e poderá ser acessado usando o aplicativo do Expo disponivel na Play Store e AppStore.
 
+5- Realizar o download do aplicativo, no Android abri-lo e ler o QR Code, no iPhone abrir a camera do aparelho e ler o QR Code.
