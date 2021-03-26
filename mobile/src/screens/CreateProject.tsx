@@ -1,40 +1,33 @@
-import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
-import api from '../services/api'
-import {
-  Button,
-  TextInput,
-  Colors,
-  Snackbar
-} from "react-native-paper";
+import React, { useState } from "react";
+import { StyleSheet } from "react-native";
+import api from "../services/api";
+import { Button, TextInput, Colors, Snackbar } from "react-native-paper";
 
-import { Text, View } from '../components/Themed';
+import { Text, View } from "../components/Themed";
 
-export default function ListItems() {
+export default function CreateProject() {
   const [name, setName] = useState("");
   const [quantity, setQuantity] = useState("");
   const [visible, setVisible] = useState(false);
   const [errorVisible, setErrorVisible] = useState(false);
 
   const onToggleSnackBar = () => {
-    setVisible(!visible)
-    setErrorVisible(false)
+    setVisible(!visible);
+    setErrorVisible(false);
   };
 
   const onDismissSnackBar = () => setVisible(false);
 
   const onToggleErrorSnackBar = () => {
-    setErrorVisible(!visible)
-    setVisible(false)
+    setErrorVisible(!visible);
+    setVisible(false);
   };
 
   const onDismissErrorSnackBar = () => setErrorVisible(false);
 
-
-
   async function saveItems() {
     try {
-      await api.post('/items', {name, quantity});
+      await api.post("/items", { name, quantity });
       onToggleSnackBar();
     } catch (error) {
       onToggleErrorSnackBar();
@@ -48,11 +41,15 @@ export default function ListItems() {
     setQuantity("");
   }
 
-  
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Itens</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <View style={styles.card}>
+        <Text style={styles.title}>Projeto</Text>
+        <View
+          style={styles.separator}
+          lightColor="#eee"
+          darkColor="rgba(255,255,255,0.1)"
+        />
         <TextInput
           style={styles.textInput}
           selectionColor={Colors.blue500}
@@ -73,26 +70,25 @@ export default function ListItems() {
           onChangeText={(q) => setQuantity(q)}
         />
         <Button
-          style={{marginTop: 30}}
+          style={{ marginTop: 30 }}
           icon="content-save"
+          mode="contained"
+          color="#4169e1"
           onPress={() => handleSubmit()}
         >
           Adicionar
         </Button>
-        <Snackbar
-          visible={visible}
-          onDismiss={onDismissSnackBar}
-          duration={3000}
-        >
-          Item adicionado com sucesso!
-       </Snackbar>
-       <Snackbar
-          visible={errorVisible}
-          onDismiss={onDismissErrorSnackBar}
-          duration={3000}
-        >
-          Erro ao adicionar item.
-       </Snackbar>
+      </View>
+      <Snackbar visible={visible} onDismiss={onDismissSnackBar} duration={3000}>
+        Item adicionado com sucesso!
+      </Snackbar>
+      <Snackbar
+        visible={errorVisible}
+        onDismiss={onDismissErrorSnackBar}
+        duration={3000}
+      >
+        Erro ao adicionar item.
+      </Snackbar>
     </View>
   );
 }
@@ -100,20 +96,31 @@ export default function ListItems() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#4169e1",
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
-  },
+    fontWeight: "bold",  },
   separator: {
     marginVertical: 30,
     height: 1,
-    width: '80%',
+    width: "80%",
   },
   textInput: {
-    width: "80%",
-    marginBottom: 10
+    width: "100%",
+    marginBottom: 10,
+  },
+  card: {
+    backgroundColor: "white",
+    borderRadius: 20,
+    marginBottom: 20,
+    paddingHorizontal: 30,
+    paddingVertical: 30,
+    width: "90%",
+    height: "70%",
+    alignItems: "center",
+    justifyContent: "center"
   },
 });

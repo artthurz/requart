@@ -1,10 +1,18 @@
 import * as Yup from 'yup';
 import Project from '../models/Project';
+import User from '../models/User';
 import _ from 'lodash';
 
 class ProjectService {
   async index(req, res) {
-    const projects = await Project.findAll({ where: { deleted_at: null } });
+    const projects = await Project.findAll({ where: { deleted_at: null },
+      include: [
+      {
+        model: User,
+        as: 'owner',
+        attributes: ['id', 'name'],
+      }]
+    });
 
     if (_.isEmpty(projects)) {
       return res.status(400).json({ error: 'Project not found.' });
@@ -47,6 +55,10 @@ class ProjectService {
 
     const project = await Project.findByPk(req.params.id);
 
+    if (_.isEmpty(project)) {
+      return res.status(400).json({ error: 'Project not found.' });
+    }
+
     await project.update(req.body);
 
     return res.json(project);
@@ -56,8 +68,8 @@ class ProjectService {
   async delete(req, res) {
     const project = await Project.findByPk(req.params.id);
 
-    if (!project) {
-      return res.status(400).json({ error: 'Project dont exists.' });
+    if (_.isEmpty(project)) {
+      return res.status(400).json({ error: 'Project not found.' });
     }
 
     project.deleted_at = new Date;

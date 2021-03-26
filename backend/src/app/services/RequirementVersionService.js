@@ -7,7 +7,6 @@ import Priority from '../models/Priority';
 
 class RequirementVersionService {
   async index(req, res) {
-    const { page = 1 } = req.query;
 
     const requirements = await Requirement.findAll({
       where: { project_id: req.params.projectId, requirement_id: req.params.requirementId, non_functional: req.params.nonFunctional, deleted_at: null },
@@ -23,8 +22,6 @@ class RequirementVersionService {
         'created_at',
         'updated_at',
       ],
-      limit: 10,
-      offset: (page - 1) * 10,
       include: [
         {
           model: Complexity,

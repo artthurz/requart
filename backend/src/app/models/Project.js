@@ -8,6 +8,7 @@ class Project extends Model {
         description: Sequelize.STRING,
         delivery_date: Sequelize.DATE,
         owner_id: Sequelize.INTEGER,
+        status: Sequelize.BOOLEAN,
         deleted_at: Sequelize.DATE,
       },
       {

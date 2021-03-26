@@ -5,8 +5,8 @@ import File from '../models/File';
 class UserService {
   async index(req, res) {
     const users = await User.findAll({
-      where: { status: true },
-      users: ['id', 'name', 'login', 'admin', 'status'],
+      where: { deleted_at: null },
+      users: ['id', 'name', 'login', 'admin'],
     });
 
     return res.json(users);
