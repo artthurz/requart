@@ -6,7 +6,7 @@ Acessar a pasta PDM\backend
 
 1- Baixar os pacotes rodando o comando yarn ou npm na pasta PDM\backend.
 
-2- Criar um banco de dados postgres com o nome aplicacaodb.
+2- Criar um banco de dados postgres com o nome requart.
 
 3- Realizar a crição da tabela items no banco através do comando:
 
@@ -16,7 +16,15 @@ npx sequelize-cli db:migrate
 Usando Yarn:
 yarn sequelize db:migrate
 
-4- Executar o backend através do comando:
+3- Realizar inserts padrões no no banco através do comando:
+
+Usando NPM:
+npx sequelize-cli db:seed:all
+
+Usando Yarn:
+yarn sequelize db:seed:all
+
+5- Executar o backend através do comando:
 Usando NPM:
 npm run dev
 

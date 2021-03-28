@@ -41,7 +41,7 @@ class App {
 
   routes() {
     this.server.use(sessionRoutes);
-    // this.server.use(authMiddleware);
+    this.server.use(authMiddleware);
     this.server.use(complexityRoutes);
     this.server.use(priorityRoutes);
     this.server.use(situationRoutes);
