@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { darken } from 'polished';
+import styled from "styled-components";
+import { darken } from "polished";
 
 export const Wrapper = styled.div`
   min-height: 100vh;
@@ -16,20 +16,12 @@ export const Content = styled.div`
   text-align: center;
   background-color: rgba(32, 32, 32, 0.8);
   border-radius: 10px;
-  padding-top: 40px;
-  padding-bottom: 40px;
-  padding-right: 20px;
-  padding-left: 20px;
-  
+  padding-top: 60px;
+  padding-bottom: 60px;
+  padding-right: 60px;
+  padding-left: 60px;
 
   form {
-    /* display: flex;
-    flex-direction: column;
-    margin-top: 30px; */
-
-    input {
-      
-    }
 
     button {
       margin: 20px 0 0;
@@ -43,7 +35,7 @@ export const Content = styled.div`
       transition: background 0.2s;
 
       &:hover {
-        background: ${darken(0.05, '#3b9eff')};
+        background: ${darken(0.05, "#3b9eff")};
       }
     }
 
@@ -58,4 +50,26 @@ export const Content = styled.div`
       }
     } */
   }
+`;
+
+export const Image = styled.img`
+  height: 40px;
+  position: absolute;
+  top: 17.5px;
+  left: 30px;
+`;
+
+export const Footer = styled.div`
+  position: absolute;
+  left: 30px;
+  bottom: 30px;
+  width: 100%;
+  color: #fff;
+  max-width: 200px;
+  text-align: center;
+  background-color: rgba(32, 32, 32, 0.8);
+  border-radius: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 10px;
 `;

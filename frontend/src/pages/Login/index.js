@@ -1,7 +1,7 @@
 import React from "react";
 import './styles.css'
 import logo from "../../assets/images/logo.svg";
-import { Span } from "./styles";
+import { Span, Image } from "./styles";
 import { useAuth } from "../../contexts/auth";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -39,18 +39,10 @@ const Login = () => {
     },
   });
 
-  const styles = {
-    root: {
-      background: "black",
-    },
-    input: {
-      color: "white",
-    },
-  };
 
   return (
     <div className="Auth">
-      <img src={logo} alt="Requart" />
+      <Image src={logo} alt="Requart" />
       <form onSubmit={formik.handleSubmit}>
         <TextField
           fullWidth
@@ -65,10 +57,9 @@ const Login = () => {
         />
         <TextField
           fullWidth
-          InputProps={{ className: styles.input }}
           id="password"
           name="password"
-          label="Password"
+          label="Senha"
           type="password"
           style={{ marginBottom: "20px" }}
           value={formik.values.password}

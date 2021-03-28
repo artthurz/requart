@@ -2,32 +2,50 @@ import React from "react";
 // import { Link } from 'react-router-dom';
 
 import { useAuth } from "../../contexts/auth";
-
 import logo from "../../assets/images/logo.svg";
 import profileCircle from "../../assets/images/profileCircle.svg";
 import {
   Container,
   Content,
-  Profile,
+  ProfileButton,
   ProfileImage,
   ProfileImageBorder,
-  Divisor
+  HeaderDivider,
 } from "./styles";
-import { makeStyles } from '@material-ui/core/styles';
-import { IconButton } from "@material-ui/core"
+import makeStyles from "@material-ui/core/styles/makeStyles";
+import IconButton from "@material-ui/core/IconButton";
 import { MdAdd } from "react-icons/md";
 
 const useIconButtonStyle = makeStyles((theme) => ({
   root: {
-    color: "#5196FF", 
-    backgroundColor: "rgba(81,150,255,0.2)"
+    color: "#5196FF",
+    backgroundColor: "rgba(81,150,255,0.2)",
   },
 }));
 
 export default function Header() {
   const iconButton = useIconButtonStyle();
+  const [profileMenuAnchor, setProfileMenuAnchor] = React.useState(null);
+  const [addMenuAnchor, setAddMenuAnchor] = React.useState(null);
+
   const { user } = useAuth();
   console.log(user);
+
+  const handleOpenAddMenu = (event) => {
+    setAddMenuAnchor(event.currentTarget);
+  };
+
+  const handleCloseAddMenu = () => {
+    setAddMenuAnchor(null);
+  };
+
+  const handleOpenProfileMenu = (event) => {
+    setAddMenuAnchor(event.currentTarget);
+  };
+
+  const handleCloseProfileMenu = () => {
+    setAddMenuAnchor(null);
+  };
 
   return (
     <Container>
@@ -38,14 +56,20 @@ export default function Header() {
         </nav>
         {/* </Link> */}
 
-        <aside>
-          <IconButton className={iconButton.root} color="primary">
+        <aside className="Header">
+          <IconButton
+            onClick={handleOpenAddMenu}
+            className={iconButton.root}
+            color="primary"
+          >
             <MdAdd />
           </IconButton>
 
-          <Divisor/>
+          <HeaderDivider />
 
-          <Profile>
+          <ProfileButton
+            onClick={handleOpenProfileMenu}
+          >
             <aside>
               <strong>{user.name}</strong>
               {/* <Link to="/profile">Meu perfil</Link> */}
@@ -57,7 +81,7 @@ export default function Header() {
                 <img src={user.avatar.url} alt="Profile" />
               </ProfileImage>
             </aside>
-          </Profile>
+          </ProfileButton>
         </aside>
       </Content>
     </Container>

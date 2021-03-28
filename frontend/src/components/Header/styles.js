@@ -7,7 +7,7 @@ export const Container = styled.div`
 `;
 
 export const Content = styled.div`
-  height: 93px;
+  height: 75px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -18,9 +18,7 @@ export const Content = styled.div`
     align-items: center;
 
     img {
-      margin-right: 20px;
-      padding-right: 20px;
-      height: 34px;
+      height: 40px;
     }
   }
 
@@ -30,11 +28,12 @@ export const Content = styled.div`
   }
 `;
 
-export const Profile = styled.div`
+export const ProfileButton = styled.button`
+  border: 0;
   display: flex;
   text-align: right;
   margin-right: 10px;
-  height: 75px;
+  height: 60px;
   padding-right: 10px;
   padding-left: 20px;
   border-radius: 100px;
@@ -52,24 +51,21 @@ export const Profile = styled.div`
     margin-top: 2px;
     font-size: 12px;
     color: #999;
+  }
 
-    &:hover {
-      color: ${darken(0.1, "#999")};
-    }
-
-    &:active {
-      color: #4169e1;
-    }
+  &:hover {
+    background: ${darken(0.25, "rgba(255, 255, 255, 0.2)")};
   }
 `;
 
 export const ProfileImage = styled.div`
-  margin-right: 5px;
+  margin-right: 8px;
+  margin-top: 3px;
   img {
-    height: 56px;
-    width: 56px;
-    min-height: 56px;
-    min-width: 56px;
+    height: 46px;
+    width: 46px;
+    min-height: 46px;
+    min-width: 46px;
     border-radius: 50%;
     margin-left: 20px;
     z-index: 10;
@@ -77,19 +73,20 @@ export const ProfileImage = styled.div`
 `;
 
 export const ProfileImageBorder = styled.div`
+  margin-top: 3px;
   position: absolute;
-  right: 3.12rem;
+  right: 3.32rem;
   img {
-    height: 66px;
-    width: 66px;
-    height: 66px;
-    width: 66px;
+    height: 56px;
+    width: 56px;
+    height: 56px;
+    width: 56px;
     border-radius: 50%;
     z-index: 9;
   }
 `;
 
-export const Divisor = styled.div`
+export const HeaderDivider = styled.div`
   height: 75px;
   width: 2px;
   margin-right: 20px;

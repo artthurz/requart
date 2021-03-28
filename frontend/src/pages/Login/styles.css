@@ -1,4 +1,22 @@
-.Auth .MuiInputBase-input {
-    color: #fff !important;
+.Auth .MuiInputBase-input:before {
+  color: #fff;
+}
+.Auth .MuiInput-underline:before {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.42);
+}
 
+.Auth .MuiInputLabel-root {
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.Auth .MuiInputLabel-root.Mui-focused {
+  color: #4a90e2;
+}
+
+.Auth .MuiInputBase-root.MuiInput-root {
+  color: #fff;
+}
+
+.Auth .MuiInputBase-root.MuiInput-root:hover {
+    color: #fff;
 }
