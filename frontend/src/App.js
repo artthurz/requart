@@ -10,9 +10,9 @@ function App() {
     <div className="App">
       <AuthProvider>
         <Routes />
-        <GlobalStyles />
-        <ToastContainer autoClose={3000} position="bottom-right" />
       </AuthProvider>
+      <GlobalStyles />
+      <ToastContainer autoClose={3000} position="bottom-right" />
     </div>
   );
 }

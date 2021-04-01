@@ -6,6 +6,25 @@ export const Container = styled.div`
   padding: 0 30px;
 `;
 
+export const TopMenuLink = styled.div`
+  padding: 2px;
+
+  h1 {
+    color: white;
+    font-size: 18px;
+    border-bottom: 2px solid #5196ff;
+    font-weight: 100 !important;
+  }
+`;
+
+export const LinksContainer = styled.aside`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 300px;
+`;
+
 export const Content = styled.div`
   height: 72px;
   margin: 0 auto;
@@ -89,19 +108,34 @@ export const HeaderDivider = styled.div`
 
 export const Menu = styled.div`
   position: absolute;
-  margin-right: 165px;
-  top: calc(72px);
-  padding: 30px 0 ;
-  width: 350px;
-  background: #212122;
-  border-radius: 5px;
+  right: ${(props) => props.right};
+  top: 72px;
+  padding: 30px 0;
+  width: ${(props) => props.width};
+  background: rgba(33, 33, 34, 0.9);
+  border-radius: 15px;
   box-shadow: rgb(0 0 0 / 60%) 0px 5px 20px;
   transition: opacity 0.2s ease 0s, visibility 0.2s ease 0s;
   opacity: ${(props) => (props.visible ? 1 : 0)};
   visibility: ${(props) => (props.visible ? "visible" : "hidden")};
+  z-index: 1;
+
+  strong {
+    font-size: 18px;
+    width: 300px;
+  }
+
+  h2 {
+    color: #fff;
+    font-size: 24px;
+    padding: 0 24px;
+    display: flex;
+    justify-self: flex-start;
+    margin-bottom: 20px;
+  }
 
   h1 {
-    font-size: 10px;
+    font-size: 12px;
     color: #e2e2e2;
     padding: 0 24px;
     display: flex;
@@ -127,6 +161,7 @@ export const Menu = styled.div`
     span {
       margin-left: 24px;
       font-weight: bold;
+      color: #e4e4e8;
     }
 
     svg {
@@ -151,6 +186,12 @@ export const Menu = styled.div`
     border-width: 0px 8px 8px;
     border-color: transparent transparent rgb(32, 32, 36);
   }
+`;
+
+export const DisableMenu = styled.div`
+  background-color: transparent !important;
+  position: fixed;
+  inset: 0px;
 `;
 
 export const ProfileCard = styled.div`
@@ -181,7 +222,7 @@ export const ProfileCard = styled.div`
     justify-self: flex-start;
     padding: 0 24px;
   }
-  
+
   h1 {
     font-size: 10px;
     color: #e2e2e2;
