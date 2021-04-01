@@ -23,12 +23,13 @@ class SessionService {
       return res.status(401).json({ error: 'Password does not match' });
     }
 
-    const { id, name, avatar, admin } = user;
+    const { id, name, email, avatar, admin } = user;
 
     return res.json({
       user: {
         id,
         name,
+        email,
         login,
         admin,
         avatar,

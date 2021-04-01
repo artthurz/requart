@@ -15,6 +15,7 @@ class UserService {
   async store(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
+      email: Yup.email().required(),
       login: Yup.string().required(),
       password: Yup.string().required().min(6),
     });
@@ -29,7 +30,7 @@ class UserService {
       return res.status(400).json({ error: 'User already exists.' });
     }
 
-    const { id, name, login, admin, avatar_id } = await User.create({
+    const { id, name, email, login, admin, avatar_id } = await User.create({
       ...req.body,
       avatar_id: 1,
     });
@@ -37,6 +38,7 @@ class UserService {
     return res.json({
       id,
       name,
+      email,
       login,
       admin,
       avatar_id,
@@ -46,6 +48,7 @@ class UserService {
   async update(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string(),
+      email: Yup.email(),
       login: Yup.string(),
       oldPassword: Yup.string().min(6),
       password: Yup.string()
@@ -82,7 +85,7 @@ class UserService {
 
     await user.update(req.body);
 
-    const { id, name, avatar } = await User.findByPk(req.userID, {
+    const { id, name, email, avatar } = await User.findByPk(req.userID, {
       include: [
         {
           model: File,
@@ -95,6 +98,7 @@ class UserService {
     return res.json({
       id,
       name,
+      email,
       login,
       avatar,
     });
