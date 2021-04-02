@@ -1,6 +1,6 @@
-# requart
+#### requart
 
---User padrão inserido com as seeds
+#- User padrão inserido com as seeds
 Login: admin
 Senha: 123456
 
@@ -51,7 +51,9 @@ Acessar a pasta PDM\mobile
 
 5- Realizar o download do aplicativo, no Android abri-lo e ler o QR Code, no iPhone abrir a camera do aparelho e ler o QR Code.
 
-### Iniciarlizar o Frontend
+----
+
+### Inicializar o Frontend
 
 Acessar a pasta PDM\frontend
 
