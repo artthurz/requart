@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/auth";
 import logo from "../../assets/images/logo.svg";
@@ -27,12 +27,34 @@ import {
   MdFlag,
 } from "react-icons/md";
 import { BiStats } from "react-icons/bi";
+import NewProjectModal from "../../components/NewProjectModal";
+
+import AppBar from "@material-ui/core/AppBar";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import { backgrounds } from "polished";
+
+function a11yProps(index) {
+  return {
+    id: `nav-tab-${index}`,
+    "aria-controls": `nav-tabpanel-${index}`,
+  };
+}
+
+function LinkTab(props) {
+  return (
+    <Tab
+      component={Link}
+      {...props}
+    />
+  );
+}
 
 const useIconButtonStyle = makeStyles((theme) => ({
   root: {
     color: "#5196FF",
     backgroundColor: "rgba(81,150,255,0.2)",
-    transition: "transform 250ms linear, filter 250ms linear"
+    transition: "transform 250ms linear, filter 250ms linear",
   },
 }));
 const useRotatedIconButtonStyle = makeStyles((theme) => ({
@@ -40,7 +62,7 @@ const useRotatedIconButtonStyle = makeStyles((theme) => ({
     color: "#5196FF",
     backgroundColor: "rgba(81,150,255,0.2)",
     transform: "rotate(45deg)",
-    transition: "transform 250ms linear, filter 250ms linear"
+    transition: "transform 250ms linear, filter 250ms linear",
   },
 }));
 
@@ -51,6 +73,8 @@ const useDividerStyle = makeStyles((theme) => ({
 }));
 
 export default function Header() {
+  const [value, setValue] = useState(0);
+  const [isNewProjectModalOpen, setIsNewProjectModalOpen] = useState(false);
   const iconButton = useIconButtonStyle();
   const iconButtonRotated = useRotatedIconButtonStyle();
   const divider = useDividerStyle();
@@ -79,21 +103,41 @@ export default function Header() {
     setProfileMenuShow(false);
   };
 
+  const handleOpenNewProjectModalOpen = () => {
+    setIsNewProjectModalOpen(true);
+    setAddMenuShow(false);
+  };
+
+  const handleCloseNewProjectModalClose = () => {
+    setIsNewProjectModalOpen(false);
+  };
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   return (
     <Container>
       <Content>
-        <LinksContainer>
-          <Link to="/">
-            <nav>
-              <img src={logo} alt="Requart" />
-            </nav>
-          </Link>
-          <Link to="/projects">
-            <TopMenuLink>
-              <h1>Projetos</h1>
-            </TopMenuLink>
-          </Link>
-        </LinksContainer>
+          <LinksContainer>
+            <Link to="/" >
+              <nav onClick={() => handleChange(0)}>
+                <img src={logo} alt="Requart" />
+              </nav>
+            </Link>
+
+            <AppBar position="static">
+              <Tabs
+                variant="fullWidth"
+                value={value}
+                onChange={handleChange}
+                aria-label="nav tabs example"
+              >
+                <LinkTab label="Home" to="/" {...a11yProps(0)} />
+                <LinkTab label="Projetos" to="/projects" {...a11yProps(1)} />
+              </Tabs>
+            </AppBar>
+          </LinksContainer>
         <aside>
           <IconButton
             onClick={handleOpenAddMenu}
@@ -106,7 +150,7 @@ export default function Header() {
           <Menu visible={addMenuShow} right="280px" width="360px">
             <h2>Criar</h2>
             <a>
-              <div>
+              <div onClick={() => handleOpenNewProjectModalOpen()}>
                 <span>Projeto</span>
                 <h1>Crie um novo projeto dentro da plataforma.</h1>
               </div>
@@ -157,43 +201,45 @@ export default function Header() {
                 <img src={user.avatar.url} alt="Profile" />
               </ProfileImage>
             </aside>
-            {profileMenuShow && (
-              <DisableMenu onClick={handleCloseProfileMenu} />
-            )}
-            <Menu visible={profileMenuShow} right="40px" width="380px">
-              <ProfileCard>
-                <aside>
-                  <img src={user.avatar.url} alt="Profile" />
-                  <div>
-                    <strong>{user.name}</strong>
-                    <h1>{user.email}</h1>
-                    <AdminBadge>
-                      <h1>{user.admin ? "Admin" : "User"}</h1>
-                    </AdminBadge>
-                  </div>
-                </aside>
-              </ProfileCard>
-              <Link to="/profile">
-                <span>Meu perfil</span>
-                <div>
-                  <MdAssignmentInd />
-                </div>
-              </Link>
-              <Divider variant="middle" className={divider.root} />
-              <a onClick={handleLogout}>
-                <span>Sair</span>
-                <div>
-                  <MdExitToApp />
-                </div>
-              </a>
-              <h1 style={{ marginTop: 10 }}>
-                Privacidade · Termos · Publicidade · Cookies{" "}
-              </h1>
-              <h1>Requart © 2021</h1>
-            </Menu>
           </ProfileButton>
+          <Menu visible={profileMenuShow} right="40px" width="380px">
+            <ProfileCard>
+              <aside>
+                <img src={user.avatar.url} alt="Profile" />
+                <div>
+                  <strong>{user.name}</strong>
+                  <h1>{user.email}</h1>
+                  <AdminBadge>
+                    <h1>{user.admin ? "Admin" : "User"}</h1>
+                  </AdminBadge>
+                </div>
+              </aside>
+            </ProfileCard>
+            <Link to="/profile" onClick={() => (handleCloseProfileMenu(), handleChange(0))}>
+              <span >Meu perfil</span>
+              <div>
+                <MdAssignmentInd />
+              </div>
+            </Link>
+            <Divider variant="middle" className={divider.root} />
+            <a onClick={handleLogout}>
+              <span>Sair</span>
+              <div>
+                <MdExitToApp />
+              </div>
+            </a>
+            <h1 style={{ marginTop: 10 }}>
+              Privacidade · Termos · Publicidade · Cookies{" "}
+            </h1>
+            <h1>Requart © 2021</h1>
+          </Menu>
+          {profileMenuShow && <DisableMenu onClick={handleCloseProfileMenu} />}
         </aside>
       </Content>
+      <NewProjectModal
+        isOpen={isNewProjectModalOpen}
+        onRequestClose={handleCloseNewProjectModalClose}
+      />
     </Container>
   );
 }

@@ -4,6 +4,7 @@ import { darken } from "polished";
 export const Container = styled.div`
   background: rgb(61, 60, 66);
   padding: 0 30px;
+
 `;
 
 export const TopMenuLink = styled.div`
@@ -22,7 +23,26 @@ export const LinksContainer = styled.aside`
   justify-content: space-between;
   align-items: center;
 
-  width: 300px;
+  width: 500px;
+  
+  a {
+    margin-right: 30px;
+  }
+
+  .MuiAppBar-colorPrimary {
+      background-color: transparent;
+      box-shadow: none;
+
+      a{
+        margin-right: 0;
+      }
+
+      .PrivateTabIndicator-colorSecondary-6 {
+          background-color: #5196ff;
+      }
+    }
+
+  
 `;
 
 export const Content = styled.div`
@@ -118,7 +138,7 @@ export const Menu = styled.div`
   transition: opacity 0.2s ease 0s, visibility 0.2s ease 0s;
   opacity: ${(props) => (props.visible ? 1 : 0)};
   visibility: ${(props) => (props.visible ? "visible" : "hidden")};
-  z-index: 1;
+  z-index: 3;
 
   strong {
     font-size: 18px;
@@ -192,6 +212,7 @@ export const DisableMenu = styled.div`
   background-color: transparent !important;
   position: fixed;
   inset: 0px;
+  z-index: 2;
 `;
 
 export const ProfileCard = styled.div`

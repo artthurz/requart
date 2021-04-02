@@ -1,0 +1,64 @@
+.BngIconButton {
+  text-align: center;
+  background-color: transparent;
+  border: none;
+  border-radius: 100%;
+  padding: 8px;
+  transition: background-color 250ms linear, color 250ms linear,
+    filter 250ms linear;
+  outline: 0;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.BngIconButton:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+.BngIconButton .Icon {
+  vertical-align: middle;
+  font-size: 24px;
+}
+
+.BngIconButton:not(:disabled):hover {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.BngIconButton:not(:disabled):active {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.BngIconButton.xs {
+  padding: 3px !important;
+}
+
+.BngIconButton.xs .Icon {
+  font-size: 12px;
+}
+
+.BngIconButton.info {
+  background-color: #005dff !important;
+  color: white !important;
+}
+
+.BngIconButton.success {
+  background-color: #269c59 !important;
+  color: white !important;
+}
+
+.BngIconButton.warning {
+  background-color: #eea42c !important;
+  color: white !important;
+}
+
+.BngIconButton.info:not(:disabled):hover,
+.BngIconButton.success:not(:disabled):hover,
+.BngIconButton.warning:not(:disabled):hover {
+  filter: brightness(115%);
+}
+
+.BngIconButton.info:not(:disabled):active,
+.BngIconButton.success:not(:disabled):active,
+.BngIconButton.warning:not(:disabled):active {
+  filter: brightness(125%);
+}

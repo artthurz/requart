@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 // import _ from "lodash";
 import "react-toastify/dist/ReactToastify.min.css";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 import api from "../services/api";
 

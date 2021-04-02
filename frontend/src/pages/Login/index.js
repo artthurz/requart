@@ -1,14 +1,11 @@
 import React from "react";
-import './styles.css'
 import logo from "../../assets/images/logo.svg";
-import { Span, Image } from "./styles";
+import { Span, Image, Container } from "./styles";
 import { useAuth } from "../../contexts/auth";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-
-// import { Container } from './styles';
 
 const validationSchema = yup.object({
   login: yup.string("Digite seu login").required("O login é obrigatório"),
@@ -41,7 +38,7 @@ const Login = () => {
 
 
   return (
-    <div className="Auth">
+    <Container>
       <Image src={logo} alt="Requart" />
       <form onSubmit={formik.handleSubmit}>
         <TextField
@@ -75,7 +72,7 @@ const Login = () => {
           Entrar
         </Button>
       </form>
-    </div>
+    </Container>
   );
 };
 

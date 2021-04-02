@@ -25,7 +25,7 @@ export const Content = styled.div`
 
     button {
       margin: 20px 0 0;
-      height: 44px;
+      height: 4rem;
       background: #3b9eff;
       font-weight: bold;
       color: #fff;
