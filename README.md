@@ -1,4 +1,8 @@
-# requart
+#### requart
+
+#- User padrão inserido com as seeds
+Login: admin
+Senha: 123456
 
 ### Inicializar o backend
 
@@ -46,3 +50,13 @@ Acessar a pasta PDM\mobile
 4- Após isso o servidor de desenvolvimento estará rodando e poderá ser acessado usando o aplicativo do Expo disponivel na Play Store e AppStore.
 
 5- Realizar o download do aplicativo, no Android abri-lo e ler o QR Code, no iPhone abrir a camera do aparelho e ler o QR Code.
+
+----
+
+### Inicializar o Frontend
+
+Acessar a pasta PDM\frontend
+
+1- Baixar os pacotes rodando o comando yarn ou npm na pasta PDM\app. 
+
+2- Executar o projecto usando o comando "yarn start" ou "npm run start".
