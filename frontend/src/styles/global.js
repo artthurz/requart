@@ -33,6 +33,7 @@ export default createGlobalStyle`
 
   html, body, #root {
     height: 100%;
+    font-size: 1rem
   }
 
   body {
@@ -40,7 +41,7 @@ export default createGlobalStyle`
   }
 
   body, input, button {
-    font: 14px 'Roboto', sans-serif;
+    font: 0.9rem 'Roboto', sans-serif;
   }
 
   a {

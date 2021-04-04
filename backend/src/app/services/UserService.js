@@ -7,6 +7,9 @@ class UserService {
     const users = await User.findAll({
       where: { deleted_at: null },
       users: ['id', 'name', 'login', 'admin'],
+      include: [
+        { model: File, as: 'avatar', attributes: ['id', 'path', 'url'] },
+      ],
     });
 
     return res.json(users);
@@ -15,7 +18,7 @@ class UserService {
   async store(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
-      email: Yup.email().required(),
+      email: Yup.string().email().required(),
       login: Yup.string().required(),
       password: Yup.string().required().min(6),
     });
@@ -48,15 +51,12 @@ class UserService {
   async update(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string(),
-      email: Yup.email(),
+      email: Yup.string().email(),
       login: Yup.string(),
       oldPassword: Yup.string().min(6),
       password: Yup.string()
-        .min(6)
-        .when('oldPassword', (oldPassword, field) =>
-          oldPassword ? field.required() : field
-        ),
-      confirmPassword: Yup.string().when('password', (password, field) =>
+        .min(6),
+      passwordConfirmation: Yup.string().when('password', (password, field) =>
         password ? field.required().oneOf([Yup.ref('password')]) : field
       ),
     });
@@ -67,7 +67,7 @@ class UserService {
 
     const { login, oldPassword } = req.body;
 
-    const user = await User.findByPk(req.userID);
+    const user = await User.findByPk(req.params.id);
 
     if (login !== user.login) {
       const userExists = await User.findOne({
@@ -79,13 +79,15 @@ class UserService {
       }
     }
 
-    if (oldPassword && !(await user.checkPassword(oldPassword))) {
-      return res.status(401).json({ error: 'Password does not match' });
+    if (oldPassword) {
+      if (oldPassword && !(await user.checkPassword(oldPassword))) {
+        return res.status(401).json({ error: 'Password does not match' });
+      }
     }
 
     await user.update(req.body);
 
-    const { id, name, email, avatar } = await User.findByPk(req.userID, {
+    const { id, name, email, avatar } = await User.findByPk(req.params.id, {
       include: [
         {
           model: File,
@@ -107,7 +109,7 @@ class UserService {
   async delete(req, res) {
     const users = await User.findByPk(req.params.id);
 
-    users.deleted_at = new Date;
+    users.deleted_at = new Date();
 
     await users.save();
 

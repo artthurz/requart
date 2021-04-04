@@ -1,10 +1,9 @@
 import React from "react";
-import api from "../../services/api";
+import api from "../../../services/api";
 import Modal from "react-modal";
 import { Container } from "./styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import { useAuth } from "../../contexts/auth";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   KeyboardDatePicker,
@@ -14,7 +13,6 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { MdClose } from "react-icons/md";
 import { toast } from "react-toastify";
-import _ from 'lodash';
 
 const validationSchema = yup.object({
   name: yup.string("Digite seu login").required("O login é obrigatório"),
@@ -24,29 +22,32 @@ const validationSchema = yup.object({
   delivery_date: yup.date().required(),
 });
 
-function NewProjectModal({ isOpen, onRequestClose, fetchProjects }) {
-  const { user } = useAuth();
+function EditProjectModal({
+  isOpen,
+  onRequestClose,
+  fetchProjects,
+  project
+}) {
 
-  const handleCreateProject = async (values, resetForm) => {
+  const handleUpdateProject = async (values) => {
     try {
-      await api.post("projects", { ...values, owner_id: user.id });
-      resetForm({})
-      if(fetchProjects) fetchProjects();
-      toast.success("Projeto criado com sucesso!");
+      await api.put(`projects/${project.id}`, values);
+      if (fetchProjects) await fetchProjects();
+      toast.success("Projeto editado com sucesso!");
     } catch (error) {
-      toast.error("Erro ao criar o projeto, revise seus dados.");
+      toast.error("Erro ao editar o projeto, revise seus dados.");
     }
-  }
+  };
 
   const formik = useFormik({
     initialValues: {
-      name: "",
-      description: "",
-      delivery_date: new Date(),
+      name: project.name,
+      description: project.description,
+      delivery_date: project.delivery_date,
     },
     validationSchema: validationSchema,
-    onSubmit: (values, {resetForm}) => {
-      handleCreateProject(values, resetForm);
+    onSubmit: (values) => {
+      handleUpdateProject(values);
     },
   });
 
@@ -66,7 +67,7 @@ function NewProjectModal({ isOpen, onRequestClose, fetchProjects }) {
         <MdClose />
       </button>
       <Container onSubmit={formik.handleSubmit}>
-        <h2>Cadastrar Projeto</h2>
+        <h2>Editar Projeto</h2>
         <TextField
           label="Nome"
           variant="outlined"
@@ -125,11 +126,11 @@ function NewProjectModal({ isOpen, onRequestClose, fetchProjects }) {
           fullWidth
           variant="contained"
         >
-          Cadastrar
+          Confrimar
         </Button>
       </Container>
     </Modal>
   );
 }
 
-export default NewProjectModal;
+export default EditProjectModal;

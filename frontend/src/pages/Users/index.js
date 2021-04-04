@@ -3,8 +3,8 @@ import React, { useState, useEffect } from "react";
 import api from "../../services/api";
 import { MdAdd, MdDelete, MdEdit } from "react-icons/md";
 import { Panel, PanelHeader } from "../../components/Panel";
-import NewProjectModal from "./NewProjectModal";
-import EditProjectModal from "./EditProjectModal";
+import NewUserModal from "./NewUserModal";
+import EditUserModal from "./EditUserModal";
 import {
   makeStyles,
   createMuiTheme,
@@ -17,7 +17,7 @@ import Fab from "@material-ui/core/Fab";
 import { Dropdown } from "../../components/Dropdown";
 import OpConfirmation from "../../components/OpConfirmation";
 
-import { Body } from "./styles";
+import { Body, ProfileImage } from "./styles";
 
 const useIconButtonStyle = makeStyles(() => ({
   root: {
@@ -52,63 +52,85 @@ const useRotatedIconButtonStyle = makeStyles(() => ({
 
 const DataGridTheme = createMuiTheme({}, ptBR);
 
-const Projects = () => {
+const Users = () => {
   const iconButton = useIconButtonStyle();
   const iconButtonRotated = useRotatedIconButtonStyle();
-  const [isNewProjectModalOpen, setIsNewProjectModalOpen] = useState(false);
-  const [isEditProjectModalOpen, setIsEditProjectModalOpen] = useState(false);
-  const [projects, setProjects] = useState([]);
-  const [selectedProject, setSelectedProject] = useState();
+  const [isNewUserModalOpen, setIsNewUserModalOpen] = useState(false);
+  const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState();
 
-  const fetchProjects = async () => {
-    const { data } = await api.get("projects");
+  const fetchUsers = async () => {
+    const { data } = await api.get("users");
     data.forEach((e) => {
-      const delivery = parseISO(e.delivery_date);
       const created = parseISO(e.createdAt);
-      e.fromattedDeliveryDate = format(delivery, "dd/MM/yyyy", {
-        timeZone: "America/Sao_Paulo",
-      });
       e.createdAt = format(created, "dd/MM/yyyy", {
         timeZone: "America/Sao_Paulo",
       });
     });
-    setProjects(data);
+    setUsers(data);
   };
 
   useEffect(() => {
-    fetchProjects();
+    fetchUsers();
   }, []);
 
-  const handleProjectDelete = async (id) => {
+  const handleUserDelete = async (id) => {
     console.log(id);
     try {
-      await api.delete(`projects/${id}`);
-      await fetchProjects();
+      await api.delete(`users/${id}`);
+      await fetchUsers();
     } catch (error) {
       console.error(error);
     }
   };
 
   const columns = [
-    { field: "id", headerName: "Código", width: 100 },
-    { field: "name", headerName: "Nome", width: 320 },
     {
-      field: "owner",
-      headerName: "Responsável",
-      width: 250,
-      renderCell: (params) => <span>{params.value.name}</span>,
+      field: "avatar.id",
+      headerName: "Avatar",
+      width: 100,
+      renderCell: ({ row }) => {
+        return (
+          <ProfileImage>
+            <img src={row.avatar.url} alt="Profile" />
+          </ProfileImage>
+        );
+      },
+    },
+    {
+      field: "id",
+      headerName: "ID",
+      width: 70,
+    },
+    { field: "name", headerName: "Nome", width: 200 },
+    {
+      field: "login",
+      headerName: "Login",
+      width: 140,
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      width: 300,
+    },
+    {
+      field: "admin",
+      headerName: "Papel",
+      width: 100,
+      renderCell: ({ row }) => {
+        return (
+          <>
+            <span>{row.admin ? "Admin" : "User"}</span>
+          </>
+        );
+      },
     },
     {
       field: "createdAt",
       headerName: "Data de Criação",
       type: "date",
-      width: 200,
-    },
-    {
-      field: "fromattedDeliveryDate",
-      headerName: "Previsão de Entrega",
-      type: "date",
-      width: 200,
+      width: 180,
     },
     {
       field: "options",
@@ -119,14 +141,14 @@ const Projects = () => {
           <>
             <Dropdown
               popperOpts={{ placement: "bottom-end" }}
-              className="project-dropdown"
+              className="user-dropdown"
               options={[
                 {
                   label: "Editar",
                   icon: <MdEdit />,
                   onClick: () => {
-                    setSelectedProject(row);
-                    setIsEditProjectModalOpen(true);
+                    setSelectedUser(row);
+                    setIsEditUserModalOpen(true);
                   },
                 },
                 {
@@ -135,9 +157,9 @@ const Projects = () => {
                   onClick: () => {
                     OpConfirmation({
                       title: "Atenção",
-                      message: "Voce realmente deseja deletar este projeto?",
+                      message: "Voce realmente deseja deletar este usuário?",
                       onConfirm: () => {
-                        handleProjectDelete(row.id);
+                        handleUserDelete(row.id);
                       },
                     });
                   },
@@ -152,12 +174,12 @@ const Projects = () => {
 
   return (
     <Panel>
-      <PanelHeader title="Projetos">
-        <Zoom in={!isNewProjectModalOpen}>
+      <PanelHeader title="Usuários">
+        <Zoom in={!isNewUserModalOpen}>
           <Fab
-            onClick={() => setIsNewProjectModalOpen(true)}
+            onClick={() => setIsNewUserModalOpen(true)}
             className={
-              isNewProjectModalOpen ? iconButtonRotated.root : iconButton.root
+              isNewUserModalOpen ? iconButtonRotated.root : iconButton.root
             }
             color="primary"
           >
@@ -166,26 +188,27 @@ const Projects = () => {
         </Zoom>
       </PanelHeader>
       <Body>
-        <NewProjectModal
-          isOpen={isNewProjectModalOpen}
-          onRequestClose={() => setIsNewProjectModalOpen(false)}
-          fetchProjects={() => fetchProjects()}
+        <NewUserModal
+          isOpen={isNewUserModalOpen}
+          onRequestClose={() => setIsNewUserModalOpen(false)}
+          fetchUsers={() => fetchUsers()}
         />
-        {isEditProjectModalOpen && (
-          <EditProjectModal
-            isOpen={isEditProjectModalOpen}
-            onRequestClose={() => setIsEditProjectModalOpen(false)}
-            fetchProjects={() => fetchProjects()}
-            project={selectedProject}
+        {isEditUserModalOpen && (
+          <EditUserModal
+            isOpen={isEditUserModalOpen}
+            onRequestClose={() => setIsEditUserModalOpen(false)}
+            fetchUsers={() => fetchUsers()}
+            user={selectedUser}
           />
         )}
 
         <div style={{ height: "100%", width: "100%" }}>
           <ThemeProvider theme={DataGridTheme}>
             <DataGrid
-              rows={projects}
+              rows={users}
               columns={columns}
               pageSize={10}
+              rowHeight={80}
               components={{
                 Toolbar: GridToolbar,
               }}
@@ -197,4 +220,4 @@ const Projects = () => {
   );
 };
 
-export default Projects;
+export default Users;

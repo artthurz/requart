@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import logo from "../../assets/images/logo.svg";
 import { Span, Image, Container } from "./styles";
 import { useAuth } from "../../contexts/auth";
@@ -17,12 +18,14 @@ const validationSchema = yup.object({
 
 const Login = () => {
   const { Login } = useAuth();
+  let history = useHistory()
 
   async function handleLogin(values) {
+    history.push('/');
     await Login({
       login: values.login,
       password: values.password,
-    });
+    })
   }
 
   const formik = useFormik({
@@ -35,7 +38,6 @@ const Login = () => {
       handleLogin(values);
     },
   });
-
 
   return (
     <Container>
@@ -68,9 +70,9 @@ const Login = () => {
           Ao clicar em Entrar, você concorda com nossos Termos de Uso e Serviços
           e Política de Dados e Privacidade.
         </Span>
-        <Button color="primary" variant="contained" fullWidth type="submit">
-          Entrar
-        </Button>
+          <Button color="primary" variant="contained" fullWidth type="submit">
+            Entrar
+          </Button>
       </form>
     </Container>
   );

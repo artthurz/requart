@@ -7,23 +7,12 @@ export const Container = styled.div`
 
 `;
 
-export const TopMenuLink = styled.div`
-  padding: 2px;
-
-  h1 {
-    color: white;
-    font-size: 18px;
-    border-bottom: 2px solid #5196ff;
-    font-weight: 100 !important;
-  }
-`;
-
 export const LinksContainer = styled.aside`
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  width: 500px;
+  width: 400px;
   
   a {
     margin-right: 30px;
@@ -217,8 +206,8 @@ export const DisableMenu = styled.div`
 
 export const ProfileCard = styled.div`
   position: relative;
-  width: 5.2rem;
-  height: 5.2rem;
+  width: 6.2rem;
+  height: 6.2rem;
   flex-shrink: 0;
   margin-left: 20px;
   margin-bottom: 20px;
@@ -226,10 +215,8 @@ export const ProfileCard = styled.div`
   align-items: flex-start;
 
   img {
-    width: 100%;
-    height: 100%;
-    max-width: 100%;
-    max-height: 100%;
+    width: 6.2rem;
+    height: 6.2rem;
     padding: 2px;
     border-radius: 100%;
     background-position: center center;

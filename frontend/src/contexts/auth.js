@@ -34,18 +34,27 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  function ReloadAvatar(avatar) { 
+    setUser({...user, avatar});
+    sessionStorage.setItem("@App:user", JSON.stringify({...user, avatar}));
+  }
+
+  function ReloadUser(user) { 
+    setUser(user);
+    sessionStorage.setItem("@App:user", JSON.stringify(user));
+  }
+
+
   function Logout() {
     setUser(null);
     toast("Volte sempre!");
-    console.log(user);
-    console.log(Boolean(user));
     sessionStorage.setItem("@App:user", JSON.stringify(null));
     sessionStorage.setItem("@App:token", JSON.stringify(null));
   }
 
   return (
     <AuthContext.Provider
-      value={{ signed: Boolean(user), user, Login, Logout }}
+      value={{ signed: Boolean(user), user, Login, Logout, ReloadUser, ReloadAvatar }}
     >
       {children}
     </AuthContext.Provider>

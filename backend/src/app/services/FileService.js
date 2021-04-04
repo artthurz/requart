@@ -31,7 +31,9 @@ class FileService {
         }, {where: {id: avatarId}}
         );
 
-        return res.json({avatarId, name, avatarPath });
+        const file = await File.findByPk(avatarId);
+
+        return res.json(file);
       }
     }
 

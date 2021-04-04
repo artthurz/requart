@@ -1,5 +1,4 @@
 import "./styles.css"
-import React from "react";
 import PropTypes from 'prop-types';
 import Swal from 'sweetalert2'
 import _ from 'lodash'

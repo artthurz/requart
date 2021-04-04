@@ -1,10 +1,8 @@
 import React from 'react';
-import { useAuth } from '../../contexts/auth';
 
 // import { Container } from './styles';
 
 const NotFoundPage = () => {
-  const { signed, Logout } = useAuth();
 
   return (
     <div>

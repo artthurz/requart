@@ -9,6 +9,8 @@ export const Wrapper = styled.div`
 
 export const ChildrenWrapper = styled.div`
   display: flex;
-  -webkit-box-pack: center;
+  min-height: calc(100vh - 72px);
+  display: flex;
   justify-content: center;
+  align-items: center;
 `;

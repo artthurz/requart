@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/auth";
 import logo from "../../assets/images/logo.svg";
@@ -12,7 +13,6 @@ import {
   ProfileCard,
   AdminBadge,
   DisableMenu,
-  TopMenuLink,
   LinksContainer,
 } from "./styles";
 import makeStyles from "@material-ui/core/styles/makeStyles";
@@ -23,16 +23,14 @@ import {
   MdAssignmentInd,
   MdExitToApp,
   MdLowPriority,
-  MdLibraryBooks,
+  MdPersonAdd,
   MdFlag,
 } from "react-icons/md";
 import { BiStats } from "react-icons/bi";
-import NewProjectModal from "../../components/NewProjectModal";
 
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import { backgrounds } from "polished";
 
 function a11yProps(index) {
   return {
@@ -42,12 +40,7 @@ function a11yProps(index) {
 }
 
 function LinkTab(props) {
-  return (
-    <Tab
-      component={Link}
-      {...props}
-    />
-  );
+  return <Tab component={Link} {...props} />;
 }
 
 const useIconButtonStyle = makeStyles((theme) => ({
@@ -73,8 +66,8 @@ const useDividerStyle = makeStyles((theme) => ({
 }));
 
 export default function Header() {
+  let history = useHistory();
   const [value, setValue] = useState(0);
-  const [isNewProjectModalOpen, setIsNewProjectModalOpen] = useState(false);
   const iconButton = useIconButtonStyle();
   const iconButtonRotated = useRotatedIconButtonStyle();
   const divider = useDividerStyle();
@@ -82,8 +75,8 @@ export default function Header() {
   const [addMenuShow, setAddMenuShow] = React.useState(null);
 
   const { user, Logout } = useAuth();
-  console.log(user);
   async function handleLogout() {
+    history.push("/");
     Logout();
   }
 
@@ -103,15 +96,6 @@ export default function Header() {
     setProfileMenuShow(false);
   };
 
-  const handleOpenNewProjectModalOpen = () => {
-    setIsNewProjectModalOpen(true);
-    setAddMenuShow(false);
-  };
-
-  const handleCloseNewProjectModalClose = () => {
-    setIsNewProjectModalOpen(false);
-  };
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -119,25 +103,25 @@ export default function Header() {
   return (
     <Container>
       <Content>
-          <LinksContainer>
-            <Link to="/" >
-              <nav onClick={() => handleChange(0)}>
-                <img src={logo} alt="Requart" />
-              </nav>
-            </Link>
+        <LinksContainer>
+          <Link to="/">
+            <nav onClick={() => handleChange(0)}>
+              <img src={logo} alt="Requart" />
+            </nav>
+          </Link>
 
-            <AppBar position="static">
-              <Tabs
-                variant="fullWidth"
-                value={value}
-                onChange={handleChange}
-                aria-label="nav tabs example"
-              >
-                <LinkTab label="Home" to="/" {...a11yProps(0)} />
-                <LinkTab label="Projetos" to="/projects" {...a11yProps(1)} />
-              </Tabs>
-            </AppBar>
-          </LinksContainer>
+          <AppBar position="static">
+            <Tabs
+              variant="fullWidth"
+              value={value}
+              onChange={handleChange}
+              aria-label="nav tabs example"
+            >
+              <LinkTab label="Home" to="/" {...a11yProps(0)} />
+              <LinkTab label="Projetos" to="/projects" {...a11yProps(1)} />
+            </Tabs>
+          </AppBar>
+        </LinksContainer>
         <aside>
           <IconButton
             onClick={handleOpenAddMenu}
@@ -148,21 +132,21 @@ export default function Header() {
           </IconButton>
           {addMenuShow && <DisableMenu onClick={handleCloseAddMenu} />}
           <Menu visible={addMenuShow} right="280px" width="360px">
-            <h2>Criar</h2>
-            <a>
-              <div onClick={() => handleOpenNewProjectModalOpen()}>
-                <span>Projeto</span>
-                <h1>Crie um novo projeto dentro da plataforma.</h1>
+            <h2>Cadastros</h2>
+            <Link to="/users" onClick={() => setAddMenuShow(false)}>
+              <div>
+                <span>Usuários</span>
+                <h1>Crie um novo usuário dentro da plataforma.</h1>
               </div>
               <div>
-                <MdLibraryBooks />
+                <MdPersonAdd />
               </div>
-            </a>
+            </Link>
             <Divider variant="middle" className={divider.root} />
             <a>
               <div>
-                <span>Prioridade</span>
-                <h1>Cria uma nova prioridade para atribuir aos requisitos.</h1>
+                <span>Prioridades</span>
+                <h1>Crie uma nova prioridade para atribuir aos requisitos.</h1>
               </div>
               <div>
                 <MdFlag />
@@ -170,8 +154,8 @@ export default function Header() {
             </a>
             <a>
               <div>
-                <span>Situação</span>
-                <h1>Cria uma nova situação para atribuir aos requisitos.</h1>
+                <span>Situaçãos</span>
+                <h1>Crie uma nova situação para atribuir aos requisitos.</h1>
               </div>
               <div>
                 <BiStats />
@@ -179,9 +163,9 @@ export default function Header() {
             </a>
             <a>
               <div>
-                <span>Complexidade</span>
+                <span>Complexidades</span>
                 <h1>
-                  Cria uma nova complexidade para atribuir aos requisitos.
+                  Crie uma nova complexidade para atribuir aos requisitos.
                 </h1>
               </div>
               <div>
@@ -215,8 +199,11 @@ export default function Header() {
                 </div>
               </aside>
             </ProfileCard>
-            <Link to="/profile" onClick={() => (handleCloseProfileMenu(), handleChange(0))}>
-              <span >Meu perfil</span>
+            <Link
+              to="/profile"
+              onClick={() => (handleCloseProfileMenu(), handleChange(0))}
+            >
+              <span>Meu perfil</span>
               <div>
                 <MdAssignmentInd />
               </div>
@@ -236,10 +223,6 @@ export default function Header() {
           {profileMenuShow && <DisableMenu onClick={handleCloseProfileMenu} />}
         </aside>
       </Content>
-      <NewProjectModal
-        isOpen={isNewProjectModalOpen}
-        onRequestClose={handleCloseNewProjectModalClose}
-      />
     </Container>
   );
 }
