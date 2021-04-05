@@ -8,5 +8,7 @@ const fileRoutes = new Router();
 const upload = multer(multerConfig);
 
 fileRoutes.post('/files', upload.single('file'), FileService.store);
+fileRoutes.put('/files/:id', FileService.update);
+fileRoutes.delete('/files/:id', FileService.delete);
 
 export default fileRoutes;

@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 export const MainPanel = styled.div`
-  margin-top: 50px;
   width: 100%;
   max-width: 1200px;
   height: 80vh;

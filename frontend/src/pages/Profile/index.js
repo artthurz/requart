@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { useAuth } from "../../contexts/auth";
 import api from "../../services/api";
-import Modal from "react-modal";
-import { Container } from "./styles";
+import { Container, FormContainer } from "./styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { MdClose } from "react-icons/md";
 import { toast } from "react-toastify";
-import AvatarInput from "./AvatarInput";
 import { Panel, PanelHeader } from "../../components/Panel";
+import EditAvatarModal from "./EditAvatarModal";
+import { BiEditAlt } from "react-icons/bi";
+
 
 const validationSchema = yup.object({
   name: yup.string("Digite seu login").required("O login é obrigatório"),
@@ -41,6 +41,7 @@ const validationSchema = yup.object({
 
 function Profile() {
   const { user, ReloadUser } = useAuth();
+  const [isEditAvatarModalOpen, setIsEditAvatarModalOpen] = useState(false);
   const [changePassword, setChangePassword] = useState(false);
 
   const handleUpdateUser = async (values) => {
@@ -67,125 +68,149 @@ function Profile() {
     },
   });
 
-  return (
-    <Panel
-    className="react-modal-content"
-    >
+  console.log(user.avatar.path);
 
-      <h2>Editar Usuário</h2>
-      <AvatarInput />
-      <Container onSubmit={formik.handleSubmit}>
-        <TextField
-          label="Nome"
-          variant="outlined"
-          fullWidth
-          id="name"
-          name="name"
-          style={{ marginTop: "20px", marginBottom: "20px" }}
-          value={formik.values.name}
-          onChange={formik.handleChange}
-          error={formik.touched.name && Boolean(formik.errors.name)}
-          helperText={formik.touched.name && formik.errors.name}
-        />
-        <TextField
-          label="Email"
-          variant="outlined"
-          fullWidth
-          type="email"
-          id="email"
-          name="email"
-          style={{ marginBottom: "20px" }}
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          error={formik.touched.email && Boolean(formik.errors.email)}
-          helperText={formik.touched.email && formik.errors.email}
-        />
-        <TextField
-          label="Login"
-          variant="outlined"
-          fullWidth
-          id="login"
-          name="login"
-          style={{ marginBottom: "20px" }}
-          value={formik.values.login}
-          onChange={formik.handleChange}
-          error={formik.touched.login && Boolean(formik.errors.login)}
-          helperText={formik.touched.login && formik.errors.login}
-        />
-        {!changePassword && (
-          <button type="button" onClick={() => setChangePassword(true)}>
-            Alterar senha?
+  return (
+    <Container>
+      <Panel>
+        <PanelHeader title="Editar Perfil" />
+        <div className="edit-user-body ">
+          <button
+            className="avatar-button"
+            onClick={() => setIsEditAvatarModalOpen(true)}
+          >
+            <img src={user.avatar.url} alt="Profile" />
+            <BiEditAlt className="edit-icon" />
           </button>
-        )}
-        {changePassword && (
-          <>
-            <h2>Alterar Senha</h2>
+          <FormContainer onSubmit={formik.handleSubmit}>
             <TextField
-              label="Senha antiga"
+              label="Nome"
               variant="outlined"
-              type="password"
-              id="oldPassword"
-              name="oldPassword"
-              style={{ marginBottom: "20px", width: "45%", marginTop: "20px" }}
-              value={formik.values.oldPassword}
+              fullWidth
+              id="name"
+              name="name"
+              style={{ marginBottom: "20px" }}
+              value={formik.values.name}
               onChange={formik.handleChange}
-              error={
-                formik.touched.oldPassword && Boolean(formik.errors.oldPassword)
-              }
-              helperText={
-                formik.touched.oldPassword && formik.errors.oldPassword
-              }
+              error={formik.touched.name && Boolean(formik.errors.name)}
+              helperText={formik.touched.name && formik.errors.name}
             />
-            <aside style={{ width: "100%" }}>
-              <TextField
-                label="Nova Senha"
-                variant="outlined"
-                type="password"
-                id="password"
-                name="password"
-                style={{ marginBottom: "20px", width: "45%" }}
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                error={
-                  formik.touched.password && Boolean(formik.errors.password)
-                }
-                helperText={formik.touched.password && formik.errors.password}
-              />
-              <TextField
-                label="Confirme a nova senha"
-                variant="outlined"
-                type="password"
-                id="passwordConfirmation"
-                name="passwordConfirmation"
-                style={{
-                  marginBottom: "20px",
-                  width: "45%",
-                  marginLeft: "10%",
-                }}
-                value={formik.values.passwordConfirmation}
-                onChange={formik.handleChange}
-                error={
-                  formik.touched.passwordConfirmation &&
-                  Boolean(formik.errors.passwordConfirmation)
-                }
-                helperText={
-                  formik.touched.passwordConfirmation &&
-                  formik.errors.passwordConfirmation
-                }
-              />
-            </aside>
-          </>
-        )}
-        <Button
-          type="submit"
-          className="new-user-modal-submit-button"
-          fullWidth
-          variant="contained"
-        >
-          Confrimar
-        </Button>
-      </Container>
-    </Panel>
+            <TextField
+              label="Email"
+              variant="outlined"
+              fullWidth
+              type="email"
+              id="email"
+              name="email"
+              style={{ marginBottom: "20px" }}
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
+            />
+            <TextField
+              label="Login"
+              variant="outlined"
+              fullWidth
+              id="login"
+              name="login"
+              style={{ marginBottom: "20px" }}
+              value={formik.values.login}
+              onChange={formik.handleChange}
+              error={formik.touched.login && Boolean(formik.errors.login)}
+              helperText={formik.touched.login && formik.errors.login}
+            />
+            {!changePassword && (
+              <button type="button" onClick={() => setChangePassword(true)}>
+                Alterar senha?
+              </button>
+            )}
+            {changePassword && (
+              <>
+                <h4>Alterar Senha</h4>
+                <TextField
+                  label="Senha antiga"
+                  variant="outlined"
+                  type="password"
+                  id="oldPassword"
+                  name="oldPassword"
+                  style={{
+                    marginBottom: "20px",
+                    width: "45%",
+                    marginTop: "20px",
+                    width: "100%"
+                  }}
+                  value={formik.values.oldPassword}
+                  onChange={formik.handleChange}
+                  error={
+                    formik.touched.oldPassword &&
+                    Boolean(formik.errors.oldPassword)
+                  }
+                  helperText={
+                    formik.touched.oldPassword && formik.errors.oldPassword
+                  }
+                />
+                <aside style={{ width: "100%" }}>
+                  <TextField
+                    label="Nova Senha"
+                    variant="outlined"
+                    type="password"
+                    id="password"
+                    name="password"
+                    style={{ marginBottom: "20px", width: "45%" }}
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    error={
+                      formik.touched.password && Boolean(formik.errors.password)
+                    }
+                    helperText={
+                      formik.touched.password && formik.errors.password
+                    }
+                  />
+                  <TextField
+                    label="Confirme a nova senha"
+                    variant="outlined"
+                    type="password"
+                    id="passwordConfirmation"
+                    name="passwordConfirmation"
+                    style={{
+                      marginBottom: "20px",
+                      width: "45%",
+                      marginLeft: "10%",
+                    }}
+                    value={formik.values.passwordConfirmation}
+                    onChange={formik.handleChange}
+                    error={
+                      formik.touched.passwordConfirmation &&
+                      Boolean(formik.errors.passwordConfirmation)
+                    }
+                    helperText={
+                      formik.touched.passwordConfirmation &&
+                      formik.errors.passwordConfirmation
+                    }
+                  />
+                </aside>
+              </>
+            )}
+            <Button
+              type="submit"
+              className="edit-profile-modal-submit-button"
+              fullWidth
+              variant="contained"
+            >
+              Confrimar
+            </Button>
+          </FormContainer>
+        </div>
+      </Panel>
+      {isEditAvatarModalOpen && (
+        <EditAvatarModal
+          isOpen={isEditAvatarModalOpen}
+          onRequestClose={() => setIsEditAvatarModalOpen(false)}
+          project={user}
+        />
+      )}
+    </Container>
   );
 }
 

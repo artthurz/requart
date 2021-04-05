@@ -67,6 +67,8 @@ export default createGlobalStyle`
     display: flex;
     align-items: center;
     justify-content: center;
+
+    z-index: 2;
   }
 
   .react-modal-content {
@@ -76,6 +78,7 @@ export default createGlobalStyle`
     padding: 3rem;
     position: relative;
     border-radius: 0.25rem;
+    opacity: 1;
   }
   
   .react-modal-close {
@@ -94,4 +97,3 @@ export default createGlobalStyle`
   }
 
 `;
-

@@ -1,10 +1,53 @@
 import styled from "styled-components";
+export const Container = styled.div`
+  height: calc(100% - 80px);
+  background-color: #fff;
+  width: 800px;
 
-export const Container = styled.form`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  .edit-user-body {
+    position: relative;
+    height: calc(100% - 80px);
+    padding: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content:  space-evenly;
+  }
+
+  .avatar-button {
+    position: relative;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    background: none;
+    border: none;
+  }
+
+  .edit-icon{
+    color: rgb(225, 225, 230);
+    font-size: 1.8rem;
+    position: absolute;
+    bottom: 25px;
+    right: 35px;
+  }
+
+  img {
+    width: 10rem;
+    height: 10rem;
+    max-width: 100%;
+    max-height: 100%;
+    padding: 4px;
+    border: 4px solid rgb(225, 225, 230);
+    border-radius: 100%;
+    background-position: center center;
+    background-size: cover;
+    background-clip: content-box;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+`;
+export const FormContainer = styled.form`
+  width: 50%;
   color: var(--text-title);
 
   button {
@@ -15,7 +58,7 @@ export const Container = styled.form`
     color: var(--green);
   }
 
-  .new-user-modal-submit-button {
+  .edit-profile-modal-submit-button {
     width: 100%;
     padding: 0 1.5rem;
     height: 4rem;
@@ -34,5 +77,8 @@ export const Container = styled.form`
       filter: brightness(0.9);
     }
   }
-`;
 
+  /* .MuiInputLabel-outlined {
+    z-index: 0;
+  } */
+`;
