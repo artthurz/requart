@@ -1,5 +1,5 @@
 {
-  "name": "authapp",
+  "name": "requart",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -51,6 +51,7 @@
     ]
   },
   "devDependencies": {
-    "@types/react-router-dom": "^5.1.5"
+    "@types/react-router-dom": "^5.1.5",
+    "prettier": "2.2.1"
   }
 }

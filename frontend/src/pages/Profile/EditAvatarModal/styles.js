@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Container = styled.form`
   display: flex;
@@ -14,16 +14,16 @@ export const Container = styled.form`
       opacity: 0.7;
     }
 
-  img {
-    width: 15rem;
-    height: 15rem;
-    max-width: 100%;
-    max-height: 100%;
-    border-radius: 100%;
-    background-position: center center;
-    background-size: cover;
-    background-clip: content-box;
-  }
+    img {
+      width: 15rem;
+      height: 15rem;
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 100%;
+      background-position: center center;
+      background-size: cover;
+      background-clip: content-box;
+    }
     input {
       display: none;
     }
@@ -48,5 +48,4 @@ export const Container = styled.form`
       filter: brightness(0.9);
     }
   }
-
 `;

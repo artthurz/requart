@@ -1,10 +1,22 @@
-import styled from "styled-components";
-import { darken } from "polished";
+import styled from 'styled-components';
+import { darken } from 'polished';
 
 export const Container = styled.div`
-  background: rgb(61, 60, 66);
-  padding: 0 30px;
-
+  position: fixed;
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  width: 100%;
+  height: 72px;
+  padding: 0px 30px;
+  background: rgb(32, 32, 36);
+  top: 0px;
+  z-index: 9998;
+  transition: all 0.5s ease-in-out 0s;
+  box-shadow: rgb(18 18 20) 0px 0.2rem 2rem;
+  opacity: 1;
+  transform: translateY(0px);
+  visibility: visible;
 `;
 
 export const LinksContainer = styled.aside`
@@ -13,46 +25,63 @@ export const LinksContainer = styled.aside`
   align-items: center;
 
   width: 400px;
-  
+
   a {
     margin-right: 30px;
   }
 
   .MuiAppBar-colorPrimary {
-      background-color: transparent;
-      box-shadow: none;
+    background-color: transparent;
+    box-shadow: none;
 
-      a{
-        margin-right: 0;
-      }
-
-      .PrivateTabIndicator-colorSecondary-6 {
-          background-color: #5196ff;
-      }
+    a {
+      margin-right: 0;
     }
 
-  
+    .PrivateTabIndicator-colorSecondary-6 {
+      background-color: #5196ff;
+    }
+  }
 `;
 
 export const Content = styled.div`
-  height: 72px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 1366px;
   display: flex;
-  justify-content: space-between;
+  -webkit-box-align: center;
   align-items: center;
+  color: rgb(255, 255, 255);
+  padding: 12px 0px;
 
-  nav {
+  div {
     display: flex;
+    -webkit-box-align: center;
     align-items: center;
+    position: relative;
+    z-index: 2;
 
     img {
       height: 40px;
     }
   }
 
-  aside {
+  .menus-section {
     display: flex;
+    -webkit-box-align: center;
     align-items: center;
+    -webkit-box-pack: end;
+    justify-content: flex-end;
+    flex: 1 1 0%;
+    z-index: 2;
+  }
+
+  .profile-button-and-menu {
+    position: relative;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    height: 100%;
+    padding-left: 12px;
   }
 `;
 
@@ -82,22 +111,20 @@ export const ProfileButton = styled.button`
   }
 
   &:hover {
-    background: ${darken(0.25, "rgba(255, 255, 255, 0.2)")};
+    background: ${darken(0.25, 'rgba(255, 255, 255, 0.2)')};
   }
 `;
 
 export const ProfileImage = styled.div`
   position: relative;
-  width: 3.2rem;
-  height: 3.2rem;
   flex-shrink: 0;
   margin-left: 10px;
 
   img {
-    width: 100%;
-    height: 100%;
-    max-width: 100%;
-    max-height: 100%;
+    width: 3.2rem !important;
+    height: 3.2rem !important;
+    max-width: 3.2rem !important;
+    max-height: 3.2rem !important;
     padding: 2px;
     border: 2px solid rgb(225, 225, 230);
     border-radius: 100%;
@@ -116,8 +143,8 @@ export const HeaderDivider = styled.div`
 `;
 
 export const Menu = styled.div`
-  position: absolute;
-  right: ${(props) => props.right};
+  position: absolute !important;
+  right: 0;
   top: 72px;
   padding: 30px 0;
   width: ${(props) => props.width};
@@ -126,8 +153,9 @@ export const Menu = styled.div`
   box-shadow: rgb(0 0 0 / 60%) 0px 5px 20px;
   transition: opacity 0.2s ease 0s, visibility 0.2s ease 0s;
   opacity: ${(props) => (props.visible ? 1 : 0)};
-  visibility: ${(props) => (props.visible ? "visible" : "hidden")};
+  visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
   z-index: 3;
+  flex-direction: column;
 
   strong {
     font-size: 18px;
@@ -135,6 +163,7 @@ export const Menu = styled.div`
   }
 
   h2 {
+    width: 100%;
     color: #fff;
     font-size: 24px;
     padding: 0 24px;
@@ -149,6 +178,18 @@ export const Menu = styled.div`
     padding: 0 24px;
     display: flex;
     justify-self: flex-start;
+  }
+
+  span {
+      margin-left: 24px;
+      font-weight: bold;
+      color: #e4e4e8;
+    }
+
+  .menu-item-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   a {
@@ -167,12 +208,6 @@ export const Menu = styled.div`
     border: none;
     width: 100%;
 
-    span {
-      margin-left: 24px;
-      font-weight: bold;
-      color: #e4e4e8;
-    }
-
     svg {
       width: 20px;
       height: 20px;
@@ -180,12 +215,12 @@ export const Menu = styled.div`
     }
 
     :hover {
-      background: ${darken(0.25, "#212122")};
+      background: ${darken(0.25, '#212122')};
     }
   }
 
   :before {
-    content: "";
+    content: '';
     position: absolute;
     top: -8px;
     right: 19px;
@@ -199,51 +234,62 @@ export const Menu = styled.div`
 
 export const DisableMenu = styled.div`
   background-color: transparent !important;
-  position: fixed;
+  position: absolute;
   inset: 0px;
   z-index: 2;
 `;
 
 export const ProfileCard = styled.div`
-  position: relative;
-  width: 6.2rem;
-  height: 6.2rem;
-  flex-shrink: 0;
-  margin-left: 20px;
-  margin-bottom: 20px;
-  justify-content: center;
-  align-items: flex-start;
+  position: relative !important;
+  width: ${(props) => props.width};
+  height: 10rem;
+  padding: 15px;
+  flex-shrink: 0 !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
 
-  img {
-    width: 6.2rem;
-    height: 6.2rem;
-    padding: 2px;
-    border-radius: 100%;
-    background-position: center center;
-    background-size: cover;
-    background-clip: content-box;
-  }
+  div {
+    width: 100%;
+    height: 100%;
 
-  strong {
-    color: #fff;
-    display: flex;
-    justify-self: flex-start;
-    padding: 0 24px;
-  }
+    img {
+      width: 8rem !important;
+      height: 8rem !important;
+      max-width: 8rem !important;
+      max-height: 8rem !important;
+      padding: 2px;
+      border-radius: 100%;
+      background-position: center center;
+      background-size: cover;
+      background-clip: content-box;
+    }
 
-  h1 {
-    font-size: 10px;
-    color: #e2e2e2;
-    padding: 0 24px;
-    display: flex;
-    justify-self: flex-start;
-    margin-top: 4px;
+    div {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+
+      strong {
+        color: #fff;
+        padding: 0 24px;
+        width: unset;
+      }
+
+      h1 {
+        font-size: 10px;
+        color: #e2e2e2;
+        padding: 0 24px;
+        margin-top: 4px;
+      }
+    }
   }
 `;
 
 export const AdminBadge = styled.div`
   background-color: rgba(255, 255, 255, 0.2);
-  max-width: 50px;
+  max-width: 60px;
+  height: unset !important;
   margin-left: 24px;
   margin-top: 10px;
   padding: 6px;
@@ -255,7 +301,9 @@ export const AdminBadge = styled.div`
   h1 {
     font-size: 10px;
     color: #e2e2e2;
-    padding: 0;
-    margin: 0;
+    padding: 0 !important;
+    margin: 0 !important;
+    align-self: center;
+    justify-self: center;
   }
 `;

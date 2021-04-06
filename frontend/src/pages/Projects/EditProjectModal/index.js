@@ -1,41 +1,35 @@
-import React from "react";
-import api from "../../../services/api";
-import Modal from "react-modal";
-import { Container } from "./styles";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import DateFnsUtils from "@date-io/date-fns";
+import React from 'react';
+import api from '../../../services/api';
+import Modal from 'react-modal';
+import { Container } from './styles';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import DateFnsUtils from '@date-io/date-fns';
 import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider,
-} from "@material-ui/pickers";
-import * as yup from "yup";
-import { useFormik } from "formik";
-import { MdClose } from "react-icons/md";
-import { toast } from "react-toastify";
+} from '@material-ui/pickers';
+import * as yup from 'yup';
+import { useFormik } from 'formik';
+import { MdClose } from 'react-icons/md';
+import { toast } from 'react-toastify';
 
 const validationSchema = yup.object({
-  name: yup.string("Digite seu login").required("O login é obrigatório"),
+  name: yup.string('Digite seu login').required('O login é obrigatório'),
   description: yup
-    .string("Descrição")
-    .required("A descrição do projeto é obrigatória"),
+    .string('Descrição')
+    .required('A descrição do projeto é obrigatória'),
   delivery_date: yup.date().required(),
 });
 
-function EditProjectModal({
-  isOpen,
-  onRequestClose,
-  fetchProjects,
-  project
-}) {
-
+function EditProjectModal({ isOpen, onRequestClose, fetchProjects, project }) {
   const handleUpdateProject = async (values) => {
     try {
       await api.put(`projects/${project.id}`, values);
       if (fetchProjects) await fetchProjects();
-      toast.success("Projeto editado com sucesso!");
+      toast.success('Projeto editado com sucesso!');
     } catch (error) {
-      toast.error("Erro ao editar o projeto, revise seus dados.");
+      toast.error('Erro ao editar o projeto, revise seus dados.');
     }
   };
 
@@ -53,6 +47,7 @@ function EditProjectModal({
 
   return (
     <Modal
+      closeTimeoutMS={500}
       isOpen={isOpen}
       onRequestClose={onRequestClose}
       className="react-modal-content"
@@ -74,7 +69,7 @@ function EditProjectModal({
           fullWidth
           id="name"
           name="name"
-          style={{ marginTop: "20px", marginBottom: "20px" }}
+          style={{ marginTop: '20px', marginBottom: '20px' }}
           value={formik.values.name}
           onChange={formik.handleChange}
           error={formik.touched.name && Boolean(formik.errors.name)}
@@ -87,7 +82,7 @@ function EditProjectModal({
           fullWidth
           id="description"
           name="description"
-          style={{ marginBottom: "20px" }}
+          style={{ marginBottom: '20px' }}
           value={formik.values.description}
           onChange={formik.handleChange}
           error={
@@ -108,7 +103,7 @@ function EditProjectModal({
             minDate={new Date()}
             value={formik.values.delivery_date}
             onChange={(val) => {
-              formik.setFieldValue("delivery_date", val);
+              formik.setFieldValue('delivery_date', val);
             }}
             error={
               formik.touched.delivery_date &&
@@ -117,7 +112,7 @@ function EditProjectModal({
             helperText={
               formik.touched.delivery_date && formik.errors.delivery_date
             }
-            InputAdornmentProps={{ position: "start" }}
+            InputAdornmentProps={{ position: 'start' }}
           />
         </MuiPickersUtilsProvider>
         <Button

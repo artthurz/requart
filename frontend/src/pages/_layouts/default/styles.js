@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Wrapper = styled.div`
   min-height: 100vh;
@@ -9,8 +9,9 @@ export const Wrapper = styled.div`
 
 export const ChildrenWrapper = styled.div`
   display: flex;
-  min-height: calc(100vh - 72px);
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-top: 72px;
 `;

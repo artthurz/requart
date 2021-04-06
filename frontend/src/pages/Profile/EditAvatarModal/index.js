@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import api from "../../../services/api";
-import Modal from "react-modal";
-import { Container } from "./styles";
-import { useAuth } from "../../../contexts/auth";
-import Button from "@material-ui/core/Button";
-import { MdClose } from "react-icons/md";
-import { toast } from "react-toastify";
+import React, { useState } from 'react';
+import api from '../../../services/api';
+import Modal from 'react-modal';
+import { Container } from './styles';
+import { useAuth } from '../../../contexts/auth';
+import Button from '@material-ui/core/Button';
+import { MdClose } from 'react-icons/md';
+import { toast } from 'react-toastify';
 
 function EditAvatarModal({ isOpen, onRequestClose }) {
   const { user, ReloadAvatar } = useAuth();
@@ -15,13 +15,13 @@ function EditAvatarModal({ isOpen, onRequestClose }) {
   async function handleUploadFile(e) {
     try {
       let data = new FormData();
-      data.append("file", e.target.files[0]);
-      const file = await api.post("files", data);
+      data.append('file', e.target.files[0]);
+      const file = await api.post('files', data);
       const { id, path, url } = file.data;
       setPreview({ id, path, url });
     } catch (error) {
       console.error(error);
-      toast.error("Erro ao carregar a foto, tente novamente.");
+      toast.error('Erro ao carregar a foto, tente novamente.');
     }
   }
 
@@ -36,48 +36,54 @@ function EditAvatarModal({ isOpen, onRequestClose }) {
     try {
       if (!(preview.id === undefined)) {
         await api.put(`files/${preview.id}`);
-        toast.success("Foto atualziada com sucesso!");
+        toast.success('Foto atualziada com sucesso!');
         ReloadAvatar(preview);
       }
       onRequestClose();
     } catch (error) {
       console.error(error);
-      toast.error("Erro ao editar a foto, tente novamente.");
+      toast.error('Erro ao editar a foto, tente novamente.');
     }
   }
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={() => handleDeleteFile()}
-      className="react-modal-content"
-      overlayClassName="react-modal-overlay"
-      ariaHideApp={false}
-    >
-      <h2>Editar Foto</h2>
-      <button
-        type="button"
-        onClick={() => handleDeleteFile()}
-        className="react-modal-close"
+    <div className="wrapper">
+      <Modal
+        closeTimeoutMS={500}
+        isOpen={isOpen}
+        onRequestClose={() => handleDeleteFile()}
+        className="react-modal-content"
+        overlayClassName="react-modal-overlay"
+        ariaHideApp={false}
       >
-        <MdClose />
-      </button>
-      <Container>
-        <label htmlFor="avatar_id">
-          <img src={preview.url} alt="Profile" />
-          <input
-            type="file"
-            id="avatar_id"
-            name="avatar"
-            accept="image/*"
-            onChange={(e) => handleUploadFile(e)}
-          />
-        </label>
-      <Button className="edit-avatar-modal-submit-button" onClick={() => handleConfirmFileChange()}>
-        Confirmar Alterações
-      </Button>
-      </Container>
-    </Modal>
+        <h2>Editar Foto</h2>
+        <button
+          type="button"
+          onClick={() => handleDeleteFile()}
+          className="react-modal-close"
+        >
+          <MdClose />
+        </button>
+        <Container>
+          <label htmlFor="avatar_id">
+            <img src={preview.url} alt="Profile" />
+            <input
+              type="file"
+              id="avatar_id"
+              name="avatar"
+              accept="image/*"
+              onChange={(e) => handleUploadFile(e)}
+            />
+          </label>
+          <Button
+            className="edit-avatar-modal-submit-button"
+            onClick={() => handleConfirmFileChange()}
+          >
+            Confirmar Alterações
+          </Button>
+        </Container>
+      </Modal>
+    </div>
   );
 }
 

@@ -1,9 +1,9 @@
-import React from "react";
-import Routes from "./routes";
-import { ToastContainer } from "react-toastify";
-import { AuthProvider } from "./contexts/auth";
+import React from 'react';
+import Routes from './routes';
+import { ToastContainer } from 'react-toastify';
+import { AuthProvider } from './contexts/auth';
 
-import GlobalStyles from "./styles/global";
+import GlobalStyles from './styles/global';
 
 function App() {
   return (

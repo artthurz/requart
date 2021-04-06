@@ -1,6 +1,6 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components';
 // import 'react-perfect-scrollbar/dist/css/styles.css';
-import "react-toastify/dist/ReactToastify.css";
+import 'react-toastify/dist/ReactToastify.css';
 
 export default createGlobalStyle`
   @import url('https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap');
@@ -69,6 +69,7 @@ export default createGlobalStyle`
     justify-content: center;
 
     z-index: 2;
+
   }
 
   .react-modal-content {
@@ -78,7 +79,22 @@ export default createGlobalStyle`
     padding: 3rem;
     position: relative;
     border-radius: 0.25rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: transform 0.2s ease-in 0s, opacity 0.2s ease-in 0s;
+
+  }
+
+  .ReactModal__Content--after-open {
     opacity: 1;
+    transform: translateY(0px);
+    transition: transform 0.3s ease-out 0.2s, opacity 0.3s ease-out 0.2s;
+  }
+
+  .ReactModal__Content--before-close {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: transform 0.3s ease-out 0.2s, opacity 0.3s ease-out 0.2s;
   }
   
   .react-modal-close {

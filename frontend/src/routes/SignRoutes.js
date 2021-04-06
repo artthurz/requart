@@ -1,10 +1,10 @@
-import React from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-import NotFoundPage from "../pages/NotFoundPage";
-import Login from "../pages/Login";
+import NotFoundPage from '../pages/NotFoundPage';
+import Login from '../pages/Login';
 
-import AuthLayout from "../pages/_layouts/auth";
+import AuthLayout from '../pages/_layouts/auth';
 
 const SignRoutes = () => {
   return (

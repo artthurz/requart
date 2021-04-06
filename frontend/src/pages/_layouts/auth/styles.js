@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { darken } from "polished";
+import styled from 'styled-components';
+import { darken } from 'polished';
 
 export const Wrapper = styled.div`
   min-height: 100vh;
@@ -22,7 +22,6 @@ export const Content = styled.div`
   padding-left: 60px;
 
   form {
-
     button {
       margin: 20px 0 0;
       height: 4rem;
@@ -35,7 +34,7 @@ export const Content = styled.div`
       transition: background 0.2s;
 
       &:hover {
-        background: ${darken(0.05, "#3b9eff")};
+        background: ${darken(0.05, '#3b9eff')};
       }
     }
 

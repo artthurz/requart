@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 export const Container = styled.div`
   height: calc(100% - 80px);
   background-color: #fff;
@@ -10,7 +10,7 @@ export const Container = styled.div`
     padding: 3rem;
     display: flex;
     align-items: center;
-    justify-content:  space-evenly;
+    justify-content: space-evenly;
   }
 
   .avatar-button {
@@ -21,7 +21,7 @@ export const Container = styled.div`
     border: none;
   }
 
-  .edit-icon{
+  .edit-icon {
     color: rgb(225, 225, 230);
     font-size: 1.8rem;
     position: absolute;
@@ -77,8 +77,4 @@ export const FormContainer = styled.form`
       filter: brightness(0.9);
     }
   }
-
-  /* .MuiInputLabel-outlined {
-    z-index: 0;
-  } */
 `;

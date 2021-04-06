@@ -28,6 +28,7 @@ class FileService {
 
     const avatarId = user.avatar_id;
 
+
     if (avatarId && avatarId !== 1) {
       const userFile = await File.findByPk(avatarId);
       const userAvatarFilePath = path.join(
@@ -54,7 +55,7 @@ class FileService {
 
     const file = await User.update(
       {
-        avatar_id: id
+        avatar_id: req.params.id
       },
       { where: { id: req.userID } }
     );

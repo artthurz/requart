@@ -1,51 +1,51 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-import api from "../../services/api";
-import { MdAdd, MdDelete, MdEdit } from "react-icons/md";
-import { Panel, PanelHeader } from "../../components/Panel";
-import NewProjectModal from "./NewProjectModal";
-import EditProjectModal from "./EditProjectModal";
+import api from '../../services/api';
+import { MdAdd, MdDelete, MdEdit } from 'react-icons/md';
+import { Panel, PanelHeader } from '../../components/Panel';
+import NewProjectModal from './NewProjectModal';
+import EditProjectModal from './EditProjectModal';
 import {
   makeStyles,
   createMuiTheme,
   ThemeProvider,
-} from "@material-ui/core/styles";
-import Zoom from "@material-ui/core/Zoom";
-import { DataGrid, ptBR, GridToolbar } from "@material-ui/data-grid";
-import { format, parseISO } from "date-fns";
-import Fab from "@material-ui/core/Fab";
-import { Dropdown } from "../../components/Dropdown";
-import OpConfirmation from "../../components/OpConfirmation";
+} from '@material-ui/core/styles';
+import Zoom from '@material-ui/core/Zoom';
+import { DataGrid, ptBR, GridToolbar } from '@material-ui/data-grid';
+import { format, parseISO } from 'date-fns';
+import Fab from '@material-ui/core/Fab';
+import { Dropdown } from '../../components/Dropdown';
+import OpConfirmation from '../../components/OpConfirmation';
 
-import { Body } from "./styles";
+import { Body } from './styles';
 
 const useIconButtonStyle = makeStyles(() => ({
   root: {
-    position: "absolute",
-    left: "-30px",
-    top: "10px",
-    fontSize: "25px",
-    color: "#fff !important",
-    backgroundColor: "rgba(81,150,255, 1) !important",
-    transition: "transform 250ms linear, filter 250ms linear",
-    "&:hover": {
-      backgroundColor: "rgba(81,150,255, 0.9) !important",
+    position: 'absolute',
+    left: '-30px',
+    top: '10px',
+    fontSize: '25px',
+    color: '#fff !important',
+    backgroundColor: 'rgba(81,150,255, 1) !important',
+    transition: 'transform 250ms linear, filter 250ms linear',
+    '&:hover': {
+      backgroundColor: 'rgba(81,150,255, 0.9) !important',
     },
   },
 }));
 
 const useRotatedIconButtonStyle = makeStyles(() => ({
   root: {
-    position: "absolute",
-    left: "-30px",
-    top: "10px",
-    fontSize: "25px",
-    color: "#fff !important",
-    backgroundColor: "rgba(81,150,255, 1) !important",
-    transform: "rotate(45deg)",
-    transition: "transform 250ms linear, filter 250ms linear",
-    "&:hover": {
-      backgroundColor: "rgba(81,150,255, 0.9) !important",
+    position: 'absolute',
+    left: '-30px',
+    top: '10px',
+    fontSize: '25px',
+    color: '#fff !important',
+    backgroundColor: 'rgba(81,150,255, 1) !important',
+    transform: 'rotate(45deg)',
+    transition: 'transform 250ms linear, filter 250ms linear',
+    '&:hover': {
+      backgroundColor: 'rgba(81,150,255, 0.9) !important',
     },
   },
 }));
@@ -61,15 +61,15 @@ const Projects = () => {
   const [selectedProject, setSelectedProject] = useState();
 
   const fetchProjects = async () => {
-    const { data } = await api.get("projects");
+    const { data } = await api.get('projects');
     data.forEach((e) => {
       const delivery = parseISO(e.delivery_date);
       const created = parseISO(e.createdAt);
-      e.fromattedDeliveryDate = format(delivery, "dd/MM/yyyy", {
-        timeZone: "America/Sao_Paulo",
+      e.fromattedDeliveryDate = format(delivery, 'dd/MM/yyyy', {
+        timeZone: 'America/Sao_Paulo',
       });
-      e.createdAt = format(created, "dd/MM/yyyy", {
-        timeZone: "America/Sao_Paulo",
+      e.createdAt = format(created, 'dd/MM/yyyy', {
+        timeZone: 'America/Sao_Paulo',
       });
     });
     setProjects(data);
@@ -90,39 +90,39 @@ const Projects = () => {
   };
 
   const columns = [
-    { field: "id", headerName: "Código", width: 100 },
-    { field: "name", headerName: "Nome", width: 320 },
+    { field: 'id', headerName: 'Código', width: 100 },
+    { field: 'name', headerName: 'Nome', width: 320 },
     {
-      field: "owner",
-      headerName: "Responsável",
+      field: 'owner',
+      headerName: 'Responsável',
       width: 250,
       renderCell: (params) => <span>{params.value.name}</span>,
     },
     {
-      field: "createdAt",
-      headerName: "Data de Criação",
-      type: "date",
+      field: 'createdAt',
+      headerName: 'Data de Criação',
+      type: 'date',
       width: 200,
     },
     {
-      field: "fromattedDeliveryDate",
-      headerName: "Previsão de Entrega",
-      type: "date",
+      field: 'fromattedDeliveryDate',
+      headerName: 'Previsão de Entrega',
+      type: 'date',
       width: 200,
     },
     {
-      field: "options",
-      headerName: " ",
+      field: 'options',
+      headerName: ' ',
       width: 70,
       renderCell: ({ row }) => {
         return (
           <>
             <Dropdown
-              popperOpts={{ placement: "bottom-end" }}
+              popperOpts={{ placement: 'bottom-end' }}
               className="project-dropdown"
               options={[
                 {
-                  label: "Editar",
+                  label: 'Editar',
                   icon: <MdEdit />,
                   onClick: () => {
                     setSelectedProject(row);
@@ -130,12 +130,12 @@ const Projects = () => {
                   },
                 },
                 {
-                  label: "Deletar",
+                  label: 'Deletar',
                   icon: <MdDelete />,
                   onClick: () => {
                     OpConfirmation({
-                      title: "Atenção",
-                      message: "Voce realmente deseja deletar este projeto?",
+                      title: 'Atenção',
+                      message: 'Voce realmente deseja deletar este projeto?',
                       onConfirm: () => {
                         handleProjectDelete(row.id);
                       },
@@ -180,7 +180,7 @@ const Projects = () => {
           />
         )}
 
-        <div style={{ height: "100%", width: "100%" }}>
+        <div style={{ height: '100%', width: '100%' }}>
           <ThemeProvider theme={DataGridTheme}>
             <DataGrid
               rows={projects}

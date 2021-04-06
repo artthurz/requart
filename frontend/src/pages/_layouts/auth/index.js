@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import logo from "../../../assets/images/logo.svg";
+import logo from '../../../assets/images/logo.svg';
 
 import { Wrapper, Content, Image, Footer } from './styles';
 

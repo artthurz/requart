@@ -1,40 +1,39 @@
-import React, { useState } from "react";
-import { useAuth } from "../../contexts/auth";
-import api from "../../services/api";
-import { Container, FormContainer } from "./styles";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import * as yup from "yup";
-import { useFormik } from "formik";
-import { toast } from "react-toastify";
-import { Panel, PanelHeader } from "../../components/Panel";
-import EditAvatarModal from "./EditAvatarModal";
-import { BiEditAlt } from "react-icons/bi";
-
+import React, { useState } from 'react';
+import { useAuth } from '../../contexts/auth';
+import api from '../../services/api';
+import { Container, FormContainer } from './styles';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import * as yup from 'yup';
+import { useFormik } from 'formik';
+import { toast } from 'react-toastify';
+import { Panel, PanelHeader } from '../../components/Panel';
+import EditAvatarModal from './EditAvatarModal';
+import { BiEditAlt } from 'react-icons/bi';
 
 const validationSchema = yup.object({
-  name: yup.string("Digite seu login").required("O login é obrigatório"),
+  name: yup.string('Digite seu login').required('O login é obrigatório'),
   email: yup
-    .string("Email")
-    .email("Digite um email válido")
-    .required("O email é obrigatório"),
-  login: yup.string("Login").required("O login é obrigatório"),
+    .string('Email')
+    .email('Digite um email válido')
+    .required('O email é obrigatório'),
+  login: yup.string('Login').required('O login é obrigatório'),
   oldPassword: yup
-    .string("Senha antiga")
+    .string('Senha antiga')
     .min(6)
-    .when("password", (password, field) =>
+    .when('password', (password, field) =>
       password
-        ? field.required("Digite a senha antiga para definir uma nova")
+        ? field.required('Digite a senha antiga para definir uma nova')
         : field
     ),
-  password: yup.string("Nova senha").min(6),
+  password: yup.string('Nova senha').min(6),
   passwordConfirmation: yup
     .string()
-    .when("password", (password, field) =>
+    .when('password', (password, field) =>
       password
         ? field
-            .required("Confirme a nova senha")
-            .oneOf([yup.ref("password"), null], "A senhas não conferem")
+            .required('Confirme a nova senha')
+            .oneOf([yup.ref('password'), null], 'A senhas não conferem')
         : field
     ),
 });
@@ -49,9 +48,9 @@ function Profile() {
     try {
       const { data } = await api.put(`users/${user.id}`, values);
       ReloadUser(data);
-      toast.success("Perfil editado com sucesso!");
+      toast.success('Perfil editado com sucesso!');
     } catch (error) {
-      toast.error("Erro ao editar seu perfil, revise os dados.");
+      toast.error('Erro ao editar seu perfil, revise os dados.');
     }
   };
 
@@ -89,7 +88,7 @@ function Profile() {
               fullWidth
               id="name"
               name="name"
-              style={{ marginBottom: "20px" }}
+              style={{ marginBottom: '20px' }}
               value={formik.values.name}
               onChange={formik.handleChange}
               error={formik.touched.name && Boolean(formik.errors.name)}
@@ -102,7 +101,7 @@ function Profile() {
               type="email"
               id="email"
               name="email"
-              style={{ marginBottom: "20px" }}
+              style={{ marginBottom: '20px' }}
               value={formik.values.email}
               onChange={formik.handleChange}
               error={formik.touched.email && Boolean(formik.errors.email)}
@@ -114,7 +113,7 @@ function Profile() {
               fullWidth
               id="login"
               name="login"
-              style={{ marginBottom: "20px" }}
+              style={{ marginBottom: '20px' }}
               value={formik.values.login}
               onChange={formik.handleChange}
               error={formik.touched.login && Boolean(formik.errors.login)}
@@ -135,10 +134,10 @@ function Profile() {
                   id="oldPassword"
                   name="oldPassword"
                   style={{
-                    marginBottom: "20px",
-                    width: "45%",
-                    marginTop: "20px",
-                    width: "100%"
+                    marginBottom: '20px',
+                    width: '45%',
+                    marginTop: '20px',
+                    width: '100%',
                   }}
                   value={formik.values.oldPassword}
                   onChange={formik.handleChange}
@@ -150,14 +149,14 @@ function Profile() {
                     formik.touched.oldPassword && formik.errors.oldPassword
                   }
                 />
-                <aside style={{ width: "100%" }}>
+                <aside style={{ width: '100%' }}>
                   <TextField
                     label="Nova Senha"
                     variant="outlined"
                     type="password"
                     id="password"
                     name="password"
-                    style={{ marginBottom: "20px", width: "45%" }}
+                    style={{ marginBottom: '20px', width: '45%' }}
                     value={formik.values.password}
                     onChange={formik.handleChange}
                     error={
@@ -174,9 +173,9 @@ function Profile() {
                     id="passwordConfirmation"
                     name="passwordConfirmation"
                     style={{
-                      marginBottom: "20px",
-                      width: "45%",
-                      marginLeft: "10%",
+                      marginBottom: '20px',
+                      width: '45%',
+                      marginLeft: '10%',
                     }}
                     value={formik.values.passwordConfirmation}
                     onChange={formik.handleChange}
@@ -203,13 +202,11 @@ function Profile() {
           </FormContainer>
         </div>
       </Panel>
-      {isEditAvatarModalOpen && (
-        <EditAvatarModal
-          isOpen={isEditAvatarModalOpen}
-          onRequestClose={() => setIsEditAvatarModalOpen(false)}
-          project={user}
-        />
-      )}
+      <EditAvatarModal
+        isOpen={isEditAvatarModalOpen}
+        onRequestClose={() => setIsEditAvatarModalOpen(false)}
+        project={user}
+      />
     </Container>
   );
 }

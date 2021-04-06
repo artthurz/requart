@@ -1,37 +1,37 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
-import logo from "../../assets/images/logo.svg";
-import { Span, Image, Container } from "./styles";
-import { useAuth } from "../../contexts/auth";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import logo from '../../assets/images/logo.svg';
+import { Span, Image, Container } from './styles';
+import { useAuth } from '../../contexts/auth';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
 const validationSchema = yup.object({
-  login: yup.string("Digite seu login").required("O login é obrigatório"),
+  login: yup.string('Digite seu login').required('O login é obrigatório'),
   password: yup
-    .string("Digite sua senha")
-    .min(6, "A senha deve conter no mínimo 6 caracteres")
-    .required("A senha é obrigatória"),
+    .string('Digite sua senha')
+    .min(6, 'A senha deve conter no mínimo 6 caracteres')
+    .required('A senha é obrigatória'),
 });
 
 const Login = () => {
   const { Login } = useAuth();
-  let history = useHistory()
+  let history = useHistory();
 
   async function handleLogin(values) {
     history.push('/');
     await Login({
       login: values.login,
       password: values.password,
-    })
+    });
   }
 
   const formik = useFormik({
     initialValues: {
-      login: "",
-      password: "",
+      login: '',
+      password: '',
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -48,7 +48,7 @@ const Login = () => {
           id="login"
           name="login"
           label="Login"
-          style={{ marginBottom: "20px" }}
+          style={{ marginBottom: '20px' }}
           value={formik.values.login}
           onChange={formik.handleChange}
           error={formik.touched.login && Boolean(formik.errors.login)}
@@ -60,7 +60,7 @@ const Login = () => {
           name="password"
           label="Senha"
           type="password"
-          style={{ marginBottom: "20px" }}
+          style={{ marginBottom: '20px' }}
           value={formik.values.password}
           onChange={formik.handleChange}
           error={formik.touched.password && Boolean(formik.errors.password)}
@@ -70,9 +70,9 @@ const Login = () => {
           Ao clicar em Entrar, você concorda com nossos Termos de Uso e Serviços
           e Política de Dados e Privacidade.
         </Span>
-          <Button color="primary" variant="contained" fullWidth type="submit">
-            Entrar
-          </Button>
+        <Button color="primary" variant="contained" fullWidth type="submit">
+          Entrar
+        </Button>
       </form>
     </Container>
   );

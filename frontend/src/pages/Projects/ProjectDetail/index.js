@@ -10,7 +10,6 @@ const Projects = () => {
     <div>
       <h1>Datalhes do Projeto</h1>
     </div>
-    
   );
 };
 

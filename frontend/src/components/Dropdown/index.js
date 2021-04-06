@@ -4,13 +4,13 @@ import React, { useState } from 'react';
 import Popper from '../Popper';
 import { BngClickOutsideOverlay } from '../ClickOutsideOverlay';
 import { BngIconButton } from '../IconButton';
-import { MdMoreVert } from "react-icons/md";
-import _ from 'lodash'
+import { MdMoreVert } from 'react-icons/md';
+import _ from 'lodash';
 
 export const Dropdown = ({
   className = '',
   popperClassName = '',
-  icon = <MdMoreVert/>,
+  icon = <MdMoreVert />,
   container = document.body,
   closeOnSelect = true,
   options = [],
@@ -43,7 +43,9 @@ export const Dropdown = ({
 
   return (
     <div className={`BngDropdown ${className}`} title={title}>
-      {!customButton && <BngIconButton  onClick={openDropdown}>{icon}</BngIconButton>}
+      {!customButton && (
+        <BngIconButton onClick={openDropdown}>{icon}</BngIconButton>
+      )}
       {customButton && customButton({ openDropdown })}
 
       <Popper

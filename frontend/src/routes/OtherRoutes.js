@@ -1,13 +1,13 @@
-import React from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-import Home from "../pages/Home";
-import Projects from "../pages/Projects";
-import Profile from "../pages/Profile";
-import Users from "../pages/Users";
-import NotFoundPage from "../pages/NotFoundPage";
+import Home from '../pages/Home';
+import Projects from '../pages/Projects';
+import Profile from '../pages/Profile';
+import Users from '../pages/Users';
+import NotFoundPage from '../pages/NotFoundPage';
 
-import DefaultLayout from "../pages/_layouts/default";
+import DefaultLayout from '../pages/_layouts/default';
 
 const OtherRoutes = () => {
   return (
