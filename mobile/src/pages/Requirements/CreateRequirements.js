@@ -70,7 +70,6 @@ export default function CreateRequirements({ navigation, route }) {
         latitude: coords.latitude,
         longitude: coords.longitude,
       });
-      console.log(coords);
     })();
   }, []);
 
