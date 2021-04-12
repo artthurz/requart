@@ -6,6 +6,7 @@ import {
   ScrollView,
   SafeAreaView,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import * as Location from "expo-location";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -34,6 +35,9 @@ export default function CreateRequirements({ navigation, route }) {
   const [situations, setSituations] = useState([]);
 
   const [currentPhoto, setCurrentPhoto] = useState();
+
+  const [firstPhoto, setFirstPhoto] = useState();
+  const [secondPhoto, setSecondPhoto] = useState();
 
   const priRef = useRef(null);
   const comRef = useRef(null);
@@ -94,30 +98,54 @@ export default function CreateRequirements({ navigation, route }) {
   }, []);
 
   const HandlePickPhoto = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+    let response = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
 
-    if (!result.cancelled) {
-      // setImage(result.uri);
-      console.log(result);
+    if (!response.cancelled) {
+      let data = new FormData();
+      data.append("file", {
+        type: "image/jpeg",
+        name: `${project_id}.jpg`,
+        uri: response.uri,
+      });
+
+      const file = await axios.post("requirements/files", data);
+      if (currentPhoto === 1) {
+        setFirstPhoto(file.data);
+      } else {
+        setSecondPhoto(file.data);
+      }
+      setImageModalVisible(false);
     }
   };
 
   const HandleTakePhoto = async () => {
-    let result = await ImagePicker.launchCameraAsync({
+    let response = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
 
-    if (!result.cancelled) {
-      // setImage(result.uri);
-      console.log(result);
+    if (!response.cancelled) {
+      let data = new FormData();
+      data.append("file", {
+        type: "image/jpeg",
+        name: `${project_id}.jpg`,
+        uri: response.uri,
+      });
+
+      const file = await axios.post("requirements/files", data);
+      if (currentPhoto === 1) {
+        setFirstPhoto(file.data);
+      } else {
+        setSecondPhoto(file.data);
+      }
+      setImageModalVisible(false);
     }
   };
 
@@ -126,14 +154,10 @@ export default function CreateRequirements({ navigation, route }) {
     setErrorVisible(false);
   };
 
-  const onDismissSnackBar = () => setVisible(false);
-
   const onToggleErrorSnackBar = () => {
     setErrorVisible(!visible);
     setVisible(false);
   };
-
-  const onDismissErrorSnackBar = () => setErrorVisible(false);
 
   async function saveItems() {
     try {
@@ -145,6 +169,8 @@ export default function CreateRequirements({ navigation, route }) {
         priority_id,
         complexity_id,
         situation_id,
+        first_file_id: firstPhoto?.id,
+        second_file_id: secondPhoto?.id,
         latitude: location.latitude,
         longitude: location.longitude,
       });
@@ -159,9 +185,8 @@ export default function CreateRequirements({ navigation, route }) {
     saveItems();
     setName("");
     setDescription("");
-    priRef.current.reset();
-    comRef.current.reset();
-    sitRef.current.reset();
+    setFirstPhoto();
+    setSecondPhoto();
   }
 
   function handleOpenModal(photo) {
@@ -239,14 +264,40 @@ export default function CreateRequirements({ navigation, route }) {
               onChangeText={(e) => setDescription(e)}
             />
 
-            <Text style={{marginTop: 10, fontSize: 20}}>Imagens</Text>
+            <Text style={{ marginTop: 10, fontSize: 20 }}>Imagens</Text>
 
-            <View style={{ flexDirection: "row"}}>
+            <View style={{ flexDirection: "row" }}>
               <TouchableOpacity onPress={() => handleOpenModal(1)}>
-                <View style={styles.imageStyle}></View>
+                {firstPhoto ? (
+                  <Image
+                    style={styles.imageStyle}
+                    source={{
+                      uri: firstPhoto?.url,
+                    }}
+                  />
+                ) : (
+                  <View style={styles.imageStyle}>
+                    <Text style={{ color: "#fff", alignSelf: "center" }}>
+                      Selecione
+                    </Text>
+                  </View>
+                )}
               </TouchableOpacity>
               <TouchableOpacity onPress={() => handleOpenModal(2)}>
-                <View style={styles.imageStyle}></View>
+                {secondPhoto ? (
+                  <Image
+                    style={styles.imageStyle}
+                    source={{
+                      uri: secondPhoto?.url,
+                    }}
+                  />
+                ) : (
+                  <View style={styles.imageStyle}>
+                    <Text style={{ color: "#fff", alignSelf: "center" }}>
+                      Selecione
+                    </Text>
+                  </View>
+                )}
               </TouchableOpacity>
             </View>
 
@@ -261,17 +312,17 @@ export default function CreateRequirements({ navigation, route }) {
           </View>
           <Snackbar
             visible={visible}
-            onDismiss={onDismissSnackBar}
+            onDismiss={() => setVisible(false)}
             duration={3000}
           >
-            Projeto adicionado com sucesso!
+            Requisito adicionado com sucesso!
           </Snackbar>
           <Snackbar
             visible={errorVisible}
-            onDismiss={onDismissErrorSnackBar}
+            onDismiss={() => setErrorVisible(false)}
             duration={3000}
           >
-            Erro ao adicionar projeto.
+            Erro ao adicionar requisito.
           </Snackbar>
         </ScrollView>
       </SafeAreaView>
@@ -299,7 +350,7 @@ export default function CreateRequirements({ navigation, route }) {
               color="#4169e1"
               onPress={() => HandleTakePhoto()}
             >
-              Tirar uma foto
+              Usar câmera
             </Button>
           </View>
         </Modal>
@@ -368,6 +419,7 @@ const styles = StyleSheet.create({
     height: 80,
     backgroundColor: "#333",
     borderRadius: 20,
-    margin: 20
+    margin: 20,
+    justifyContent: "center",
   },
 });

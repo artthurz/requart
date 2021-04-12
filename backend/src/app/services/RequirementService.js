@@ -72,6 +72,8 @@ class RequirementService {
       non_functional: Yup.boolean().required(),
       project_id: Yup.number().required(),
       priority_id: Yup.number().required(),
+      first_file_id: Yup.number(),
+      second_file_id: Yup.number(),
       complexity_id: Yup.number().required(),
       situation_id: Yup.number().required(),
     });
@@ -122,6 +124,16 @@ class RequirementService {
           model: Priority,
           as: 'priority',
           attributes: ['id', 'name', 'color'],
+        },
+        {
+          model: Photo,
+          as: 'firstFile',
+          attributes: ['id', 'path', 'url'],
+        },
+        {
+          model: Photo,
+          as: 'secondFile',
+          attributes: ['id', 'path', 'url'],
         },
       ],
     });
