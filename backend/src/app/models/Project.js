@@ -7,6 +7,7 @@ class Project extends Model {
         name: Sequelize.STRING,
         description: Sequelize.STRING,
         delivery_date: Sequelize.DATE,
+        link: Sequelize.STRING,
         owner_id: Sequelize.INTEGER,
         status: Sequelize.BOOLEAN,
         deleted_at: Sequelize.DATE,

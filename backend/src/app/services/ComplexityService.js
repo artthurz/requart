@@ -23,20 +23,19 @@ class ComplexityService {
       where: { name: req.body.name },
     });
 
-    if (complexityExists && complexityExists.status) {
+    if (complexityExists && complexityExists.deleted_at !== null) {
       return res.status(400).json({ error: 'Complexity already exists.' });
     } else if (complexityExists) {
       await complexityExists.update({
-        status: true,
+        deleted_at: null,
         description: req.body.description,
         color: req.body.color,
       });
       return res.json(complexityExists);
     }
 
-    const { id, name, description, color, status } = await Complexity.create({
+    const { id, name, description, color,  } = await Complexity.create({
       ...req.body,
-      status: true,
     });
 
     return res.json({

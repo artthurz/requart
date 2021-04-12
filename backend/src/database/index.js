@@ -1,7 +1,8 @@
 import Sequelize from 'sequelize';
 
 import User from '../app/models/User';
-import File from '../app/models/File';
+import Avatar from '../app/models/Avatar';
+import Photo from '../app/models/Photo';
 import Complexity from '../app/models/Complexity';
 import Situation from '../app/models/Situation';
 import Priority from '../app/models/Priority';
@@ -12,7 +13,8 @@ import databaseConfig from '../config/database';
 
 const models = [
   User,
-  File,
+  Avatar,
+  Photo,
   Complexity,
   Situation,
   Priority,

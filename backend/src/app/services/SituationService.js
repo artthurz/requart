@@ -3,7 +3,7 @@ import Situation from '../models/Situation';
 
 class SituationService {
   async index(req, res) {
-    const situations = await Situation.findAll({ where: { status: true } });
+    const situations = await Situation.findAll({ where: { deleted_at: null } });
 
     return res.json(situations);
   }
@@ -23,20 +23,19 @@ class SituationService {
       where: { name: req.body.name },
     });
 
-    if (situationExists && situationExists.status) {
+    if (situationExists && situationExists.deleted_at !== null) {
       return res.status(400).json({ error: 'Situation already exists.' });
     } else if (situationExists) {
       await situationExists.update({
-        status: true,
+        deleted_at: null,
         description: req.body.description,
         color: req.body.color,
       });
       return res.json(situationExists);
     }
 
-    const { id, name, description, color, status } = await Situation.create({
+    const { id, name, description, color } = await Situation.create({
       ...req.body,
-      status: true,
     });
 
     return res.json({
@@ -44,7 +43,6 @@ class SituationService {
       name,
       description,
       color,
-      status,
     });
   }
 

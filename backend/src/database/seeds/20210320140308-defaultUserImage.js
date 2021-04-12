@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert('files', [{
+    return queryInterface.bulkInsert('avatars', [{
       name: 'UserBlank',
       path: 'userBlank.png',
       created_at: new Date(),
@@ -10,6 +10,6 @@ module.exports = {
     }]);
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('files', null, {});
+    return queryInterface.bulkDelete('avatars', null, {});
   }
 };

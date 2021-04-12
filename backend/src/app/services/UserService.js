@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import User from '../models/User';
-import File from '../models/File';
+import Avatar from '../models/Avatar';
 
 class UserService {
   async index(req, res) {
@@ -8,7 +8,7 @@ class UserService {
       where: { deleted_at: null },
       users: ['id', 'name', 'login', 'admin'],
       include: [
-        { model: File, as: 'avatar', attributes: ['id', 'path', 'url'] },
+        { model: Avatar, as: 'avatar', attributes: ['id', 'path', 'url'] },
       ],
     });
 
@@ -90,7 +90,7 @@ class UserService {
     const { id, name, email, avatar } = await User.findByPk(req.params.id, {
       include: [
         {
-          model: File,
+          model: Avatar,
           as: 'avatar',
           attributes: ['id', 'path', 'url'],
         },

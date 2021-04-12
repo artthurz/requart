@@ -26,17 +26,19 @@ function EditAvatarModal({ isOpen, onRequestClose }) {
   }
 
   async function handleDeleteFile() {
+    console.log(preview);
     if (!(preview.id === undefined)) {
       await api.delete(`files/${preview.id}`);
     }
     onRequestClose();
+    setPreview({url: user.avatar.url});
   }
 
   async function handleConfirmFileChange() {
     try {
       if (!(preview.id === undefined)) {
         await api.put(`files/${preview.id}`);
-        toast.success('Foto atualziada com sucesso!');
+        toast.success('Foto atualizada com sucesso!');
         ReloadAvatar(preview);
       }
       onRequestClose();

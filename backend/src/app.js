@@ -11,7 +11,8 @@ import priorityRoutes from './app/routes/priority.routes';
 import situationRoutes from './app/routes/situation.routes';
 import userRoutes from './app/routes/user.routes';
 import sessionRoutes from './app/routes/session.routes';
-import fileRoutes from './app/routes/file.routes';
+import avatarRoutes from './app/routes/avatar.routes';
+import photoRoutes from './app/routes/photo.routes';
 import roleRoutes from './app/routes/role.routes';
 import projectRoutes from './app/routes/project.routes';
 import requirementRoutes from './app/routes/requirement.routes';
@@ -35,7 +36,11 @@ class App {
     this.server.use(express.json());
     this.server.use(
       '/files',
-      express.static(path.resolve(__dirname, '..', 'tmp', 'uploads'))
+      express.static(path.resolve(__dirname, '..', 'tmp', 'uploads', 'avatars'))
+    );
+    this.server.use(
+      '/requirements/files',
+      express.static(path.resolve(__dirname, '..', 'tmp', 'uploads', 'photos'))
     );
   }
 
@@ -46,7 +51,8 @@ class App {
     this.server.use(priorityRoutes);
     this.server.use(situationRoutes);
     this.server.use(userRoutes);
-    this.server.use(fileRoutes);
+    this.server.use(avatarRoutes);
+    this.server.use(photoRoutes);
     this.server.use(roleRoutes);
     this.server.use(projectRoutes);
     this.server.use(requirementRoutes);

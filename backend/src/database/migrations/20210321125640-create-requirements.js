@@ -31,6 +31,24 @@ module.exports = {
         defaultValue: true,
         allowNull: false,
       },
+      latitude: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      longitude: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      first_file_id: {
+        type: Sequelize.INTEGER,
+        references: { model: 'photos', key: 'id' },
+        allowNull: true,
+      },
+      second_file_id: {
+        type: Sequelize.INTEGER,
+        references: { model: 'photos', key: 'id' },
+        allowNull: true,
+      },
       project_id: {
         type: Sequelize.INTEGER,
         references: { model: 'projects', key: 'id' },

@@ -6,6 +6,7 @@ import Requirement from '../models/Requirement';
 import Complexity from '../models/Complexity';
 import Situation from '../models/Situation';
 import Priority from '../models/Priority';
+import Photo from '../models/Photo';
 
 class RequirementService {
   async index(req, res) {
@@ -21,6 +22,8 @@ class RequirementService {
         'description',
         'non_functional',
         'version',
+        'latitude',
+        'longitude',
         'created_at',
         'updated_at',
       ],
@@ -42,11 +45,21 @@ class RequirementService {
           as: 'priority',
           attributes: ['id', 'name', 'color'],
         },
+        {
+          model: Photo,
+          as: 'firstFile',
+          attributes: ['id', 'path', 'url'],
+        },
+        {
+          model: Photo,
+          as: 'secondFile',
+          attributes: ['id', 'path', 'url'],
+        },
       ],
     });
 
     if (_.isEmpty(requirements)) {
-      return res.status(400).json({ error: 'Project not found.' });
+      return res.status(400).json({ error: 'Requirements not found.' });
     }
 
     return res.json(requirements);

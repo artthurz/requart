@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 import User from '../models/User';
-import File from '../models/File';
+import Avatar from '../models/Avatar';
 import authConfig from '../../config/auth';
 
 class SessionService {
@@ -11,7 +11,7 @@ class SessionService {
     const user = await User.findOne({
       where: { login },
       include: [
-        { model: File, as: 'avatar', attributes: ['id', 'path', 'url'] },
+        { model: Avatar, as: 'avatar', attributes: ['id', 'path', 'url'] },
       ],
     });
 

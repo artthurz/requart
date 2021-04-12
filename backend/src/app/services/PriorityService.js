@@ -3,7 +3,7 @@ import Priority from '../models/Priority';
 
 class PriorityService {
   async index(req, res) {
-    const priorities = await Priority.findAll({ where: { status: true } });
+    const priorities = await Priority.findAll({ where: { deleted_at: null } });
 
     return res.json(priorities);
   }
@@ -23,20 +23,19 @@ class PriorityService {
       where: { name: req.body.name },
     });
 
-    if (priortityExists && priortityExists.status) {
+    if (priortityExists && priortityExists.deleted_at !== null) {
       return res.status(400).json({ error: 'Priority already exists.' });
     } else if (priortityExists) {
       await priortityExists.update({
-        status: true,
+        deleted_at: null,
         description: req.body.description,
         color: req.body.color,
       });
       return res.json(priortityExists);
     }
 
-    const { id, name, description, color, status } = await Priority.create({
+    const { id, name, description, color } = await Priority.create({
       ...req.body,
-      status: true,
     });
 
     return res.json({
@@ -44,7 +43,6 @@ class PriorityService {
       name,
       description,
       color,
-      status,
     });
   }
 

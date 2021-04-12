@@ -32,7 +32,7 @@ module.exports = {
       },
       avatar_id: {
         type: Sequelize.INTEGER,
-        references: { model: 'files', key: 'id' },
+        references: { model: 'avatars', key: 'id' },
         defaultValue: 1,
         allowNull: false,
       },
