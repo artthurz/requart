@@ -1,5 +1,12 @@
 import React, { useState, useCallback } from "react";
-import { StyleSheet, FlatList, TouchableOpacity, Text, View } from "react-native";
+import { Card, CardBackground } from "./styles";
+import {
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Text,
+  View,
+} from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import {
   IconButton,
@@ -10,7 +17,7 @@ import {
   Button,
   TextInput,
 } from "react-native-paper";
-import axios from 'axios'
+import axios from "axios";
 
 export default function Requirements({ navigation, route }) {
   const [id, setId] = useState(0);
@@ -75,99 +82,103 @@ export default function Requirements({ navigation, route }) {
   );
 
   const rederItem = ({ item }) => (
-    <TouchableOpacity style={styles.card} activeOpacity={0.8}>
-      <View style={styles.titleContainer}></View>
-      <View style={styles.subContainer}>
-        <View style={styles.contentContainer}></View>
-        <View style={styles.contentEnveloper}>
-          <Text style={styles.messageTitle}>
-            {item.non_functional ? "RNF" : "RF"}
-          </Text>
-          <Text style={styles.messageTitle}>{`${item.requirement_id} - `}</Text>
-          <Text style={styles.messageTitle}>{item.name}</Text>
-        </View>
-        <View style={styles.contentEnveloper}>
-          <Text style={styles.messageSubTitle}>{`Versão `}</Text>
-          <Text style={styles.messageSubTitle}>{item.version}</Text>
-        </View>
-        <View style={styles.cardsEnveloper}>
+    <Card activeOpacity={0.8}>
+      <CardBackground colors={["#4169e1", "#214cce"]}>
+        <View style={styles.cardHeader}>
           <View style={styles.contentEnveloper}>
-            <Text style={styles.messageSubTitle}>{`Prioridade `}</Text>
-            <View
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: item.priority.color,
-                borderRadius: 20,
-                width: 150,
-                padding: 10,
-                marginBottom: 10,
-                marginTop: 10,
-              }}
-            >
-              <Text style={styles.tagStyle}>{item.priority.name}</Text>
-            </View>
+            <Text style={styles.messageTitle}>
+              {item.non_functional ? "RNF" : "RF"}
+            </Text>
+            <Text
+              style={styles.messageTitle}
+            >{`${item.requirement_id} - `}</Text>
+            <Text style={styles.messageTitle}>{item.name}</Text>
           </View>
           <View style={styles.contentEnveloper}>
-            <Text style={styles.messageSubTitle}>{`Complexidade `}</Text>
-            <View
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: item.complexity.color,
-                borderRadius: 20,
-                width: 150,
-                padding: 10,
-                marginBottom: 10,
-              }}
-            >
-              <Text style={styles.tagStyle}>{item.complexity.name}</Text>
-            </View>
-          </View>
-          <View style={styles.contentEnveloper}>
-            <Text style={styles.messageSubTitle}>{`Situação `}</Text>
-            <View
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: item.situation.color,
-                borderRadius: 20,
-                width: 150,
-                padding: 10,
-              }}
-            >
-              <Text style={styles.tagStyle}>{item.situation.name}</Text>
-            </View>
+            <Text style={styles.messageSubTitle}>{`Versão `}</Text>
+            <Text style={styles.messageSubTitle}>{item.version}</Text>
           </View>
         </View>
+        <View style={styles.cardBody}>
+          <View style={styles.cardsEnveloper}>
+            <View style={styles.contentEnveloper}>
+              <Text style={styles.messageSubTitle}>{`Prioridade `}</Text>
+              <View
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: item.priority.color,
+                  borderRadius: 20,
+                  width: 150,
+                  padding: 10,
+                  marginBottom: 10,
+                  marginTop: 10,
+                }}
+              >
+                <Text style={styles.tagStyle}>{item.priority.name}</Text>
+              </View>
+            </View>
+            <View style={styles.contentEnveloper}>
+              <Text style={styles.messageSubTitle}>{`Complexidade `}</Text>
+              <View
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: item.complexity.color,
+                  borderRadius: 20,
+                  width: 150,
+                  padding: 10,
+                  marginBottom: 10,
+                }}
+              >
+                <Text style={styles.tagStyle}>{item.complexity.name}</Text>
+              </View>
+            </View>
+            <View style={styles.contentEnveloper}>
+              <Text style={styles.messageSubTitle}>{`Situação `}</Text>
+              <View
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: item.situation.color,
+                  borderRadius: 20,
+                  width: 150,
+                  padding: 10,
+                }}
+              >
+                <Text style={styles.tagStyle}>{item.situation.name}</Text>
+              </View>
+            </View>
+          </View>
 
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-evenly",
-            backgroundColor: "transparent",
-          }}
-        ></View>
-        <View style={styles.contentContainer}>
-          <View style={styles.buttonsContainer}>
-            <IconButton
-              icon="square-edit-outline"
-              style={{backgroundColor: "#fff"}}
-              color={Colors.blue500}
-              size={25}
-              onPress={() => showModal(item)}
-            />
-            <IconButton
-              icon="trash-can-outline"
-              style={{backgroundColor: "#fff"}}
-              color={Colors.red500}
-              size={25}
-              onPress={() => deleteRequirement(item.id)}
-            />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+              backgroundColor: "transparent",
+            }}
+          ></View>
+          <View style={styles.contentContainer}>
+            <View style={styles.cardFooter}>
+              <IconButton
+                icon="square-edit-outline"
+                style={{ backgroundColor: "#fff" }}
+                color={Colors.blue500}
+                size={25}
+                onPress={() => showModal(item)}
+              />
+              <IconButton
+                icon="trash-can-outline"
+                style={{ backgroundColor: "#fff" }}
+                color={Colors.red500}
+                size={25}
+                onPress={() => deleteRequirement(item.id)}
+              />
+            </View>
           </View>
         </View>
-      </View>
-    </TouchableOpacity>
+      </CardBackground>
+    </Card>
   );
 
   return (
@@ -190,9 +201,11 @@ export default function Requirements({ navigation, route }) {
             right: 10,
           }}
           icon="plus"
-          onPress={() => navigation.navigate("Criar Requisito", {
-            project_id: project_id,
-          })}
+          onPress={() =>
+            navigation.navigate("Criar Requisito", {
+              project_id: project_id,
+            })
+          }
           size={20}
           color={"white"}
         />
@@ -274,13 +287,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  buttonsContainer: {
+  cardFooter: {
     flexDirection: "row",
     justifyContent: "space-between",
     borderRadius: 100,
     marginTop: 30,
   },
-  titleContainer: {
+  cardHeader: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -319,7 +332,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 10,
   },
-  subContainer: {
+  cardBody: {
     marginTop: 20,
     backgroundColor: "transparent",
     justifyContent: "center",
@@ -341,14 +354,6 @@ const styles = StyleSheet.create({
   dateStyle: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#fff",
-  },
-  card: {
-    backgroundColor: "#4169e1",
-    borderRadius: 20,
-    paddingVertical: 35,
-    paddingHorizontal: 20,
-    marginBottom: 20,
     color: "#fff",
   },
   contentEnveloper: {

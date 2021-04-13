@@ -1,5 +1,12 @@
 import React, { useState, useCallback } from "react";
-import { StyleSheet, FlatList, TouchableOpacity, Text, View } from "react-native";
+import { Card, CardBackground } from "./styles";
+import {
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Text,
+  View,
+} from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
 import {
@@ -11,7 +18,7 @@ import {
   Button,
   TextInput,
 } from "react-native-paper";
-import axios from 'axios'
+import axios from "axios";
 
 export default function Projects({ navigation }) {
   const [id, setId] = useState(0);
@@ -51,7 +58,12 @@ export default function Projects({ navigation }) {
 
   async function editProject() {
     try {
-      await axios.put(`/projects/${id}`, { name, description, owner_id, delivery_date });
+      await axios.put(`/projects/${id}`, {
+        name,
+        description,
+        owner_id,
+        delivery_date,
+      });
       loadProjects();
     } catch (error) {
       console.log(error);
@@ -70,74 +82,94 @@ export default function Projects({ navigation }) {
   );
 
   const renderProjects = ({ item }) => (
-    <TouchableOpacity 
-      style={styles.card}
+    <Card
       activeOpacity={0.8}
-      onPress={() => navigation.navigate("Requisitos", {
-        project_id: item.id,
-      })}
+      onPress={() =>
+        navigation.navigate("Requisitos", {
+          project_id: item.id,
+        })
+      }
     >
-      <View style={styles.titleContainer}>
-        <Text style={styles.messageTitle}>{item.name}</Text>
-      </View>
-      <View style={styles.subContainer}>
-        <View style={styles.contentContainer}>
+      <CardBackground colors={["#4169e1", "#214cce"]}>
+        <View style={styles.titleContainer}>
+          <Text style={styles.messageTitle}>{item.name}</Text>
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            backgroundColor: "transparent",
-          }}
-        >
-          <Text style={styles.dateStyle}>Responsável: </Text>
-          <Text style={styles.descriptionStyle}>{item.owner.name}</Text>
-        </View>
-        <View style={{alignItems: "center", justifyContent: "center", backgroundColor: "transparent", marginBottom: 20}}>
-        <View style={{alignItems: "center", justifyContent: "center", backgroundColor: item.status ? "#3ca419" : "#e14169", borderRadius: 20, width: 150, padding: 10}}>
-          <Text style={styles.tagStyle}>{item.status ? "Em andamento" : "Finalizado"}</Text>
-        </View>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-evenly",
-            backgroundColor: "transparent",
-          }}
-        >
-          <View style={styles.contentContainer}>
-            <Text style={styles.dateStyle}>Entrega estimada</Text>
-            <Text style={styles.dateStyle}>
-              {moment(item.delivery_date).format("DD/MM/YYYY")}
-            </Text>
+        <View style={styles.subContainer}>
+          <View style={styles.contentContainer}></View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              backgroundColor: "transparent",
+            }}
+          >
+            <Text style={styles.dateStyle}>Responsável: </Text>
+            <Text style={styles.descriptionStyle}>{item.owner.name}</Text>
+          </View>
+          <View
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "transparent",
+              marginBottom: 20,
+            }}
+          >
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: item.status ? "#3ca419" : "#e14169",
+                borderRadius: 20,
+                width: 150,
+                padding: 10,
+              }}
+            >
+              <Text style={styles.tagStyle}>
+                {item.status ? "Em andamento" : "Finalizado"}
+              </Text>
+            </View>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+              backgroundColor: "transparent",
+            }}
+          >
+            <View style={styles.contentContainer}>
+              <Text style={styles.dateStyle}>Entrega estimada</Text>
+              <Text style={styles.dateStyle}>
+                {moment(item.delivery_date).format("DD/MM/YYYY")}
+              </Text>
+            </View>
+            <View style={styles.contentContainer}>
+              <Text style={styles.dateStyle}>Data de Criação</Text>
+              <Text style={styles.dateStyle}>
+                {moment(item.created_at).format("DD/MM/YYYY")}
+              </Text>
+            </View>
           </View>
           <View style={styles.contentContainer}>
-            <Text style={styles.dateStyle}>Data de Criação</Text>
-            <Text style={styles.dateStyle}>
-              {moment(item.created_at).format("DD/MM/YYYY")}
-            </Text>
+            <View style={styles.buttonsContainer}>
+              <IconButton
+                icon="square-edit-outline"
+                style={{ backgroundColor: "#fff" }}
+                color={Colors.blue500}
+                size={25}
+                onPress={() => showModal(item)}
+              />
+              <IconButton
+                icon="trash-can-outline"
+                style={{ backgroundColor: "#fff" }}
+                color={Colors.red500}
+                size={25}
+                onPress={() => deleteProject(item.id)}
+              />
+            </View>
           </View>
         </View>
-        <View style={styles.contentContainer}>
-          <View style={styles.buttonsContainer}>
-            <IconButton
-              icon="square-edit-outline"
-              style={{backgroundColor: "#fff"}}
-              color={Colors.blue500}
-              size={25}
-              onPress={() => showModal(item)}
-            />
-            <IconButton
-              icon="trash-can-outline"
-              style={{backgroundColor: "#fff"}}
-              color={Colors.red500}
-              size={25}
-              onPress={() => deleteProject(item.id)}
-            />
-          </View>
-        </View>
-      </View>
-    </TouchableOpacity>
+      </CardBackground>
+    </Card>
   );
 
   return (
@@ -150,13 +182,15 @@ export default function Projects({ navigation }) {
           keyExtractor={(item) => item.id.toString()}
         />
         <IconButton
-          style={{width: 60,  
-            height: 60,   
-            borderRadius: 30,            
-            backgroundColor: '#3ca419',                                    
-            position: 'absolute',                                          
-            bottom: 10,                                                    
-            right: 10, }}
+          style={{
+            width: 60,
+            height: 60,
+            borderRadius: 30,
+            backgroundColor: "#3ca419",
+            position: "absolute",
+            bottom: 10,
+            right: 10,
+          }}
           icon="plus"
           onPress={() => navigation.navigate("Criar Projeto")}
           size={20}
@@ -229,7 +263,7 @@ const styles = StyleSheet.create({
     padding: 30,
     borderRadius: 20,
     width: "125%",
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
   modal: {
     alignItems: "center",
@@ -256,12 +290,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 20,
     fontSize: 20,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   messageTitle: {
     fontSize: 22,
     fontWeight: "bold",
-    color: "#fff"
+    color: "#fff",
   },
   messageSubTitle: {
     fontSize: 16,
@@ -285,7 +319,7 @@ const styles = StyleSheet.create({
   },
   subContainer: {
     marginTop: 20,
-    backgroundColor: "transparent"
+    backgroundColor: "transparent",
   },
   contentContainer: {
     alignItems: "center",
@@ -294,23 +328,15 @@ const styles = StyleSheet.create({
   descriptionStyle: {
     fontSize: 16,
     marginBottom: 20,
-    color: "#fff"
+    color: "#fff",
   },
   tagStyle: {
     fontSize: 16,
-    color: "#fff"
+    color: "#fff",
   },
   dateStyle: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#fff"
-  },
-  card: {
-    backgroundColor: "#4169e1",
-    borderRadius: 20,
-    paddingVertical: 35,
-    paddingHorizontal: 20,
-    marginBottom: 20,
     color: "#fff",
   },
 });

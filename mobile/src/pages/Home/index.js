@@ -1,5 +1,13 @@
 import React, { useContext } from "react";
-import { Container, Text, Avatar, Card, SmallText, Title } from "./styles";
+import {
+  Container,
+  CardName,
+  Avatar,
+  Card,
+  CardEmail,
+  CardTitle,
+  CardBackground,
+} from "./styles";
 
 import AuthContext from "../../contexts/auth";
 
@@ -8,15 +16,17 @@ export default function Home() {
 
   return (
     <Container>
-      <Card>
-        <Title>Bem vindo!</Title>
-        <Avatar
-          source={{
-            uri: user.avatar.url,
-          }}
-        />
-        <Text>{user.name}</Text>
-        <SmallText>{user?.email}</SmallText>
+      <Card activeOpacity={0.8}>
+        <CardBackground colors={["#0d095a", "#0a0742"]}>
+          <CardTitle>Bem vindo!</CardTitle>
+          <Avatar
+            source={{
+              uri: user.avatar.url,
+            }}
+          />
+          <CardName>{user.name}</CardName>
+          <CardEmail>{user?.email}</CardEmail>
+        </CardBackground>
       </Card>
     </Container>
   );

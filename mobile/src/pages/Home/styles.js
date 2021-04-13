@@ -1,4 +1,5 @@
 import styled from "styled-components/native";
+import { LinearGradient } from "expo-linear-gradient";
 
 export const Container = styled.View`
   flex: 1;
@@ -6,31 +7,34 @@ export const Container = styled.View`
   align-items: center;
 `;
 
-export const Card = styled.View`
-    align-items: center;
-    justify-content: center;
-    background-color: #0a0742;
-    width: 90%;
-    height: 80%;
-    border-radius: 20px;
+export const Card = styled.TouchableOpacity`
+  width: 90%;
+  height: 80%;
 `;
 
-export const Title = styled.Text`
+export const CardBackground = styled(LinearGradient)`
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  border-radius: 20px;
+`;
+
+export const CardTitle = styled.Text`
   font-size: 30px;
   font-weight: bold;
-  color: #FE5200;
+  color: #fe5200;
   margin-bottom: 40px;
 `;
 
-
-export const Text = styled.Text`
+export const CardName = styled.Text`
   font-size: 30px;
   font-weight: bold;
   color: #fff;
   margin-top: 40px;
 `;
 
-export const SmallText = styled.Text`
+export const CardEmail = styled.Text`
   font-size: 15px;
   font-weight: bold;
   color: #fefefe;

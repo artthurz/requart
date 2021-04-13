@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  SafeAreaView,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+  Container,
+  Card,
+  Title,
+  Scroll,
+  DropDown,
+  ImgPreview,
+  SelectImageCard,
+  Actions,
+} from "./styles";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import * as Location from "expo-location";
 import DropDownPicker from "react-native-dropdown-picker";
 import * as ImagePicker from "expo-image-picker";
@@ -149,12 +151,12 @@ export default function CreateRequirements({ navigation, route }) {
   };
 
   const onToggleSnackBar = () => {
-    setVisible(!visible);
+    setVisible((prevState) => !prevState);
     setErrorVisible(false);
   };
 
   const onToggleErrorSnackBar = () => {
-    setErrorVisible(!visible);
+    setErrorVisible((prevState) => !prevState);
     setVisible(false);
   };
 
@@ -195,11 +197,11 @@ export default function CreateRequirements({ navigation, route }) {
 
   return (
     <Provider>
-      <SafeAreaView style={styles.container}>
-        <ScrollView style={styles.scrollView}>
-          <View style={styles.card}>
-            <Text style={styles.title}>Requisito</Text>
-            <View style={{ marginTop: 10, width: "100%" }}>
+      <Container>
+        <Scroll>
+          <Card>
+            <Title>Requisito</Title>
+            <DropDown>
               <DropDownPicker
                 items={priorities}
                 onOpen={() => (comRef.current.close(), sitRef.current.close())}
@@ -213,8 +215,8 @@ export default function CreateRequirements({ navigation, route }) {
                 dropDownStyle={{ backgroundColor: "#fafafa" }}
                 onChangeItem={(item) => setPriority_id(item.value)}
               />
-            </View>
-            <View style={{ marginTop: 10, width: "100%" }}>
+            </DropDown>
+            <DropDown>
               <DropDownPicker
                 items={complexities}
                 onOpen={() => (priRef.current.close(), sitRef.current.close())}
@@ -228,8 +230,8 @@ export default function CreateRequirements({ navigation, route }) {
                 dropDownStyle={{ backgroundColor: "#fafafa" }}
                 onChangeItem={(item) => setComplexity_id(item.value)}
               />
-            </View>
-            <View style={{ marginTop: 10, width: "100%" }}>
+            </DropDown>
+            <DropDown>
               <DropDownPicker
                 items={situations}
                 onOpen={() => (comRef.current.close(), priRef.current.close())}
@@ -243,9 +245,9 @@ export default function CreateRequirements({ navigation, route }) {
                 dropDownStyle={{ backgroundColor: "#fafafa" }}
                 onChangeItem={(item) => setSituation_id(item.value)}
               />
-            </View>
+            </DropDown>
             <TextInput
-              style={styles.textInput}
+              style={{ width: "100%", marginTop: 10 }}
               selectionColor={Colors.blue500}
               underlineColor={Colors.blue500}
               value={name}
@@ -254,7 +256,7 @@ export default function CreateRequirements({ navigation, route }) {
               onChangeText={(e) => setName(e)}
             />
             <TextInput
-              style={styles.textInput}
+              style={{ width: "100%", marginTop: 10 }}
               selectionColor={Colors.blue500}
               underlineColor={Colors.blue500}
               value={description}
@@ -263,44 +265,43 @@ export default function CreateRequirements({ navigation, route }) {
               onChangeText={(e) => setDescription(e)}
             />
 
-            <Text style={{ marginTop: 10, fontSize: 20 }}>Imagens</Text>
+            <Text style={{ marginTop: 20, fontSize: 20, fontWeight: "bold" }}>Imagens</Text>
 
             <View style={{ flexDirection: "row" }}>
               <TouchableOpacity onPress={() => handleOpenModal(1)}>
                 {firstPhoto ? (
-                  <Image
-                    style={styles.imageStyle}
+                  <ImgPreview
                     source={{
                       uri: firstPhoto?.url,
                     }}
                   />
                 ) : (
-                  <View style={styles.imageStyle}>
-                    <Text style={{ color: "#fff", alignSelf: "center" }}>
+                  <SelectImageCard>
+                    <Text style={{ color: "#fff", alignSelf: "center", fontWeight: "bold" }}>
                       Selecione
                     </Text>
-                  </View>
+                  </SelectImageCard>
                 )}
               </TouchableOpacity>
               <TouchableOpacity onPress={() => handleOpenModal(2)}>
                 {secondPhoto ? (
-                  <Image
-                    style={styles.imageStyle}
+                  <ImgPreview
                     source={{
                       uri: secondPhoto?.url,
                     }}
                   />
                 ) : (
-                  <View style={styles.imageStyle}>
-                    <Text style={{ color: "#fff", alignSelf: "center" }}>
+                  <SelectImageCard>
+                    <Text style={{ color: "#fff", alignSelf: "center", fontWeight: "bold" }}>
                       Selecione
                     </Text>
-                  </View>
+                  </SelectImageCard>
                 )}
               </TouchableOpacity>
             </View>
 
             <Button
+              style={{ marginTop: 30, width: "100%" }}
               icon="content-save"
               mode="contained"
               color="#4169e1"
@@ -308,23 +309,23 @@ export default function CreateRequirements({ navigation, route }) {
             >
               Adicionar
             </Button>
-          </View>
-          <Snackbar
-            visible={visible}
-            onDismiss={() => setVisible(false)}
-            duration={3000}
-          >
-            Requisito adicionado com sucesso!
-          </Snackbar>
-          <Snackbar
-            visible={errorVisible}
-            onDismiss={() => setErrorVisible(false)}
-            duration={3000}
-          >
-            Erro ao adicionar requisito.
-          </Snackbar>
-        </ScrollView>
-      </SafeAreaView>
+          </Card>
+        </Scroll>
+        <Snackbar
+          visible={visible}
+          onDismiss={() => setVisible(false)}
+          duration={3000}
+        >
+          Requisito adicionado com sucesso!
+        </Snackbar>
+        <Snackbar
+          visible={errorVisible}
+          onDismiss={() => setErrorVisible(false)}
+          duration={3000}
+        >
+          Erro ao adicionar requisito.
+        </Snackbar>
+      </Container>
       <Portal>
         <Modal
           visible={imageModalVisible}
@@ -332,7 +333,7 @@ export default function CreateRequirements({ navigation, route }) {
           contentContainerStyle={styles.containerStyle}
           style={styles.modal}
         >
-          <View style={styles.containerModal}>
+          <Actions>
             <Button
               style={{ width: "100%" }}
               icon="image"
@@ -351,7 +352,7 @@ export default function CreateRequirements({ navigation, route }) {
             >
               Usar câmera
             </Button>
-          </View>
+          </Actions>
         </Modal>
       </Portal>
     </Provider>
@@ -359,47 +360,6 @@ export default function CreateRequirements({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#efefef",
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: "bold",
-    color: "#555555",
-    marginBottom: 30,
-  },
-  scrollView: {
-    marginHorizontal: 20,
-    width: "100%",
-  },
-  textInput: {
-    width: "100%",
-    marginTop: 10,
-  },
-  card: {
-    backgroundColor: "white",
-    borderRadius: 20,
-    marginBottom: 20,
-    paddingHorizontal: 30,
-    paddingVertical: 30,
-    width: "90%",
-    height: 650,
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    marginTop: 20,
-  },
-  containerModal: {
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 30,
-    borderRadius: 20,
-    width: "125%",
-    backgroundColor: "white",
-  },
   modal: {
     alignItems: "center",
     justifyContent: "center",
@@ -412,13 +372,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "80%",
     borderRadius: 20,
-  },
-  imageStyle: {
-    width: 80,
-    height: 80,
-    backgroundColor: "#333",
-    borderRadius: 20,
-    margin: 20,
-    justifyContent: "center",
   },
 });
