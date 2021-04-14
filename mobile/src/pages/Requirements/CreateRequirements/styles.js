@@ -27,6 +27,7 @@ export const Card = styled.View`
   height: auto;
   align-items: center;
   justify-content: center;
+  elevation: 4;
 `;
 
 export const DropDown = styled.View`

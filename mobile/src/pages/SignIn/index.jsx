@@ -104,6 +104,7 @@ export default function SignIn() {
                 marginBottom: 60,
                 width: "90%",
               }}
+              labelStyle={{textTransform: "none"}}
               mode="contained"
               color="#FE5200"
               onPress={handleSignIn}
@@ -120,6 +121,7 @@ export default function SignIn() {
               marginBottom: 60,
               width: "90%",
             }}
+            labelStyle={{textTransform: "none"}}
             mode="contained"
             color="#FE5200"
             onPress={() => setPressed(true)}

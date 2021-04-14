@@ -26,7 +26,8 @@ class ProjectService {
       name: Yup.string().required(),
       description: Yup.string().required(),
       delivery_date: Yup.date().required(),
-      owner_id: Yup.number().required()
+      owner_id: Yup.number().required(),
+      link: Yup.string()
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -46,7 +47,8 @@ class ProjectService {
         description: Yup.string(),
         delivery_date: Yup.date(),
         owner_id: Yup.number(),
-        status: Yup.boolean()
+        status: Yup.boolean(),
+        link: Yup.string()
     });
 
     if (!(await schema.isValid(req.body))) {

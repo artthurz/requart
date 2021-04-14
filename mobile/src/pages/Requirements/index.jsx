@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from "react";
-import { Card, CardBackground } from "./styles";
 import {
   StyleSheet,
   FlatList,
@@ -8,7 +7,6 @@ import {
   View,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import moment from "moment";
 import {
   IconButton,
   Colors,
@@ -19,18 +17,20 @@ import {
   TextInput,
 } from "react-native-paper";
 import axios from "axios";
+import { Card, CardBackground } from "./styles";
 
-export default function Projects({ navigation }) {
+export default function Requirements({ navigation, route }) {
   const [id, setId] = useState(0);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [owner_id, setOwner_id] = useState();
   const [delivery_date, setDelivery_date] = useState();
-  const [projects, setProjects] = useState();
+  const [requirements, setRequirements] = useState();
   const [editModalVisible, setEditModalVisible] = useState(false);
 
+  const { project_id } = route.params;
+
   function showModal(item) {
-    console.log(item);
     setEditModalVisible(true);
     setId(item.id);
     setName(item.name);
@@ -38,119 +38,128 @@ export default function Projects({ navigation }) {
   }
   const hideEditModal = () => setEditModalVisible(false);
 
-  async function loadProjects() {
+  async function loadRequirements() {
     try {
-      const response = await axios.get("projects");
-      setProjects(response.data);
+      const response = await axios.get(`requirements/${project_id}`);
+      setRequirements(response.data);
     } catch (error) {
       console.log(error);
     }
   }
 
-  async function deleteProject(id) {
+  async function deleteRequirement(id) {
     try {
-      await axios.delete(`/projects/${id}`);
-      loadProjects();
+      await axios.delete(`/requirements/${id}`);
+      loadRequirements();
     } catch (error) {
       console.log(error);
     }
   }
 
-  async function editProject() {
+  async function editRequirement() {
     try {
-      await axios.put(`/projects/${id}`, {
+      await axios.put(`/requirements/${id}`, {
         name,
         description,
         owner_id,
         delivery_date,
       });
-      loadProjects();
+      loadRequirements();
     } catch (error) {
       console.log(error);
     }
   }
 
-  function handleEditProjectSubmit() {
-    editProject();
+  function handleEditRequirementSubmit() {
+    editRequirement();
     hideEditModal();
   }
 
   useFocusEffect(
     useCallback(() => {
-      loadProjects();
+      loadRequirements();
     }, [])
   );
 
-  const renderProjects = ({ item }) => (
-    <Card
-      activeOpacity={0.8}
-      onPress={() =>
-        navigation.navigate("Requisitos", {
-          project_id: item.id,
-        })
-      }
-    >
+  const rederItem = ({ item }) => (
+    <Card activeOpacity={0.8}>
       <CardBackground colors={["#4169e1", "#214cce"]}>
-        <View style={styles.titleContainer}>
-          <Text style={styles.messageTitle}>{item.name}</Text>
-        </View>
-        <View style={styles.subContainer}>
-          <View style={styles.contentContainer}></View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              backgroundColor: "transparent",
-            }}
-          >
-            <Text style={styles.dateStyle}>Responsável: </Text>
-            <Text style={styles.descriptionStyle}>{item.owner.name}</Text>
+        <View style={styles.cardHeader}>
+          <View style={styles.contentEnveloper}>
+            <Text style={styles.messageTitle}>
+              {item.non_functional ? "RNF" : "RF"}
+            </Text>
+            <Text style={styles.messageTitle}>
+              {`${item.requirement_id} - `}
+            </Text>
+            <Text style={styles.messageTitle}>{item.name}</Text>
           </View>
-          <View
-            style={{
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: "transparent",
-              marginBottom: 20,
-            }}
-          >
-            <View
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: item.status ? "#3ca419" : "#e14169",
-                borderRadius: 20,
-                width: 150,
-                padding: 10,
-              }}
-            >
-              <Text style={styles.tagStyle}>
-                {item.status ? "Em andamento" : "Finalizado"}
-              </Text>
+          <View style={styles.contentEnveloper}>
+            <Text style={styles.messageSubTitle}>{"Versão "}</Text>
+            <Text style={styles.messageSubTitle}>{item.version}</Text>
+          </View>
+        </View>
+        <View style={styles.cardBody}>
+          <View style={styles.cardsEnveloper}>
+            <View style={styles.contentEnveloper}>
+              <Text style={styles.messageSubTitle}>{"Prioridade "}</Text>
+              <View
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: item.priority.color,
+                  borderRadius: 20,
+                  width: 150,
+                  padding: 10,
+                  marginBottom: 10,
+                  marginTop: 10,
+                }}
+              >
+                <Text style={styles.tagStyle}>{item.priority.name}</Text>
+              </View>
+            </View>
+            <View style={styles.contentEnveloper}>
+              <Text style={styles.messageSubTitle}>{"Complexidade "}</Text>
+              <View
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: item.complexity.color,
+                  borderRadius: 20,
+                  width: 150,
+                  padding: 10,
+                  marginBottom: 10,
+                }}
+              >
+                <Text style={styles.tagStyle}>{item.complexity.name}</Text>
+              </View>
+            </View>
+            <View style={styles.contentEnveloper}>
+              <Text style={styles.messageSubTitle}>{"Situação "}</Text>
+              <View
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: item.situation.color,
+                  borderRadius: 20,
+                  width: 150,
+                  padding: 10,
+                }}
+              >
+                <Text style={styles.tagStyle}>{item.situation.name}</Text>
+              </View>
             </View>
           </View>
+
           <View
             style={{
               flexDirection: "row",
               justifyContent: "space-evenly",
               backgroundColor: "transparent",
             }}
-          >
-            <View style={styles.contentContainer}>
-              <Text style={styles.dateStyle}>Entrega estimada</Text>
-              <Text style={styles.dateStyle}>
-                {moment(item.delivery_date).format("DD/MM/YYYY")}
-              </Text>
-            </View>
-            <View style={styles.contentContainer}>
-              <Text style={styles.dateStyle}>Data de Criação</Text>
-              <Text style={styles.dateStyle}>
-                {moment(item.created_at).format("DD/MM/YYYY")}
-              </Text>
-            </View>
-          </View>
+          />
           <View style={styles.contentContainer}>
-            <View style={styles.buttonsContainer}>
+            <View style={styles.cardFooter}>
               <IconButton
                 icon="square-edit-outline"
                 style={{ backgroundColor: "#fff" }}
@@ -163,7 +172,7 @@ export default function Projects({ navigation }) {
                 style={{ backgroundColor: "#fff" }}
                 color={Colors.red500}
                 size={25}
-                onPress={() => deleteProject(item.id)}
+                onPress={() => deleteRequirement(item.id)}
               />
             </View>
           </View>
@@ -177,8 +186,8 @@ export default function Projects({ navigation }) {
       <View style={styles.container}>
         <FlatList
           style={styles.list}
-          data={projects}
-          renderItem={renderProjects}
+          data={requirements}
+          renderItem={rederItem}
           keyExtractor={(item) => item.id.toString()}
         />
         <IconButton
@@ -192,9 +201,13 @@ export default function Projects({ navigation }) {
             right: 10,
           }}
           icon="plus"
-          onPress={() => navigation.navigate("Criar Projeto")}
+          onPress={() =>
+            navigation.navigate("Criar Requisito", {
+              project_id,
+            })
+          }
           size={20}
-          color={"white"}
+          color="white"
         />
         <Portal>
           <Modal
@@ -232,10 +245,17 @@ export default function Projects({ navigation }) {
                 onChangeText={(d) => setDescription(d)}
               />
               <Button
-                style={{ marginTop: 30 }}
+                style={{
+                  height: 60,
+                  alignSelf: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                  marginTop: 30,
+                }}
+                labelStyle={{ textTransform: "none" }}
                 color={Colors.blue500}
                 icon="content-save"
-                onPress={() => handleEditProjectSubmit()}
+                onPress={() => handleEditRequirementSubmit()}
               >
                 Salvar
               </Button>
@@ -274,13 +294,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  buttonsContainer: {
+  cardFooter: {
     flexDirection: "row",
     justifyContent: "space-between",
     borderRadius: 100,
     marginTop: 30,
   },
-  titleContainer: {
+  cardHeader: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -300,6 +320,8 @@ const styles = StyleSheet.create({
   messageSubTitle: {
     fontSize: 16,
     fontWeight: "bold",
+    color: "#fff",
+    marginTop: 5,
   },
   message: {
     fontSize: 16,
@@ -317,9 +339,11 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 10,
   },
-  subContainer: {
+  cardBody: {
     marginTop: 20,
     backgroundColor: "transparent",
+    justifyContent: "center",
+    alignItems: "center",
   },
   contentContainer: {
     alignItems: "center",
@@ -338,5 +362,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "#fff",
+  },
+  contentEnveloper: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    backgroundColor: "transparent",
+    maxWidth: "80%",
+  },
+  cardsEnveloper: {
+    backgroundColor: "transparent",
+    maxWidth: "100%",
   },
 });

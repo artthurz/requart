@@ -265,7 +265,9 @@ export default function CreateRequirements({ navigation, route }) {
               onChangeText={(e) => setDescription(e)}
             />
 
-            <Text style={{ marginTop: 20, fontSize: 20, fontWeight: "bold" }}>Imagens</Text>
+            <Text style={{ marginTop: 20, fontSize: 20, fontWeight: "bold" }}>
+              Imagens
+            </Text>
 
             <View style={{ flexDirection: "row" }}>
               <TouchableOpacity onPress={() => handleOpenModal(1)}>
@@ -277,7 +279,13 @@ export default function CreateRequirements({ navigation, route }) {
                   />
                 ) : (
                   <SelectImageCard>
-                    <Text style={{ color: "#fff", alignSelf: "center", fontWeight: "bold" }}>
+                    <Text
+                      style={{
+                        color: "#fff",
+                        alignSelf: "center",
+                        fontWeight: "bold",
+                      }}
+                    >
                       Selecione
                     </Text>
                   </SelectImageCard>
@@ -292,7 +300,13 @@ export default function CreateRequirements({ navigation, route }) {
                   />
                 ) : (
                   <SelectImageCard>
-                    <Text style={{ color: "#fff", alignSelf: "center", fontWeight: "bold" }}>
+                    <Text
+                      style={{
+                        color: "#fff",
+                        alignSelf: "center",
+                        fontWeight: "bold",
+                      }}
+                    >
                       Selecione
                     </Text>
                   </SelectImageCard>
@@ -301,7 +315,14 @@ export default function CreateRequirements({ navigation, route }) {
             </View>
 
             <Button
-              style={{ marginTop: 30, width: "100%" }}
+              style={{
+                height: 60,
+                alignSelf: "center",
+                justifyContent: "center",
+                width: "100%",
+                marginTop: 30,
+              }}
+              labelStyle={{ textTransform: "none" }}
               icon="content-save"
               mode="contained"
               color="#4169e1"
@@ -335,7 +356,13 @@ export default function CreateRequirements({ navigation, route }) {
         >
           <Actions>
             <Button
-              style={{ width: "100%" }}
+              style={{
+                height: 60,
+                alignSelf: "center",
+                justifyContent: "center",
+                width: "100%",
+              }}
+              labelStyle={{ textTransform: "none" }}
               icon="image"
               mode="contained"
               color="#4169e1"
@@ -344,7 +371,14 @@ export default function CreateRequirements({ navigation, route }) {
               Escolher da galeria
             </Button>
             <Button
-              style={{ marginTop: 30, width: "100%" }}
+              style={{
+                height: 60,
+                alignSelf: "center",
+                justifyContent: "center",
+                width: "100%",
+                marginTop: 30,
+              }}
+              labelStyle={{ textTransform: "none" }}
               icon="camera"
               mode="contained"
               color="#4169e1"

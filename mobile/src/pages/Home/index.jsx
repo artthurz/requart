@@ -16,7 +16,7 @@ export default function Home() {
 
   return (
     <Container>
-      <Card activeOpacity={0.8}>
+      <Card activeOpacity={0.8} pressDuration={3}>
         <CardBackground colors={["#0d095a", "#0a0742"]}>
           <CardTitle>Bem vindo!</CardTitle>
           <Avatar

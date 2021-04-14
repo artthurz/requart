@@ -10,8 +10,13 @@ export const Container = styled.View`
 export const Title = styled.Text`
   font-size: 30px;
   font-weight: bold;
-  color: #555555;
+  color: #fe5200;
   margin-bottom: 30px;
+`;
+
+export const InputTitle = styled.Text`
+  font-size: 14px;
+  font-weight: bold;
 `;
 
 export const Card = styled.View`
@@ -20,7 +25,8 @@ export const Card = styled.View`
   margin-bottom: 20px;
   padding: 30px;
   width: 90%;
-  height: 70%;
+  height: 600px;
   align-items: center;
   justify-content: center;
+  elevation: 4;
 `;
