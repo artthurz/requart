@@ -180,18 +180,6 @@ const Projects = () => {
           />
         )}
 
-        <div style={{ height: '100%', width: '100%' }}>
-          <ThemeProvider theme={DataGridTheme}>
-            <DataGrid
-              rows={projects}
-              columns={columns}
-              pageSize={10}
-              components={{
-                Toolbar: GridToolbar,
-              }}
-            />
-          </ThemeProvider>
-        </div>
       </Body>
     </Panel>
   );

@@ -1,7 +1,8 @@
 import React, { useState, useCallback } from "react";
+import axios from "axios";
 import { StyleSheet, FlatList, Text, View } from "react-native";
-import RandomGradient from "../../components/RandomGradiant";
 import { useFocusEffect } from "@react-navigation/native";
+import RandomGradient from "../../components/RandomGradiant";
 import {
   IconButton,
   Colors,
@@ -11,19 +12,26 @@ import {
   Button,
   TextInput,
 } from "react-native-paper";
-import axios from "axios";
-import { Card, CardBackground, Tag, TagName } from "./styles";
+import {
+  Card,
+  CardBackground,
+  CardName,
+  Avatar,
+  CardEmail,
+  CardRole,
+  CardButtons,
+  CardDetails,
+  CardRoleText
+} from "./styles";
 
-export default function Requirements({ navigation, route }) {
+export default function Users({ navigation, route }) {
   const [id, setId] = useState(0);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [owner_id, setOwner_id] = useState();
   const [delivery_date, setDelivery_date] = useState();
-  const [requirements, setRequirements] = useState();
+  const [users, setUsers] = useState();
   const [editModalVisible, setEditModalVisible] = useState(false);
-
-  const { project_id } = route.params;
 
   function showModal(item) {
     setEditModalVisible(true);
@@ -33,149 +41,74 @@ export default function Requirements({ navigation, route }) {
   }
   const hideEditModal = () => setEditModalVisible(false);
 
-  async function loadRequirements() {
-    try {
-      const response = await axios.get(`requirements/${project_id}`);
-      setRequirements(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const fetchUsers = async () => {
+    const { data } = await axios.get("users");
+    setUsers(data);
+  };
 
-  async function deleteRequirement(id) {
+  const handleUserDelete = async (id) => {
     try {
-      await axios.delete(`/requirements/${id}`);
-      loadRequirements();
+      await axios.delete(`users/${id}`);
+      await fetchUsers();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
-  }
-
-  async function editRequirement() {
+  };
+   
+  async function editUser() {
     try {
-      await axios.put(`/requirements/${id}`, {
+      await axios.put(`/users/${id}`, {
         name,
         description,
         owner_id,
         delivery_date,
       });
-      loadRequirements();
+      fetchUsers();
     } catch (error) {
       console.log(error);
     }
   }
 
-  function handleEditRequirementSubmit() {
-    editRequirement();
+  function handleEditUserSubmit() {
+    editUser();
     hideEditModal();
   }
 
   useFocusEffect(
     useCallback(() => {
-      loadRequirements();
+      fetchUsers();
     }, [])
   );
 
   const rederItem = ({ item }) => (
     <Card activeOpacity={0.8}>
-      <CardBackground
-        colors={RandomGradient(item.non_functional ? "blue" : "red")}
-        start={[0, 1]}
-        end={[1, 0]}
-      >
-        <View style={styles.cardHeader}>
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: "bold",
-              color: "#fff",
-            }}
-          >
-            {`${item.non_functional ? "RNF" : "RF"}${item.requirement_id}`}
-          </Text>
-          <Text style={styles.messageTitle}>{item.name}</Text>
-          <View style={styles.contentEnveloper}>
-            <Text style={styles.messageSubTitle}>{"Versão "}</Text>
-            <Text style={styles.messageSubTitle}>{item.version}</Text>
-          </View>
-        </View>
-        <View style={styles.cardBody}>
-          <View style={styles.tagsEnveloper}>
-            <Tag>
-              <TagName>{"Prioridade "}</TagName>
-              <View
-                style={{
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: item.priority.color,
-                  borderRadius: 20,
-                  width: 150,
-                  padding: 10,
-                  marginBottom: 10,
-                }}
-              >
-                <Text style={styles.tagStyle}>{item.priority.name}</Text>
-              </View>
-            </Tag>
-            <Tag>
-              <TagName>{"Complexidade "}</TagName>
-              <View
-                style={{
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: item.complexity.color,
-                  borderRadius: 20,
-                  width: 150,
-                  padding: 10,
-                  marginBottom: 10,
-                }}
-              >
-                <Text style={styles.tagStyle}>{item.complexity.name}</Text>
-              </View>
-            </Tag>
-            <Tag>
-              <TagName>{"Situação "}</TagName>
-              <View
-                style={{
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: item.situation.color,
-                  borderRadius: 20,
-                  width: 150,
-                  padding: 10,
-                }}
-              >
-                <Text style={styles.tagStyle}>{item.situation.name}</Text>
-              </View>
-            </Tag>
-          </View>
-
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-evenly",
-              backgroundColor: "transparent",
-            }}
+      <CardBackground colors={RandomGradient("rainbow")} start={[0, 1]} end={[1, 0]}>
+        <Avatar
+          source={{
+            uri: item.avatar.url,
+          }}
+        />
+        <CardDetails>
+          <CardName>{item.name}</CardName>
+          <CardEmail>{item?.email}</CardEmail>
+          <CardRole><CardRoleText>{item.admin ? "Administrador" : "User"}</CardRoleText></CardRole>
+        </CardDetails>
+        <CardButtons>
+          <IconButton
+            icon="square-edit-outline"
+            style={{ backgroundColor: "#fff" }}
+            color={Colors.blue500}
+            size={25}
+            onPress={() => showModal(item)}
           />
-          <View style={styles.contentContainer}>
-            <View style={styles.cardFooter}>
-              <IconButton
-                icon="square-edit-outline"
-                style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}
-                color={Colors.blue500}
-                size={25}
-                onPress={() => showModal(item)}
-              />
-              <IconButton
-                icon="trash-can-outline"
-                style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}
-                color={Colors.red500}
-                size={25}
-                onPress={() => deleteRequirement(item.id)}
-              />
-            </View>
-          </View>
-        </View>
+          <IconButton
+            icon="trash-can-outline"
+            style={{ backgroundColor: "#fff" }}
+            color={Colors.red500}
+            size={25}
+            onPress={() => handleUserDelete(item.id)}
+          />
+        </CardButtons>
       </CardBackground>
     </Card>
   );
@@ -185,7 +118,7 @@ export default function Requirements({ navigation, route }) {
       <View style={styles.container}>
         <FlatList
           style={styles.list}
-          data={requirements}
+          data={users}
           renderItem={rederItem}
           keyExtractor={(item) => item.id.toString()}
         />
@@ -201,9 +134,7 @@ export default function Requirements({ navigation, route }) {
           }}
           icon="plus"
           onPress={() =>
-            navigation.navigate("Criar Requisito", {
-              project_id,
-            })
+            navigation.navigate("Criar Usuários")
           }
           size={20}
           color="white"
@@ -254,7 +185,7 @@ export default function Requirements({ navigation, route }) {
                 labelStyle={{ textTransform: "none" }}
                 color={Colors.blue500}
                 icon="content-save"
-                onPress={() => handleEditRequirementSubmit()}
+                onPress={() => handleEditUserSubmit()}
               >
                 Salvar
               </Button>
@@ -292,12 +223,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-  },
-  cardFooter: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    borderRadius: 100,
-    marginTop: 30,
   },
   cardHeader: {
     flex: 1,
@@ -340,11 +265,13 @@ const styles = StyleSheet.create({
   },
   cardBody: {
     marginTop: 20,
+    backgroundColor: "transparent",
     justifyContent: "center",
     alignItems: "center",
   },
   contentContainer: {
     alignItems: "center",
+    backgroundColor: "transparent",
   },
   descriptionStyle: {
     fontSize: 16,
@@ -364,7 +291,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-end",
     alignItems: "center",
+    backgroundColor: "transparent",
     maxWidth: "80%",
   },
-  tagsEnveloper: {},
+  cardsEnveloper: {
+    backgroundColor: "transparent",
+    maxWidth: "100%",
+  },
 });

@@ -5,11 +5,14 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import AuthContext from "../contexts/auth";
 
+import WebViewProjects from "../pages/Projects/WebViewProjects"
 import Home from "../pages/Home";
 import CreateProjects from "../pages/Projects/CreateProjects";
 import Projects from "../pages/Projects";
 import CreateRequirements from "../pages/Requirements/CreateRequirements";
 import Requirements from "../pages/Requirements";
+import CreateUsers from "../pages/Users/CreateUsers";
+import Users from "../pages/Users";
 import { IconButton } from "react-native-paper";
 
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -43,6 +46,15 @@ const AppRoutes = () => {
               size={23}
               color="#fff"
               name={Platform.OS === "android" ? "format-list-bulleted-square" : "format-list-bulleted-square"}
+            ></Icon>
+          ),
+        }}/>
+        <Drawer.Screen name="Usuários" component={UsersStackNavigator} options={{
+          drawerIcon: (config) => (
+            <Icon
+              size={23}
+              color="#fff"
+              name={Platform.OS === "android" ? "account-group" : "account-group"}
             ></Icon>
           ),
         }}/>
@@ -99,6 +111,7 @@ const ProjectsStackNavigator = ({ navigation }) => {
       />
       <Stack.Screen name="Criar Projeto" component={CreateProjects} />
       <Stack.Screen name="Requisitos" component={Requirements} />
+      <Stack.Screen name="Conteúdo Complementar" component={WebViewProjects} />
       <Stack.Screen name="Criar Requisito" component={CreateRequirements} />
     </Stack.Navigator>
   );
@@ -122,6 +135,29 @@ const HomeStackNavigator = ({ navigation }) => {
           ),
         }}
       />
+    </Stack.Navigator>
+  );
+};
+
+const UsersStackNavigator = ({ navigation }) => {
+  return (
+    <Stack.Navigator screenOptions={screenOptionStyle}>
+      <Stack.Screen
+        name="Usuários"
+        component={Users}
+        options={{
+          headerTitle: "Usuários",
+          headerRight: () => (
+            <IconButton
+              onPress={() => navigation.openDrawer()}
+              icon="menu"
+              size={24}
+              color={screenOptionStyle.headerTintColor}
+            />
+          ),
+        }}
+      />
+      <Stack.Screen name="Criar Usuários" component={CreateUsers} />
     </Stack.Navigator>
   );
 };

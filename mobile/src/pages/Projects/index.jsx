@@ -1,10 +1,5 @@
 import React, { useState, useCallback } from "react";
-import {
-  StyleSheet,
-  FlatList,
-  Text,
-  View,
-} from "react-native";
+import { StyleSheet, FlatList, Text, View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
 import {
@@ -17,7 +12,8 @@ import {
   TextInput,
 } from "react-native-paper";
 import axios from "axios";
-import { Card, CardBackground } from "./styles";
+import RandomGradient from "../../components/RandomGradiant";
+import { Card, CardBackground, LinkButton, LinkDescription } from "./styles";
 
 export default function Projects({ navigation }) {
   const [id, setId] = useState(0);
@@ -89,7 +85,11 @@ export default function Projects({ navigation }) {
         })
       }
     >
-      <CardBackground colors={["#4169e1", "#214cce"]}>
+      <CardBackground
+        colors={RandomGradient("pastel")}
+        start={[0, 1]}
+        end={[1, 0]}
+      >
         <View style={styles.titleContainer}>
           <Text style={styles.messageTitle}>{item.name}</Text>
         </View>
@@ -105,6 +105,7 @@ export default function Projects({ navigation }) {
             <Text style={styles.dateStyle}>Responsável: </Text>
             <Text style={styles.descriptionStyle}>{item.owner.name}</Text>
           </View>
+
           <View
             style={{
               alignItems: "center",
@@ -148,18 +149,30 @@ export default function Projects({ navigation }) {
               </Text>
             </View>
           </View>
+          {item.link && (
+            <LinkButton
+              activeOpacity={0.8}
+              onPress={() =>
+                navigation.navigate("Conteúdo Complementar", {
+                  link: item.link,
+                })
+              }
+            >
+              <LinkDescription>Acessar Conteúdo Complementar</LinkDescription>
+            </LinkButton>
+          )}
           <View style={styles.contentContainer}>
             <View style={styles.buttonsContainer}>
               <IconButton
                 icon="square-edit-outline"
-                style={{ backgroundColor: "#fff" }}
+                style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}
                 color={Colors.blue500}
                 size={25}
                 onPress={() => showModal(item)}
               />
               <IconButton
                 icon="trash-can-outline"
-                style={{ backgroundColor: "#fff" }}
+                style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}
                 color={Colors.red500}
                 size={25}
                 onPress={() => deleteProject(item.id)}
@@ -277,7 +290,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     borderRadius: 100,
-    marginTop: 30,
+    marginTop: 20,
   },
   titleContainer: {
     flex: 1,

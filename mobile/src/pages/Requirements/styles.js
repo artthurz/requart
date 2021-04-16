@@ -10,5 +10,17 @@ export const CardBackground = styled(LinearGradient)`
   border-radius: 20px;
   padding: 35px 20px;
   width: 100%;
-  height: 400px;
+  height: 500px;
+`;
+
+export const Tag = styled.View`
+  align-items: center;
+  max-width: 90%;
+`;
+
+export const TagName = styled.Text`
+    font-size: 16;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 5px;
 `;

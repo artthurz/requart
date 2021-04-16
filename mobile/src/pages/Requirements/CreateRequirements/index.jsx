@@ -9,7 +9,7 @@ import {
   SelectImageCard,
   Actions,
 } from "./styles";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Switch } from "react-native";
 import * as Location from "expo-location";
 import DropDownPicker from "react-native-dropdown-picker";
 import * as ImagePicker from "expo-image-picker";
@@ -31,6 +31,9 @@ export default function CreateRequirements({ navigation, route }) {
   const [complexity_id, setComplexity_id] = useState(1);
   const [situation_id, setSituation_id] = useState(1);
   const [location, setLocation] = useState([]);
+  const [nonFunctional, setNonFunctional] = useState(false);
+  const [functional, setFunctional] = useState(true);
+  const [type, setType] = useState(true);
 
   const [priorities, setPriorities] = useState([]);
   const [complexities, setComplexities] = useState([]);
@@ -165,7 +168,7 @@ export default function CreateRequirements({ navigation, route }) {
       await axios.post("/requirements", {
         name,
         description,
-        non_functional: true,
+        non_functional: type,
         project_id,
         priority_id,
         complexity_id,
@@ -194,6 +197,12 @@ export default function CreateRequirements({ navigation, route }) {
     setImageModalVisible(true);
     setCurrentPhoto(photo);
   }
+
+  const handleToggleRequirementType = (state) => {
+    setType(state);
+    setNonFunctional((prevState) => !prevState);
+    setFunctional((prevState) => !prevState);
+  };
 
   return (
     <Provider>
@@ -264,6 +273,46 @@ export default function CreateRequirements({ navigation, route }) {
               label="Description"
               onChangeText={(e) => setDescription(e)}
             />
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-evenly",
+              }}
+            >
+              <View
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: 10
+                }}
+              >
+                <Text>Funcional</Text>
+                <Switch
+                  trackColor={{ false: "#767577", true: "#3ca419" }}
+                  thumbColor={functional ? "#fff" : "#f4f3f4"}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={handleToggleRequirementType}
+                  value={functional}
+                />
+              </View>
+              <View
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: 10
+                }}
+              >
+                <Text>Não funcional</Text>
+                <Switch
+                  trackColor={{ false: "#767577", true: "#3ca419" }}
+                  thumbColor={nonFunctional ? "#fff" : "#f4f3f4"}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={handleToggleRequirementType}
+                  value={nonFunctional}
+                />
+              </View>
+            </View>
 
             <Text style={{ marginTop: 20, fontSize: 20, fontWeight: "bold" }}>
               Imagens
