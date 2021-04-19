@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import logo from '../../assets/images/logo.svg';
 import { Span, Image, Container } from './styles';
-import { useAuth } from '../../contexts/auth';
+import { useAuth } from '../../contexts/AuthContext';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import Button from '@material-ui/core/Button';
@@ -17,15 +17,20 @@ const validationSchema = yup.object({
 });
 
 const Login = () => {
-  const { Login } = useAuth();
-  let history = useHistory();
+  const { handleLogin } = useAuth();
+  const history = useHistory();
 
-  async function handleLogin(values) {
-    history.push('/');
-    await Login({
-      login: values.login,
-      password: values.password,
-    });
+  async function handleSubmit(values) {
+    try {
+      await handleLogin({
+        login: values.login,
+        password: values.password,
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      history.push('/');
+    }
   }
 
   const formik = useFormik({
@@ -35,7 +40,7 @@ const Login = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      handleLogin(values);
+      handleSubmit(values);
     },
   });
 

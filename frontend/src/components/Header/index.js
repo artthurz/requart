@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../contexts/auth';
+import { useAuth } from '../../contexts/AuthContext';
 import logo from '../../assets/images/logo.svg';
 import {
   Container,
@@ -77,10 +77,10 @@ export default function Header() {
   const [profileMenuShow, setProfileMenuShow] = React.useState(null);
   const [addMenuShow, setAddMenuShow] = React.useState(null);
 
-  const { user, Logout } = useAuth();
-  async function handleLogout() {
+  const { user, handleLogout } = useAuth();
+  async function handleUserLogout() {
     history.push('/');
-    Logout();
+    handleLogout();
   }
 
   const handleOpenAddMenu = () => {
@@ -214,7 +214,7 @@ export default function Header() {
                   </div>
                 </Link>
                 <Divider variant="middle" className={divider.root} />
-                <a onClick={handleLogout}>
+                <a onClick={handleUserLogout}>
                   <span>Sair</span>
                   <div>
                     <MdExitToApp />

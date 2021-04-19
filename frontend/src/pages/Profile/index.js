@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuth } from '../../contexts/auth';
+import { useAuth } from '../../contexts/AuthContext';
 import api from '../../services/api';
 import { Container, FormContainer } from './styles';
 import Button from '@material-ui/core/Button';
@@ -39,7 +39,7 @@ const validationSchema = yup.object({
 });
 
 function Profile() {
-  const { user, ReloadUser } = useAuth();
+  const { user, handleReloadUser } = useAuth();
   const [isEditAvatarModalOpen, setIsEditAvatarModalOpen] = useState(false);
   const [changePassword, setChangePassword] = useState(false);
 
@@ -47,7 +47,7 @@ function Profile() {
     console.log(values);
     try {
       const { data } = await api.put(`users/${user.id}`, values);
-      ReloadUser(data);
+      handleReloadUser(data);
       toast.success('Perfil editado com sucesso!');
     } catch (error) {
       toast.error('Erro ao editar seu perfil, revise os dados.');
@@ -135,7 +135,6 @@ function Profile() {
                   name="oldPassword"
                   style={{
                     marginBottom: '20px',
-                    width: '45%',
                     marginTop: '20px',
                     width: '100%',
                   }}

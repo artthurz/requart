@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import api from '../../../services/api';
 import Modal from 'react-modal';
 import { Container } from './styles';
-import { useAuth } from '../../../contexts/auth';
+import { useAuth } from '../../../contexts/AuthContext';
 import Button from '@material-ui/core/Button';
 import { MdClose } from 'react-icons/md';
 import { toast } from 'react-toastify';
 
 function EditAvatarModal({ isOpen, onRequestClose }) {
-  const { user, ReloadAvatar } = useAuth();
+  const { user, handleReloadAvatar } = useAuth();
 
   const [preview, setPreview] = useState({ url: user.avatar.url });
 
@@ -39,7 +39,7 @@ function EditAvatarModal({ isOpen, onRequestClose }) {
       if (!(preview.id === undefined)) {
         await api.put(`files/${preview.id}`);
         toast.success('Foto atualizada com sucesso!');
-        ReloadAvatar(preview);
+        handleReloadAvatar(preview);
       }
       onRequestClose();
     } catch (error) {

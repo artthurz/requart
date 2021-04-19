@@ -1,5 +1,4 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-// import _ from "lodash";
 import 'react-toastify/dist/ReactToastify.min.css';
 import { toast } from 'react-toastify';
 
@@ -8,44 +7,52 @@ import api from '../services/api';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [authenticatedUser, setAuthenticatedUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const storagedUser = sessionStorage.getItem('@App:user');
     const storagedToken = sessionStorage.getItem('@App:token');
 
     if (storagedToken && storagedUser) {
-      setUser(JSON.parse(storagedUser));
+      setAuthenticatedUser(JSON.parse(storagedUser));
       api.defaults.headers.Authorization = `Bearer ${storagedToken}`;
     }
+
+    setLoading(false);
   }, []);
 
-  async function Login(userData) {
+  async function handleLogin(userData) {
     try {
-      const response = await api.post('sessions', userData);
-      setUser(response.data.user);
-      api.defaults.headers.Authorization = `Bearer ${response.data.token}`;
+      const {
+        data: { token, user },
+      } = await api.post('sessions', userData);
 
-      sessionStorage.setItem('@App:user', JSON.stringify(response.data.user));
-      sessionStorage.setItem('@App:token', response.data.token);
+      api.defaults.headers.Authorization = `Bearer ${token}`;
+      
+      sessionStorage.setItem('@App:user', JSON.stringify(user));
+      sessionStorage.setItem('@App:token', token);
+      
+      setAuthenticatedUser(user);
+      
       toast.success('Autenticação realizada com sucesso!');
     } catch (error) {
       toast.error('Falha na autenticação.');
     }
   }
 
-  function ReloadAvatar(avatar) {
-    setUser({ ...user, avatar });
-    sessionStorage.setItem('@App:user', JSON.stringify({ ...user, avatar }));
+  function handleReloadAvatar(avatar) {
+    setAuthenticatedUser({ ...authenticatedUser, avatar });
+    sessionStorage.setItem('@App:user', JSON.stringify({ ...authenticatedUser, avatar }));
   }
 
-  function ReloadUser(user) {
-    setUser(user);
+  function handleReloadUser(user) {
+    setAuthenticatedUser(user);
     sessionStorage.setItem('@App:user', JSON.stringify(user));
   }
 
-  function Logout() {
-    setUser(null);
+  function handleLogout() {
+    setAuthenticatedUser(null);
     toast('Volte sempre!');
     sessionStorage.setItem('@App:user', JSON.stringify(null));
     sessionStorage.setItem('@App:token', JSON.stringify(null));
@@ -54,12 +61,13 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        signed: Boolean(user),
-        user,
-        Login,
-        Logout,
-        ReloadUser,
-        ReloadAvatar,
+        authenticated: Boolean(authenticatedUser),
+        user: authenticatedUser,
+        loading,
+        handleLogin,
+        handleLogout,
+        handleReloadUser,
+        handleReloadAvatar
       }}
     >
       {children}

@@ -1,34 +1,42 @@
 import React, { useState, useEffect } from 'react';
-
-import api from '../../services/api';
+import api from '../../../services/api';
 import { useHistory } from 'react-router-dom';
-import { MdAdd, MdDelete, MdEdit, MdDirections } from 'react-icons/md';
-import { Panel, PanelHeader } from '../../components/Panel';
-import NewProjectModal from './NewProjectModal';
-import EditProjectModal from './EditProjectModal';
+import { Panel, PanelHeader } from '../../../components/Panel';
+import Zoom from '@material-ui/core/Zoom';
 import {
   makeStyles,
   createMuiTheme,
   ThemeProvider,
 } from '@material-ui/core/styles';
-import Zoom from '@material-ui/core/Zoom';
-import { DataGrid, ptBR, GridToolbar } from '@material-ui/data-grid';
+import { MdArrowBack } from 'react-icons/md';
+import {
+  Body,
+  Details,
+  Card,
+  CardTitle,
+  CardDescription,
+  Sparetor,
+  DetailsSubTitle,
+  DetailsCards,
+  DetailsDescription,
+  DetailsTitle
+} from './styles';
+import { MdDelete, MdEdit, MdDirections } from 'react-icons/md';
 import { format, parseISO } from 'date-fns';
 import { Fab, IconButton } from '@material-ui/core';
-import { Dropdown } from '../../components/Dropdown';
-import OpConfirmation from '../../components/OpConfirmation';
-import { Body } from './styles';
+import { Dropdown } from '../../../components/Dropdown';
+import OpConfirmation from '../../../components/OpConfirmation';
+import { DataGrid, ptBR, GridToolbar } from '@material-ui/data-grid';
 
-const Projects = () => {
-  let history = useHistory();
+// import { Container } from './styles';
+
+const ProjectDetails = ({ location }) => {
+  const history = useHistory();
   const iconButton = useIconButtonStyle();
-  const iconButtonRotated = useRotatedIconButtonStyle();
-  const [isNewProjectModalOpen, setIsNewProjectModalOpen] = useState(false);
-  const [isEditProjectModalOpen, setIsEditProjectModalOpen] = useState(false);
-  const [projects, setProjects] = useState([]);
-  const [selectedProject, setSelectedProject] = useState();
+  const [project, setProject] = useState(location.state);
+  const [requirements, setRequirements] = useState([]);
 
-  const fetchProjects = async () => {
+  const fetchRequirements = async () => {
     const { data } = await api.get('projects');
     data.forEach((e) => {
       const delivery = parseISO(e.delivery_date);
@@ -40,18 +48,18 @@ const Projects = () => {
         timeZone: 'America/Sao_Paulo',
       });
     });
-    setProjects(data);
+    setRequirements(data);
   };
 
   useEffect(() => {
-    fetchProjects();
+    fetchRequirements();
   }, []);
 
-  const handleProjectDelete = async (id) => {
+  const handleRequirementDelete = async (id) => {
     console.log(id);
     try {
       await api.delete(`projects/${id}`);
-      await fetchProjects();
+      await fetchRequirements();
     } catch (error) {
       console.error(error);
     }
@@ -108,10 +116,7 @@ const Projects = () => {
                 {
                   label: 'Editar',
                   icon: <MdEdit />,
-                  onClick: () => {
-                    setSelectedProject(row);
-                    setIsEditProjectModalOpen(true);
-                  },
+                  onClick: () => {},
                 },
                 {
                   label: 'Deletar',
@@ -121,7 +126,7 @@ const Projects = () => {
                       title: 'Atenção',
                       message: 'Voce realmente deseja deletar este projeto?',
                       onConfirm: () => {
-                        handleProjectDelete(row.id);
+                        handleRequirementDelete(row.id);
                       },
                     });
                   },
@@ -135,39 +140,52 @@ const Projects = () => {
   ];
 
   return (
-    <Panel styles={{ height: '80vh', marginTop: '60px', marginBottom: '60px' }}>
-      <PanelHeader title="Projetos">
-        <Zoom in={!isNewProjectModalOpen}>
+    <Panel
+      styles={{ height: '125vh', marginTop: '60px', marginBottom: '60px' }}
+    >
+      <PanelHeader title="Detalhes">
+        <Zoom in={true}>
           <Fab
-            onClick={() => setIsNewProjectModalOpen(true)}
-            className={
-              isNewProjectModalOpen ? iconButtonRotated.root : iconButton.root
-            }
+            onClick={() => history.goBack()}
+            className={iconButton.root}
             color="primary"
           >
-            <MdAdd />
+            <MdArrowBack />
           </Fab>
         </Zoom>
       </PanelHeader>
       <Body>
-        <NewProjectModal
-          isOpen={isNewProjectModalOpen}
-          onRequestClose={() => setIsNewProjectModalOpen(false)}
-          fetchProjects={() => fetchProjects()}
-        />
-        {isEditProjectModalOpen && (
-          <EditProjectModal
-            isOpen={isEditProjectModalOpen}
-            onRequestClose={() => setIsEditProjectModalOpen(false)}
-            fetchProjects={() => fetchProjects()}
-            project={selectedProject}
-          />
-        )}
-        <div style={{ height: '100%', width: '100%' }}>
+        <Details>
+          <DetailsTitle>{project.name}</DetailsTitle>
+          <DetailsCards>
+            <Card>
+              <CardTitle>Data de Criação</CardTitle>
+              <CardDescription>
+                {project.createdAt}
+              </CardDescription>
+            </Card>
+            <Card>
+              <CardTitle>Responsável</CardTitle>
+              <CardDescription>{project.name}</CardDescription>
+            </Card>
+            <Card>
+              <CardTitle>Previsão de Entrega</CardTitle>
+              <CardDescription>
+                {project.fromattedDeliveryDate}
+              </CardDescription>
+            </Card>
+          </DetailsCards>
+        </Details>
+        <Sparetor />
+        <DetailsSubTitle>Descrição</DetailsSubTitle>
+        <DetailsDescription>{project.description}</DetailsDescription>
+        <Sparetor />
+        <DetailsSubTitle>Requisitos</DetailsSubTitle>
+        <div style={{ height: '600px', width: '100%' }}>
           <ThemeProvider theme={DataGridTheme}>
             <DataGrid
               disableSelectionOnClick={true}
-              rows={projects}
+              rows={requirements}
               columns={columns}
               pageSize={10}
               components={{
@@ -198,20 +216,4 @@ const useIconButtonStyle = makeStyles(() => ({
   },
 }));
 
-const useRotatedIconButtonStyle = makeStyles(() => ({
-  root: {
-    position: 'absolute',
-    left: '-30px',
-    top: '10px',
-    fontSize: '25px',
-    color: '#fff !important',
-    backgroundColor: 'rgba(81,150,255, 1) !important',
-    transform: 'rotate(45deg)',
-    transition: 'transform 250ms linear, filter 250ms linear',
-    '&:hover': {
-      backgroundColor: 'rgba(81,150,255, 0.9) !important',
-    },
-  },
-}));
-
-export default Projects;
+export default ProjectDetails;

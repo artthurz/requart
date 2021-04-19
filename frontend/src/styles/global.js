@@ -15,9 +15,10 @@ export default createGlobalStyle`
     --orange-light: #f09819;
     --gray-dark: #121214;
     --gray-light: #202024;
-    --text-title: #363f5f;
+    --text-title: #252733;
     --text-body: #969cb3;
     --shape: #ffffff;
+    --grey: #DFE0EB;
   }
 
   * {
@@ -25,6 +26,28 @@ export default createGlobalStyle`
     padding: 0;
     outline: 0;
     box-sizing: border-box;
+
+    /* width */
+::-webkit-scrollbar {
+    width: 16px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background-color: var(--background);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background-color: #babac0;
+    border-radius: 16px;
+    border: 4px solid var(--background);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color:#a0a0a5;
+}
   }
 
   *:focus{
