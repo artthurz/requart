@@ -115,8 +115,18 @@ export default function Header() {
             </div>
             <AppBar position="static">
               <Tabs variant="fullWidth" value={page} onChange={handleChange}>
-                <LinkTab label="Home" to="/home" {...a11yProps(0)} />
-                <LinkTab label="Projetos" to="/projects" {...a11yProps(1)} />
+                <LinkTab
+                  label="Home"
+                  to="/home"
+                  {...a11yProps(0)}
+                  style={{ textTransform: 'none' }}
+                />
+                <LinkTab
+                  label="Projetos"
+                  to="/projects"
+                  {...a11yProps(1)}
+                  style={{ textTransform: 'none' }}
+                />
               </Tabs>
             </AppBar>
           </LinksContainer>

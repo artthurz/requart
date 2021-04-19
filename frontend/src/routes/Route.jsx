@@ -8,21 +8,18 @@ import { useAuth } from '../hooks/auth';
 const Route = ({ isPrivate = false, component: Component, ...rest }) => {
   const { isAuthenticated } = useAuth();
 
-  console.log(isAuthenticated);
-
   return (
     <ReactDOMRoute
-      {...rest}
       render={() => {
         return isPrivate === isAuthenticated ? (
           <>
             {isAuthenticated ? (
               <DefaultLayout>
-                <Component />
+                <Component {...rest}/>
               </DefaultLayout>
             ) : (
               <AuthLayout>
-                <Component />
+                <Component {...rest}/>
               </AuthLayout>
             )}
           </>

@@ -80,7 +80,7 @@ const Login = () => {
               Ao clicar em Entrar, você concorda com nossos Termos de Uso e
               Serviços e Política de Dados e Privacidade.
             </Span>
-            <Button color="primary" variant="contained" fullWidth type="submit">
+            <Button color="primary" variant="contained" fullWidth type="submit" style={{textTransform: "none"}}>
               Entrar
             </Button>
           </form>

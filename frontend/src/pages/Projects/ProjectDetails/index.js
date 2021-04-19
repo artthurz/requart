@@ -19,7 +19,7 @@ import {
   DetailsSubTitle,
   DetailsCards,
   DetailsDescription,
-  DetailsTitle
+  DetailsTitle,
 } from './styles';
 import { MdDelete, MdEdit, MdDirections } from 'react-icons/md';
 import { format, parseISO } from 'date-fns';
@@ -160,9 +160,7 @@ const ProjectDetails = ({ location }) => {
           <DetailsCards>
             <Card>
               <CardTitle>Data de Criação</CardTitle>
-              <CardDescription>
-                {project.createdAt}
-              </CardDescription>
+              <CardDescription>{project.createdAt}</CardDescription>
             </Card>
             <Card>
               <CardTitle>Responsável</CardTitle>
@@ -170,9 +168,7 @@ const ProjectDetails = ({ location }) => {
             </Card>
             <Card>
               <CardTitle>Previsão de Entrega</CardTitle>
-              <CardDescription>
-                {project.fromattedDeliveryDate}
-              </CardDescription>
+              <CardDescription>{project.fromattedDeliveryDate}</CardDescription>
             </Card>
           </DetailsCards>
         </Details>
