@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import api from '../../../services/api';
 import Modal from 'react-modal';
 import { Container } from './styles';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../hooks/auth';
 import Button from '@material-ui/core/Button';
 import { MdClose } from 'react-icons/md';
 import { toast } from 'react-toastify';

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../hooks/auth';
 import logo from '../../assets/images/logo.svg';
 import {
   Container,
@@ -79,7 +79,7 @@ export default function Header() {
 
   const { user, handleLogout } = useAuth();
   async function handleUserLogout() {
-    history.push('/');
+    history.push('/login');
     handleLogout();
   }
 
@@ -109,13 +109,13 @@ export default function Header() {
         <Content>
           <LinksContainer>
             <div>
-              <Link to="/" onClick={() => handleChange(0)}>
+              <Link to="/home" onClick={() => handleChange(0)}>
                 <img src={logo} alt="Requart" />
               </Link>
             </div>
             <AppBar position="static">
               <Tabs variant="fullWidth" value={page} onChange={handleChange}>
-                <LinkTab label="Home" to="/" {...a11yProps(0)} />
+                <LinkTab label="Home" to="/home" {...a11yProps(0)} />
                 <LinkTab label="Projetos" to="/projects" {...a11yProps(1)} />
               </Tabs>
             </AppBar>
@@ -186,20 +186,20 @@ export default function Header() {
 
             <div className="profile-button-and-menu">
               <ProfileButton onClick={handleOpenProfileMenu}>
-                <strong>{user.name}</strong>
+                <strong>{user?.name}</strong>
                 <ProfileImage>
-                  <img src={user.avatar.url} alt="Profile" />
+                  <img src={user?.avatar.url} alt="Profile" />
                 </ProfileImage>
               </ProfileButton>
               <Menu visible={profileMenuShow} right="0" width="380px">
                 <ProfileCard width="380px">
                   <div>
-                    <img src={user.avatar.url} alt="Profile" />
+                    <img src={user?.avatar.url} alt="Profile" />
                     <div>
-                      <strong>{user.name}</strong>
-                      <h1>{user.email}</h1>
+                      <strong>{user?.name}</strong>
+                      <h1>{user?.email}</h1>
                       <AdminBadge>
-                        <h1>{user.admin ? 'Admin' : 'User'}</h1>
+                        <h1>{user?.admin ? 'Admin' : 'User'}</h1>
                       </AdminBadge>
                     </div>
                   </div>

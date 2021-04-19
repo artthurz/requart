@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../hooks/auth';
 import api from '../../services/api';
 import { Container, FormContainer } from './styles';
 import Button from '@material-ui/core/Button';

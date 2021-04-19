@@ -4,7 +4,7 @@ import Modal from 'react-modal';
 import { Container } from './styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../hooks/auth';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   KeyboardDatePicker,
