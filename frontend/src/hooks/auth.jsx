@@ -7,7 +7,9 @@ import api from '../services/api';
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-  const [authenticatedUser, setAuthenticatedUser] = useState(null);
+  const [authenticatedUser, setAuthenticatedUser] = useState(
+    JSON.parse(sessionStorage.getItem('@App:user'))
+  );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -16,7 +18,6 @@ const AuthProvider = ({ children }) => {
 
     if (storagedToken && storagedUser) {
       setAuthenticatedUser(JSON.parse(storagedUser));
-      api.defaults.headers.Authorization = `Bearer ${storagedToken}`;
     }
 
     setLoading(false);
@@ -28,8 +29,6 @@ const AuthProvider = ({ children }) => {
       const {
         data: { token, user },
       } = await api.post('sessions', userData);
-
-      api.defaults.headers.Authorization = `Bearer ${token}`;
 
       sessionStorage.setItem('@App:user', JSON.stringify(user));
       sessionStorage.setItem('@App:token', token);

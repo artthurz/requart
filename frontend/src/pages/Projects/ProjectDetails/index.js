@@ -184,9 +184,6 @@ const ProjectDetails = ({ location }) => {
               rows={requirements}
               columns={columns}
               pageSize={10}
-              components={{
-                Toolbar: GridToolbar,
-              }}
             />
           </ThemeProvider>
         </div>

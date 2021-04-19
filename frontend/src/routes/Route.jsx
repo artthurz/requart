@@ -13,7 +13,7 @@ const Route = ({ isPrivate = false, component: Component, ...rest }) => {
       render={() => {
         return isPrivate === isAuthenticated ? (
           <>
-            {isAuthenticated ? (
+            {isPrivate ? (
               <DefaultLayout>
                 <Component {...rest}/>
               </DefaultLayout>
