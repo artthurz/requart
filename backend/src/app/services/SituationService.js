@@ -25,7 +25,8 @@ class SituationService {
 
     if (situationExists && situationExists.deleted_at !== null) {
       return res.status(400).json({ error: 'Situation already exists.' });
-    } else if (situationExists) {
+    }
+    if (situationExists) {
       await situationExists.update({
         deleted_at: null,
         description: req.body.description,
@@ -50,7 +51,7 @@ class SituationService {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
       description: Yup.string(),
-      color: Yup.string()
+      color: Yup.string(),
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -69,7 +70,9 @@ class SituationService {
       });
 
       if (situationExists) {
-        return res.status(400).json({ error: 'Situation name already in use.' });
+        return res
+          .status(400)
+          .json({ error: 'Situation name already in use.' });
       }
     }
 
@@ -85,7 +88,7 @@ class SituationService {
       return res.status(400).json({ error: 'Situation dont exists.' });
     }
 
-    situation.deleted_at = new Date;
+    situation.deleted_at = new Date();
 
     await situation.save();
 

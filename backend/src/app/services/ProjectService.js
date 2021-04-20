@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
+import _ from 'lodash';
 import Project from '../models/Project';
 import User from '../models/User';
-import _ from 'lodash';
 
 class ProjectService {
   async index(req, res) {

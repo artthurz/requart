@@ -1,6 +1,6 @@
-import Photo from '../models/Photo';
 import path from 'path';
 import fs from 'fs';
+import Photo from '../models/Photo';
 
 import uploadConfig from '../../config/multerPhoto';
 

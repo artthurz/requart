@@ -9,6 +9,8 @@ export const MainPanel = styled.div`
   min-height: 650px;
   box-shadow: inset 0 0 0 0 #b5b5b5, 0 2px 10px 0 rgba(0, 0, 0, 0.2);
   background-color: ${(props) => (props.whiteBg ? '#F7F8FA' : 'white')};
+  margin-top: 60px;
+  margin-bottom: 60px;
 `;
 
 export const SubPanel = styled.div`

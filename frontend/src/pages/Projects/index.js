@@ -135,7 +135,7 @@ const Projects = () => {
   ];
 
   return (
-    <Panel styles={{ height: '80vh', marginTop: '60px', marginBottom: '60px' }}>
+    <Panel styles={{ height: '80vh' }}>
       <PanelHeader title="Projetos">
         <Zoom in={!isNewProjectModalOpen}>
           <Fab
@@ -190,10 +190,10 @@ const useIconButtonStyle = makeStyles(() => ({
     top: '10px',
     fontSize: '25px',
     color: '#fff !important',
-    backgroundColor: 'rgba(81,150,255, 1) !important',
+    backgroundColor: 'rgba(41,204,151, 1) !important',
     transition: 'transform 250ms linear, filter 250ms linear',
     '&:hover': {
-      backgroundColor: 'rgba(81,150,255, 0.9) !important',
+      backgroundColor: 'rgba(41,204,151, 0.9) !important',
     },
   },
 }));
@@ -205,11 +205,11 @@ const useRotatedIconButtonStyle = makeStyles(() => ({
     top: '10px',
     fontSize: '25px',
     color: '#fff !important',
-    backgroundColor: 'rgba(81,150,255, 1) !important',
+    backgroundColor: 'rgba(41,204,151, 1) !important',
     transform: 'rotate(45deg)',
     transition: 'transform 250ms linear, filter 250ms linear',
     '&:hover': {
-      backgroundColor: 'rgba(81,150,255, 0.9) !important',
+      backgroundColor: 'rgba(41,204,151, 0.9) !important',
     },
   },
 }));

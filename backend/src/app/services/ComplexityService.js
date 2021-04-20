@@ -3,7 +3,9 @@ import Complexity from '../models/Complexity';
 
 class ComplexityService {
   async index(req, res) {
-    const complexities = await Complexity.findAll({ where: { deleted_at: null } });
+    const complexities = await Complexity.findAll({
+      where: { deleted_at: null },
+    });
 
     return res.json(complexities);
   }
@@ -25,7 +27,8 @@ class ComplexityService {
 
     if (complexityExists && complexityExists.deleted_at !== null) {
       return res.status(400).json({ error: 'Complexity already exists.' });
-    } else if (complexityExists) {
+    }
+    if (complexityExists) {
       await complexityExists.update({
         deleted_at: null,
         description: req.body.description,
@@ -34,7 +37,7 @@ class ComplexityService {
       return res.json(complexityExists);
     }
 
-    const { id, name, description, color,  } = await Complexity.create({
+    const { id, name, description, color } = await Complexity.create({
       ...req.body,
     });
 
@@ -43,7 +46,7 @@ class ComplexityService {
       name,
       description,
       color,
-      status,
+      deleted_at,
     });
   }
 
@@ -64,7 +67,8 @@ class ComplexityService {
 
     if (!complexity) {
       return res.status(400).json({ error: 'Complexity dont exists.' });
-    } else if (name !== complexity.name) {
+    }
+    if (name !== complexity.name) {
       const complexityExists = await Complexity.findOne({
         where: { name },
       });
@@ -88,7 +92,7 @@ class ComplexityService {
       return res.status(400).json({ error: 'Complexity dont exists.' });
     }
 
-    complexity.deleted_at = new Date;
+    complexity.deleted_at = new Date();
 
     await complexity.save();
 

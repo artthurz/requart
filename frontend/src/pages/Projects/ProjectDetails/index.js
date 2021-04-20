@@ -3,11 +3,7 @@ import api from '../../../services/api';
 import { useHistory } from 'react-router-dom';
 import { Panel, PanelHeader } from '../../../components/Panel';
 import Zoom from '@material-ui/core/Zoom';
-import {
-  makeStyles,
-  createMuiTheme,
-  ThemeProvider,
-} from '@material-ui/core/styles';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { MdArrowBack } from 'react-icons/md';
 import {
   Body,
@@ -20,30 +16,36 @@ import {
   DetailsCards,
   DetailsDescription,
   DetailsTitle,
+  Badge,
+  RequirementsHeader,
+  useRotatedAddIconButtonStyle,
+  useAddIconButtonStyle,
+  useBackIconButtonStyle,
 } from './styles';
-import { MdDelete, MdEdit, MdDirections } from 'react-icons/md';
+import { MdAdd, MdDelete, MdEdit, MdDirections } from 'react-icons/md';
 import { format, parseISO } from 'date-fns';
 import { Fab, IconButton } from '@material-ui/core';
 import { Dropdown } from '../../../components/Dropdown';
 import OpConfirmation from '../../../components/OpConfirmation';
-import { DataGrid, ptBR, GridToolbar } from '@material-ui/data-grid';
-
-// import { Container } from './styles';
+import { DataGrid, ptBR } from '@material-ui/data-grid';
 
 const ProjectDetails = ({ location }) => {
+  const project = location.state;
   const history = useHistory();
-  const iconButton = useIconButtonStyle();
-  const [project, setProject] = useState(location.state);
+  const backIconButton = useBackIconButtonStyle();
+  const addIconButton = useAddIconButtonStyle();
+  const addIconButtonRotated = useRotatedAddIconButtonStyle();
+
   const [requirements, setRequirements] = useState([]);
+  const [isNewRequirementModalOpen, setIsNewRequirementModalOpen] = useState(
+    false
+  );
 
   const fetchRequirements = async () => {
-    const { data } = await api.get('projects');
+    const { data } = await api.get(`requirements/${project.id}`);
+    console.log(data);
     data.forEach((e) => {
-      const delivery = parseISO(e.delivery_date);
       const created = parseISO(e.createdAt);
-      e.fromattedDeliveryDate = format(delivery, 'dd/MM/yyyy', {
-        timeZone: 'America/Sao_Paulo',
-      });
       e.createdAt = format(created, 'dd/MM/yyyy', {
         timeZone: 'America/Sao_Paulo',
       });
@@ -58,7 +60,7 @@ const ProjectDetails = ({ location }) => {
   const handleRequirementDelete = async (id) => {
     console.log(id);
     try {
-      await api.delete(`projects/${id}`);
+      await api.delete(`requirements/${id}`);
       await fetchRequirements();
     } catch (error) {
       console.error(error);
@@ -82,25 +84,51 @@ const ProjectDetails = ({ location }) => {
         );
       },
     },
-    { field: 'id', headerName: 'Código', width: 100 },
+    { field: 'requirement_id', headerName: 'Código', width: 100 },
+    {
+      field: 'non_functional',
+      headerName: 'Tipo',
+      width: 100,
+      renderCell: ({ row }) => {
+        return <>{row.non_functional ? 'RNF' : 'RF'}</>;
+      },
+    },
     { field: 'name', headerName: 'Nome', width: 280 },
     {
-      field: 'owner',
-      headerName: 'Responsável',
-      width: 260,
-      renderCell: (params) => <span>{params.value.name}</span>,
+      field: 'priority.id',
+      headerName: 'Prioridade',
+      width: 185,
+      renderCell: ({ row }) => {
+        return (
+          <Badge color={row.priority.color}>
+            <span>{row.priority.name}</span>
+          </Badge>
+        );
+      },
     },
     {
-      field: 'createdAt',
-      headerName: 'Data de Criação',
-      type: 'date',
-      width: 200,
+      field: 'complexity.id',
+      headerName: 'Complexidade',
+      width: 185,
+      renderCell: ({ row }) => {
+        return (
+          <Badge color={row.complexity.color}>
+            <span>{row.complexity.name}</span>
+          </Badge>
+        );
+      },
     },
     {
-      field: 'fromattedDeliveryDate',
-      headerName: 'Previsão de Entrega',
-      type: 'date',
-      width: 200,
+      field: 'situation.id',
+      headerName: 'Situação',
+      width: 185,
+      renderCell: ({ row }) => {
+        return (
+          <Badge color={row.situation.color}>
+            <span>{row.situation.name}</span>
+          </Badge>
+        );
+      },
     },
     {
       field: 'options',
@@ -108,46 +136,42 @@ const ProjectDetails = ({ location }) => {
       width: 70,
       renderCell: ({ row }) => {
         return (
-          <>
-            <Dropdown
-              popperOpts={{ placement: 'bottom-end' }}
-              className="project-dropdown"
-              options={[
-                {
-                  label: 'Editar',
-                  icon: <MdEdit />,
-                  onClick: () => {},
+          <Dropdown
+            popperOpts={{ placement: 'bottom-end' }}
+            className="project-dropdown"
+            options={[
+              {
+                label: 'Editar',
+                icon: <MdEdit />,
+                onClick: () => {},
+              },
+              {
+                label: 'Deletar',
+                icon: <MdDelete />,
+                onClick: () => {
+                  OpConfirmation({
+                    title: 'Atenção',
+                    message: 'Voce realmente deseja deletar este projeto?',
+                    onConfirm: () => {
+                      handleRequirementDelete(row.id);
+                    },
+                  });
                 },
-                {
-                  label: 'Deletar',
-                  icon: <MdDelete />,
-                  onClick: () => {
-                    OpConfirmation({
-                      title: 'Atenção',
-                      message: 'Voce realmente deseja deletar este projeto?',
-                      onConfirm: () => {
-                        handleRequirementDelete(row.id);
-                      },
-                    });
-                  },
-                },
-              ]}
-            />
-          </>
+              },
+            ]}
+          />
         );
       },
     },
   ];
 
   return (
-    <Panel
-      styles={{ height: '125vh', marginTop: '60px', marginBottom: '60px' }}
-    >
+    <Panel styles={{ height: '1300px' }}>
       <PanelHeader title="Detalhes">
         <Zoom in={true}>
           <Fab
             onClick={() => history.goBack()}
-            className={iconButton.root}
+            className={backIconButton.root}
             color="primary"
           >
             <MdArrowBack />
@@ -164,7 +188,7 @@ const ProjectDetails = ({ location }) => {
             </Card>
             <Card>
               <CardTitle>Responsável</CardTitle>
-              <CardDescription>{project.name}</CardDescription>
+              <CardDescription>{project.owner.name}</CardDescription>
             </Card>
             <Card>
               <CardTitle>Previsão de Entrega</CardTitle>
@@ -176,8 +200,23 @@ const ProjectDetails = ({ location }) => {
         <DetailsSubTitle>Descrição</DetailsSubTitle>
         <DetailsDescription>{project.description}</DetailsDescription>
         <Sparetor />
-        <DetailsSubTitle>Requisitos</DetailsSubTitle>
-        <div style={{ height: '600px', width: '100%' }}>
+        <RequirementsHeader>
+          <Zoom in={!isNewRequirementModalOpen}>
+            <Fab
+              onClick={() => setIsNewRequirementModalOpen(true)}
+              className={
+                isNewRequirementModalOpen
+                  ? addIconButtonRotated.root
+                  : addIconButton.root
+              }
+              color="primary"
+            >
+              <MdAdd />
+            </Fab>
+          </Zoom>
+          <DetailsSubTitle>Requisitos</DetailsSubTitle>
+        </RequirementsHeader>
+        <div style={{ height: '605px', width: '100%' }}>
           <ThemeProvider theme={DataGridTheme}>
             <DataGrid
               disableSelectionOnClick={true}
@@ -193,20 +232,5 @@ const ProjectDetails = ({ location }) => {
 };
 
 const DataGridTheme = createMuiTheme({}, ptBR);
-
-const useIconButtonStyle = makeStyles(() => ({
-  root: {
-    position: 'absolute',
-    left: '-30px',
-    top: '10px',
-    fontSize: '25px',
-    color: '#fff !important',
-    backgroundColor: 'rgba(81,150,255, 1) !important',
-    transition: 'transform 250ms linear, filter 250ms linear',
-    '&:hover': {
-      backgroundColor: 'rgba(81,150,255, 0.9) !important',
-    },
-  },
-}));
 
 export default ProjectDetails;

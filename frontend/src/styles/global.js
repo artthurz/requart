@@ -15,7 +15,7 @@ export default createGlobalStyle`
     --orange-light: #f09819;
     --gray-dark: #121214;
     --gray-light: #202024;
-    --text-title: #252733;
+    --text-title: rgba(0, 0, 0, 0.65);
     --text-body: #969cb3;
     --shape: #ffffff;
     --grey: #DFE0EB;

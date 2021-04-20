@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { darken } from 'polished';
 
-export const Container = styled.div`
+export const Container = styled.header`
   position: fixed;
   display: flex;
   -webkit-box-pack: center;

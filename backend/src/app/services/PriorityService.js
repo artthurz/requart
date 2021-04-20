@@ -25,7 +25,8 @@ class PriorityService {
 
     if (priortityExists && priortityExists.deleted_at !== null) {
       return res.status(400).json({ error: 'Priority already exists.' });
-    } else if (priortityExists) {
+    }
+    if (priortityExists) {
       await priortityExists.update({
         deleted_at: null,
         description: req.body.description,
@@ -85,7 +86,7 @@ class PriorityService {
       return res.status(400).json({ error: 'Priority dont exists.' });
     }
 
-    priority.deleted_at = new Date;
+    priority.deleted_at = new Date();
 
     await priority.save();
 

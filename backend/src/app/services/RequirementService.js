@@ -13,7 +13,11 @@ class RequirementService {
     // const { page = 1 } = req.query;
 
     const requirements = await Requirement.findAll({
-      where: { project_id: req.params.projectId, latest_version: true, deleted_at: null },
+      where: {
+        project_id: req.params.projectId,
+        latest_version: true,
+        deleted_at: null,
+      },
       order: ['non_functional', 'requirement_id'],
       attributes: [
         'id',
@@ -24,8 +28,8 @@ class RequirementService {
         'version',
         'latitude',
         'longitude',
-        'created_at',
-        'updated_at',
+        'createdAt',
+        'updatedAt',
       ],
       // limit: 10,
       // offset: (page - 1) * 10,
@@ -85,12 +89,12 @@ class RequirementService {
     const { project_id, non_functional } = req.body;
 
     const data = await Requirement.findOne({
-      where: { project_id: project_id, non_functional: non_functional, deleted_at: null },
+      where: { project_id, non_functional, deleted_at: null },
       attributes: ['requirement_id'],
       order: [['createdAt', 'DESC']],
     });
 
-    let reqId = !_.isNull(data) ? data.requirement_id + 1 : 1;
+    const reqId = !_.isNull(data) ? data.requirement_id + 1 : 1;
 
     const requirement = await Requirement.create({
       ...req.body,
@@ -145,7 +149,7 @@ class RequirementService {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
       description: Yup.string().required(),
-      non_functional: Yup.boolean().required(),  
+      non_functional: Yup.boolean().required(),
       project_id: Yup.number().required(),
       priority_id: Yup.number().required(),
       complexity_id: Yup.number().required(),
@@ -160,18 +164,18 @@ class RequirementService {
 
     const oldRequirement = await Requirement.findByPk(req.params.id);
 
-    var lastInvertedTypeRequirementId;
+    let lastInvertedTypeRequirementId;
 
     if (nf !== oldRequirement.non_functional) {
       lastInvertedTypeRequirementId = await Requirement.findOne({
-        where: { project_id: project_id, non_functional: nf, deleted_at: null },
+        where: { project_id, non_functional: nf, deleted_at: null },
         attributes: ['requirement_id'],
         order: [['requirement_id', 'DESC']],
       });
 
-      const reqVersion = (oldRequirement.version + 1);
+      const reqVersion = oldRequirement.version + 1;
 
-      const reqId = (lastInvertedTypeRequirementId.requirement_id + 1)
+      const reqId = lastInvertedTypeRequirementId.requirement_id + 1;
 
       const requirement = await Requirement.create({
         ...req.body,
@@ -181,7 +185,11 @@ class RequirementService {
       });
 
       await Requirement.update(
-        { requirement_id: requirement.requirement_id, non_functional: nf, latest_version: false  },
+        {
+          requirement_id: requirement.requirement_id,
+          non_functional: nf,
+          latest_version: false,
+        },
         {
           where: {
             requirement_id: oldRequirement.requirement_id,
@@ -190,7 +198,7 @@ class RequirementService {
           },
         }
       );
-  
+
       await Requirement.update(
         { requirement_id: sequelize.literal('requirement_id - 1') },
         {
@@ -199,7 +207,7 @@ class RequirementService {
               [Op.gt]: oldRequirement.requirement_id,
             },
             non_functional: oldRequirement.non_functional,
-            project_id: oldRequirement.project_id
+            project_id: oldRequirement.project_id,
           },
         }
       );
@@ -235,52 +243,49 @@ class RequirementService {
       });
 
       return res.json(response);
-
-    } else {
-      const reqVersion = (oldRequirement.version + 1);
-
-      const requirement = await Requirement.create({
-        ...req.body,
-        requirement_id: oldRequirement.requirement_id,
-        version: reqVersion,
-        created_at: oldRequirement.created_at,
-      });
-
-      const response = await Requirement.findByPk(requirement.id, {
-        attributes: [
-          'id',
-          'requirement_id',
-          'name',
-          'description',
-          'non_functional',
-          'version',
-          'created_at',
-          'updated_at',
-        ],
-        include: [
-          {
-            model: Complexity,
-            as: 'complexity',
-            attributes: ['id', 'name', 'color'],
-          },
-          {
-            model: Situation,
-            as: 'situation',
-            attributes: ['id', 'name', 'color'],
-          },
-          {
-            model: Priority,
-            as: 'priority',
-            attributes: ['id', 'name', 'color'],
-          },
-        ],
-      });
-
-      await oldRequirement.update({ latest_version: false });
-
-      return res.json(response);
     }
-    
+    const reqVersion = oldRequirement.version + 1;
+
+    const requirement = await Requirement.create({
+      ...req.body,
+      requirement_id: oldRequirement.requirement_id,
+      version: reqVersion,
+      created_at: oldRequirement.created_at,
+    });
+
+    const response = await Requirement.findByPk(requirement.id, {
+      attributes: [
+        'id',
+        'requirement_id',
+        'name',
+        'description',
+        'non_functional',
+        'version',
+        'created_at',
+        'updated_at',
+      ],
+      include: [
+        {
+          model: Complexity,
+          as: 'complexity',
+          attributes: ['id', 'name', 'color'],
+        },
+        {
+          model: Situation,
+          as: 'situation',
+          attributes: ['id', 'name', 'color'],
+        },
+        {
+          model: Priority,
+          as: 'priority',
+          attributes: ['id', 'name', 'color'],
+        },
+      ],
+    });
+
+    await oldRequirement.update({ latest_version: false });
+
+    return res.json(response);
   }
 
   async delete(req, res) {
@@ -309,12 +314,14 @@ class RequirementService {
             [Op.gt]: requirement.requirement_id,
           },
           non_functional: requirement.non_functional,
-          project_id: requirement.project_id
+          project_id: requirement.project_id,
         },
       }
     );
 
-    return res.status(200).json({ success: 'Requirement deleted with success.' });
+    return res
+      .status(200)
+      .json({ success: 'Requirement deleted with success.' });
   }
 }
 

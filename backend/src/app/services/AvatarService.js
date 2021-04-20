@@ -1,6 +1,6 @@
-import Avatar from '../models/Avatar';
 import path from 'path';
 import fs from 'fs';
+import Avatar from '../models/Avatar';
 import User from '../models/User';
 
 import uploadConfig from '../../config/multerAvatar';
