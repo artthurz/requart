@@ -33,6 +33,8 @@ const AuthProvider = ({ children }) => {
       sessionStorage.setItem('@App:user', JSON.stringify(user));
       sessionStorage.setItem('@App:token', token);
 
+      api.defaults.headers.Authorization = `Bearer ${token}`;
+
       setAuthenticatedUser(user);
 
       toast.success('Autenticação realizada com sucesso!');
