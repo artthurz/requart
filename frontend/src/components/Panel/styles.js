@@ -3,14 +3,11 @@ import styled from 'styled-components';
 export const MainPanel = styled.div`
   width: 100%;
   max-width: 1200px;
-  margin-top: ${(props) => (props.styles?.marginTop ? props.styles.marginTop : '0px')};
-  margin-bottom: ${(props) => (props.styles?.marginBottom ? props.styles.marginBottom : '0px')};
-  height: ${(props) => (props.styles?.height ? props.styles.height : '80vh')};
+  margin: ${(props) => (props.styles?.margin) ? props.styles.margin : '2rem'};
+  height: ${(props) => (props.styles?.height ? props.styles.height : 'auto')};
   min-height: 650px;
   box-shadow: inset 0 0 0 0 #b5b5b5, 0 2px 10px 0 rgba(0, 0, 0, 0.2);
   background-color: ${(props) => (props.whiteBg ? '#F7F8FA' : 'white')};
-  margin-top: 60px;
-  margin-bottom: 60px;
 `;
 
 export const SubPanel = styled.div`

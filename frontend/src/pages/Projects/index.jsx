@@ -17,7 +17,7 @@ import { format, parseISO } from 'date-fns';
 import { Fab, IconButton } from '@material-ui/core';
 import { Dropdown } from '../../components/Dropdown';
 import OpConfirmation from '../../components/OpConfirmation';
-import { Body } from './styles';
+import { Container, Body } from './styles';
 
 const Projects = () => {
   let history = useHistory();
@@ -135,49 +135,48 @@ const Projects = () => {
   ];
 
   return (
-    <Panel styles={{ height: '80vh' }}>
-      <PanelHeader title="Projetos">
-        <Zoom in={!isNewProjectModalOpen}>
-          <Fab
-            onClick={() => setIsNewProjectModalOpen(true)}
-            className={
-              isNewProjectModalOpen ? iconButtonRotated.root : iconButton.root
-            }
-            color="primary"
-          >
-            <MdAdd />
-          </Fab>
-        </Zoom>
-      </PanelHeader>
-      <Body>
-        <NewProjectModal
-          isOpen={isNewProjectModalOpen}
-          onRequestClose={() => setIsNewProjectModalOpen(false)}
-          fetchProjects={() => fetchProjects()}
-        />
-        {isEditProjectModalOpen && (
-          <EditProjectModal
-            isOpen={isEditProjectModalOpen}
-            onRequestClose={() => setIsEditProjectModalOpen(false)}
+    <Container>
+      <Panel>
+        <PanelHeader title="Projetos">
+          <Zoom in={!isNewProjectModalOpen}>
+            <Fab
+              onClick={() => setIsNewProjectModalOpen(true)}
+              className={
+                isNewProjectModalOpen ? iconButtonRotated.root : iconButton.root
+              }
+              color="primary"
+            >
+              <MdAdd />
+            </Fab>
+          </Zoom>
+        </PanelHeader>
+        <Body>
+          <NewProjectModal
+            isOpen={isNewProjectModalOpen}
+            onRequestClose={() => setIsNewProjectModalOpen(false)}
             fetchProjects={() => fetchProjects()}
-            project={selectedProject}
           />
-        )}
-        <div style={{ height: '100%', width: '100%' }}>
-          <ThemeProvider theme={DataGridTheme}>
-            <DataGrid
-              disableSelectionOnClick={true}
-              rows={projects}
-              columns={columns}
-              pageSize={10}
-              components={{
-                Toolbar: GridToolbar,
-              }}
+          {isEditProjectModalOpen && (
+            <EditProjectModal
+              isOpen={isEditProjectModalOpen}
+              onRequestClose={() => setIsEditProjectModalOpen(false)}
+              fetchProjects={() => fetchProjects()}
+              project={selectedProject}
             />
-          </ThemeProvider>
-        </div>
-      </Body>
-    </Panel>
+          )}
+          <div style={{ height: '100%', width: '100%' }}>
+            <ThemeProvider theme={DataGridTheme}>
+              <DataGrid
+                disableSelectionOnClick={true}
+                rows={projects}
+                columns={columns}
+                pageSize={10}
+              />
+            </ThemeProvider>
+          </div>
+        </Body>
+      </Panel>
+    </Container>
   );
 };
 

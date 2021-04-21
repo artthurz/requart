@@ -7,7 +7,7 @@ export const Container = styled.header`
   -webkit-box-pack: center;
   justify-content: center;
   width: 100%;
-  height: 72px;
+  height: 5rem;
   padding: 0px 30px;
   background: rgb(32, 32, 36);
   top: 0px;

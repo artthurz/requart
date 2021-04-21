@@ -1,7 +1,15 @@
 import styled from 'styled-components';
 
+export const Container = styled.div`
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 export const Body = styled.div`
-  height: calc(100% - 80px);
+  height: 40rem;
+  width: 1200px;
   background-color: #fff;
 
   .user-dropdown {

@@ -1,13 +1,17 @@
 import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
 
-export const Body = styled.div`
-  height: calc(100% - 80px);
-  background-color: #fff;
+export const Container = styled.div`
+  margin: auto;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
+`;
 
+export const Body = styled.div`
+  height: 78.5rem;
+  width: 1200px;
+  background-color: #fff;
   .project-dropdown {
     position: relative;
     display: flex;
@@ -19,7 +23,7 @@ export const Body = styled.div`
   }
 `;
 
-export const Details = styled.div`
+export const Details = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;

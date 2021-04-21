@@ -8,9 +8,11 @@ import { Wrapper, ChildrenWrapper } from './styles';
 export default function DefaultLayout({ children }) {
   return (
     <Wrapper>
-      <Header />
-      <ChildrenWrapper>{children}</ChildrenWrapper>
-      <Footer />
+      <main>
+        <Header />
+        <ChildrenWrapper>{children}</ChildrenWrapper>
+        <Footer />
+      </main>
     </Wrapper>
   );
 }

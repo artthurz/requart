@@ -21,6 +21,7 @@ import {
   useRotatedAddIconButtonStyle,
   useAddIconButtonStyle,
   useBackIconButtonStyle,
+  Container,
 } from './styles';
 import { MdAdd, MdDelete, MdEdit, MdDirections } from 'react-icons/md';
 import { format, parseISO } from 'date-fns';
@@ -28,6 +29,7 @@ import { Fab, IconButton } from '@material-ui/core';
 import { Dropdown } from '../../../components/Dropdown';
 import OpConfirmation from '../../../components/OpConfirmation';
 import { DataGrid, ptBR } from '@material-ui/data-grid';
+import NewRequirementModal from '../../Requirements/NewRequirementModal';
 
 const ProjectDetails = ({ location }) => {
   const project = location.state;
@@ -35,11 +37,11 @@ const ProjectDetails = ({ location }) => {
   const backIconButton = useBackIconButtonStyle();
   const addIconButton = useAddIconButtonStyle();
   const addIconButtonRotated = useRotatedAddIconButtonStyle();
-
-  const [requirements, setRequirements] = useState([]);
   const [isNewRequirementModalOpen, setIsNewRequirementModalOpen] = useState(
     false
   );
+
+  const [requirements, setRequirements] = useState([]);
 
   const fetchRequirements = async () => {
     const { data } = await api.get(`requirements/${project.id}`);
@@ -77,7 +79,7 @@ const ProjectDetails = ({ location }) => {
           <IconButton
             color="primary"
             aria-label="details"
-            onClick={() => history.push('/projects/details', row)}
+            onClick={() => history.push('/requirements/versions', row)}
           >
             <MdDirections />
           </IconButton>
@@ -141,7 +143,7 @@ const ProjectDetails = ({ location }) => {
             className="project-dropdown"
             options={[
               {
-                label: 'Editar',
+                label: 'Criar nova Versão',
                 icon: <MdEdit />,
                 onClick: () => {},
               },
@@ -166,68 +168,81 @@ const ProjectDetails = ({ location }) => {
   ];
 
   return (
-    <Panel styles={{ height: '1300px' }}>
-      <PanelHeader title="Detalhes">
-        <Zoom in={true}>
-          <Fab
-            onClick={() => history.goBack()}
-            className={backIconButton.root}
-            color="primary"
-          >
-            <MdArrowBack />
-          </Fab>
-        </Zoom>
-      </PanelHeader>
-      <Body>
-        <Details>
-          <DetailsTitle>{project.name}</DetailsTitle>
-          <DetailsCards>
-            <Card>
-              <CardTitle>Data de Criação</CardTitle>
-              <CardDescription>{project.createdAt}</CardDescription>
-            </Card>
-            <Card>
-              <CardTitle>Responsável</CardTitle>
-              <CardDescription>{project.owner.name}</CardDescription>
-            </Card>
-            <Card>
-              <CardTitle>Previsão de Entrega</CardTitle>
-              <CardDescription>{project.fromattedDeliveryDate}</CardDescription>
-            </Card>
-          </DetailsCards>
-        </Details>
-        <Sparetor />
-        <DetailsSubTitle>Descrição</DetailsSubTitle>
-        <DetailsDescription>{project.description}</DetailsDescription>
-        <Sparetor />
-        <RequirementsHeader>
-          <Zoom in={!isNewRequirementModalOpen}>
+    <Container>
+      <Panel styles={{margin: '5.55rem'}}>
+        <PanelHeader title="Detalhes">
+          <Zoom in={true}>
             <Fab
-              onClick={() => setIsNewRequirementModalOpen(true)}
-              className={
-                isNewRequirementModalOpen
-                  ? addIconButtonRotated.root
-                  : addIconButton.root
-              }
+              onClick={() => history.goBack()}
+              className={backIconButton.root}
               color="primary"
             >
-              <MdAdd />
+              <MdArrowBack />
             </Fab>
           </Zoom>
-          <DetailsSubTitle>Requisitos</DetailsSubTitle>
-        </RequirementsHeader>
-        <div style={{ height: '605px', width: '100%' }}>
-          <ThemeProvider theme={DataGridTheme}>
-            <DataGrid
-              disableSelectionOnClick={true}
-              rows={requirements}
-              columns={columns}
-              pageSize={10}
-            />
-          </ThemeProvider>
-        </div>
-      </Body>
-    </Panel>
+        </PanelHeader>
+        <Body>
+          <Details>
+            <DetailsTitle>{project.name}</DetailsTitle>
+            <DetailsCards>
+              <Card>
+                <CardTitle>Data de Criação</CardTitle>
+                <CardDescription>{project.createdAt}</CardDescription>
+              </Card>
+              <Card>
+                <CardTitle>Responsável</CardTitle>
+                <CardDescription>{project.owner.name}</CardDescription>
+              </Card>
+              <Card>
+                <CardTitle>Previsão de Entrega</CardTitle>
+                <CardDescription>
+                  {project.fromattedDeliveryDate}
+                </CardDescription>
+              </Card>
+            </DetailsCards>
+
+            <Sparetor />
+            <DetailsSubTitle>Descrição</DetailsSubTitle>
+            <DetailsDescription>{project.description}</DetailsDescription>
+          </Details>
+          <section style={{ height: '605px', width: '100%' }}>
+            <Sparetor />
+            <RequirementsHeader>
+              <Zoom in={!isNewRequirementModalOpen}>
+                <Fab
+                  onClick={() => setIsNewRequirementModalOpen(true)}
+                  className={
+                    isNewRequirementModalOpen
+                      ? addIconButtonRotated.root
+                      : addIconButton.root
+                  }
+                  color="primary"
+                >
+                  <MdAdd />
+                </Fab>
+              </Zoom>
+              <DetailsSubTitle>Requisitos</DetailsSubTitle>
+            </RequirementsHeader>
+            <div style={{ height: '605px', width: '100%' }}>
+              <ThemeProvider theme={DataGridTheme}>
+                <DataGrid
+                  disableSelectionOnClick={true}
+                  rows={requirements}
+                  columns={columns}
+                  pageSize={10}
+                />
+              </ThemeProvider>
+            </div>
+          </section>
+          <NewRequirementModal
+            isOpen={isNewRequirementModalOpen}
+            onRequestClose={() => setIsNewRequirementModalOpen(false)}
+            fetchRequirements={() => fetchRequirements()}
+            projectId={project.id}
+          />
+        </Body>
+      </Panel>
+    </Container>
   );
 };
 

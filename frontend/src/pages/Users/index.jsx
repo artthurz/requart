@@ -17,7 +17,7 @@ import Fab from '@material-ui/core/Fab';
 import { Dropdown } from '../../components/Dropdown';
 import OpConfirmation from '../../components/OpConfirmation';
 
-import { Body, ProfileImage } from './styles';
+import { Container, Body, ProfileImage } from './styles';
 
 const useIconButtonStyle = makeStyles(() => ({
   root: {
@@ -173,50 +173,49 @@ const Users = () => {
   ];
 
   return (
-    <Panel>
-      <PanelHeader title="Usuários">
-        <Zoom in={!isNewUserModalOpen}>
-          <Fab
-            onClick={() => setIsNewUserModalOpen(true)}
-            className={
-              isNewUserModalOpen ? iconButtonRotated.root : iconButton.root
-            }
-            color="primary"
-          >
-            <MdAdd />
-          </Fab>
-        </Zoom>
-      </PanelHeader>
-      <Body>
-        <NewUserModal
-          isOpen={isNewUserModalOpen}
-          onRequestClose={() => setIsNewUserModalOpen(false)}
-          fetchUsers={() => fetchUsers()}
-        />
-        {isEditUserModalOpen && (
-          <EditUserModal
-            isOpen={isEditUserModalOpen}
-            onRequestClose={() => setIsEditUserModalOpen(false)}
+    <Container>
+      <Panel>
+        <PanelHeader title="Usuários">
+          <Zoom in={!isNewUserModalOpen}>
+            <Fab
+              onClick={() => setIsNewUserModalOpen(true)}
+              className={
+                isNewUserModalOpen ? iconButtonRotated.root : iconButton.root
+              }
+              color="primary"
+            >
+              <MdAdd />
+            </Fab>
+          </Zoom>
+        </PanelHeader>
+        <Body>
+          <NewUserModal
+            isOpen={isNewUserModalOpen}
+            onRequestClose={() => setIsNewUserModalOpen(false)}
             fetchUsers={() => fetchUsers()}
-            user={selectedUser}
           />
-        )}
-
-        <div style={{ height: '100%', width: '100%' }}>
-          <ThemeProvider theme={DataGridTheme}>
-            <DataGrid
-              rows={users}
-              columns={columns}
-              pageSize={10}
-              rowHeight={80}
-              components={{
-                Toolbar: GridToolbar,
-              }}
+          {isEditUserModalOpen && (
+            <EditUserModal
+              isOpen={isEditUserModalOpen}
+              onRequestClose={() => setIsEditUserModalOpen(false)}
+              fetchUsers={() => fetchUsers()}
+              user={selectedUser}
             />
-          </ThemeProvider>
-        </div>
-      </Body>
-    </Panel>
+          )}
+
+          <div style={{ height: '100%', width: '100%' }}>
+            <ThemeProvider theme={DataGridTheme}>
+              <DataGrid
+                rows={users}
+                columns={columns}
+                pageSize={10}
+                rowHeight={80}
+              />
+            </ThemeProvider>
+          </div>
+        </Body>
+      </Panel>
+    </Container>
   );
 };
 
