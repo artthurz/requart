@@ -16,5 +16,5 @@ export const ChildrenWrapper = styled.div`
   height: calc(100vh - 5rem);
   justify-content: center;
   align-items: center;
-  overflow-y: scroll;
+  overflow-y: auto;
 `;

@@ -12,6 +12,7 @@ class Requirement extends Model {
         latest_version: Sequelize.BOOLEAN,
         latitude: Sequelize.STRING,
         longitude: Sequelize.STRING,
+        parent_id: Sequelize.INTEGER,
         first_file_id: Sequelize.INTEGER,
         second_file_id: Sequelize.INTEGER,
         project_id: Sequelize.INTEGER,

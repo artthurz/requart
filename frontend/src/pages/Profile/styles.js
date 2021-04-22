@@ -1,12 +1,19 @@
 import styled from 'styled-components';
+
 export const Container = styled.div`
-  height: calc(100% - 80px);
-  background-color: #fff;
-  width: 800px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  width: 100%;
+  height: 100%;
 
   .edit-user-body {
+    height: 40rem;
+    width: 1200px;
+    background-color: rgb(32, 32, 36);
     position: relative;
-    height: calc(100% - 80px);
     padding: 3rem;
     display: flex;
     align-items: center;
@@ -56,7 +63,28 @@ export const FormContainer = styled.form`
     background: none;
     font-size: 1rem;
     color: var(--green);
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
+
+  h4 {
+    color: #fff;
+  }
+
+// estilo input
+  .MuiOutlinedInput-input {
+    color: #fff;
+  }
+  .MuiOutlinedInput-notchedOutline {
+    border-color: rgb(135, 134, 139);
+  }
+
+  label {
+    color: rgb(135, 134, 139);
+  }
+// fim estilo input
 
   .edit-profile-modal-submit-button {
     width: 100%;

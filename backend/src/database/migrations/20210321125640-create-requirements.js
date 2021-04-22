@@ -10,6 +10,9 @@ module.exports = {
       requirement_id: {
         type: Sequelize.INTEGER,
       },
+      parent_id: {
+        type: Sequelize.INTEGER,
+      },
       name: {
         type: Sequelize.STRING,
         allowNull: false,

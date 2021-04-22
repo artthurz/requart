@@ -21,52 +21,94 @@ import {
   useRotatedAddIconButtonStyle,
   useAddIconButtonStyle,
   useBackIconButtonStyle,
+  useEnterIconButtonStyle,
   Container,
 } from './styles';
 import { MdAdd, MdDelete, MdEdit, MdDirections } from 'react-icons/md';
 import { format, parseISO } from 'date-fns';
-import { Fab, IconButton } from '@material-ui/core';
+import { Fab } from '@material-ui/core';
 import { Dropdown } from '../../../components/Dropdown';
 import OpConfirmation from '../../../components/OpConfirmation';
 import { DataGrid, ptBR } from '@material-ui/data-grid';
+import Skeleton from '@material-ui/lab/Skeleton';
 import NewRequirementModal from '../../Requirements/NewRequirementModal';
+import EditRequirementModal from '../../Requirements/EditRequirementModal';
+import ProjectToPdf from '../../../documents/Project.pdf.jsx';
 
-const ProjectDetails = ({ location }) => {
-  const project = location.state;
+const ProjectDetails = (params) => {
+  const [project, setProject] = useState(params.location.state);
   const history = useHistory();
   const backIconButton = useBackIconButtonStyle();
   const addIconButton = useAddIconButtonStyle();
+  const enterIconButton = useEnterIconButtonStyle();
   const addIconButtonRotated = useRotatedAddIconButtonStyle();
   const [isNewRequirementModalOpen, setIsNewRequirementModalOpen] = useState(
     false
   );
+  const [isEditRequirementModalOpen, setIsEditRequirementModalOpen] = useState(
+    false
+  );
+  const [loading, setLoading] = useState(false);
+  const [selectedRequirement, setSelectedRequirement] = useState(false);
 
   const [requirements, setRequirements] = useState([]);
 
-  const fetchRequirements = async () => {
-    const { data } = await api.get(`requirements/${project.id}`);
-    console.log(data);
-    data.forEach((e) => {
-      const created = parseISO(e.createdAt);
-      e.createdAt = format(created, 'dd/MM/yyyy', {
-        timeZone: 'America/Sao_Paulo',
+  const fetchRequirements = async (proj) => {
+    try {
+      const { data } = await api.get(`requirements/${proj.id}`);
+      data.forEach((e) => {
+        const created = parseISO(e.createdAt);
+        e.createdAt = format(created, 'dd/MM/yyyy', {
+          timeZone: 'America/Sao_Paulo',
+        });
       });
-    });
-    setRequirements(data);
+      setRequirements(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    fetchRequirements();
+    (async () => {
+      setLoading(true);
+      if (project) {
+        return fetchRequirements(project);
+      } else {
+        try {
+          const { data } = await api.get(
+            `projects/${params.computedMatch.params.project}`
+          );
+          const delivery = parseISO(data.delivery_date);
+          const created = parseISO(data.createdAt);
+          data.fromattedDeliveryDate = format(delivery, 'dd/MM/yyyy', {
+            timeZone: 'America/Sao_Paulo',
+          });
+          data.createdAt = format(created, 'dd/MM/yyyy', {
+            timeZone: 'America/Sao_Paulo',
+          });
+          setProject(data);
+          fetchRequirements(data);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    })();
   }, []);
 
   const handleRequirementDelete = async (id) => {
-    console.log(id);
     try {
       await api.delete(`requirements/${id}`);
-      await fetchRequirements();
+      await fetchRequirements(project);
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleOpenEditRequirementModal = (req) => {
+    setSelectedRequirement(req);
+    setIsEditRequirementModalOpen(true);
   };
 
   const columns = [
@@ -75,14 +117,15 @@ const ProjectDetails = ({ location }) => {
       headerName: ' ',
       width: 70,
       renderCell: ({ row }) => {
+        const data = { requirement: row, project: project };
         return (
-          <IconButton
+          <Fab
+            onClick={() => history.push('/requirements', data)}
+            className={enterIconButton.root}
             color="primary"
-            aria-label="details"
-            onClick={() => history.push('/requirements/versions', row)}
           >
             <MdDirections />
-          </IconButton>
+          </Fab>
         );
       },
     },
@@ -92,7 +135,7 @@ const ProjectDetails = ({ location }) => {
       headerName: 'Tipo',
       width: 100,
       renderCell: ({ row }) => {
-        return <>{row.non_functional ? 'RNF' : 'RF'}</>;
+        return <>{row?.non_functional ? 'RNF' : 'RF'}</>;
       },
     },
     { field: 'name', headerName: 'Nome', width: 280 },
@@ -102,8 +145,8 @@ const ProjectDetails = ({ location }) => {
       width: 185,
       renderCell: ({ row }) => {
         return (
-          <Badge color={row.priority.color}>
-            <span>{row.priority.name}</span>
+          <Badge color={row?.priority.color}>
+            <span>{row?.priority.name}</span>
           </Badge>
         );
       },
@@ -114,8 +157,8 @@ const ProjectDetails = ({ location }) => {
       width: 185,
       renderCell: ({ row }) => {
         return (
-          <Badge color={row.complexity.color}>
-            <span>{row.complexity.name}</span>
+          <Badge color={row?.complexity.color}>
+            <span>{row?.complexity.name}</span>
           </Badge>
         );
       },
@@ -126,8 +169,8 @@ const ProjectDetails = ({ location }) => {
       width: 185,
       renderCell: ({ row }) => {
         return (
-          <Badge color={row.situation.color}>
-            <span>{row.situation.name}</span>
+          <Badge color={row?.situation.color}>
+            <span>{row?.situation.name}</span>
           </Badge>
         );
       },
@@ -145,7 +188,9 @@ const ProjectDetails = ({ location }) => {
               {
                 label: 'Criar nova Versão',
                 icon: <MdEdit />,
-                onClick: () => {},
+                onClick: () => {
+                  handleOpenEditRequirementModal(row);
+                },
               },
               {
                 label: 'Deletar',
@@ -155,7 +200,7 @@ const ProjectDetails = ({ location }) => {
                     title: 'Atenção',
                     message: 'Voce realmente deseja deletar este projeto?',
                     onConfirm: () => {
-                      handleRequirementDelete(row.id);
+                      handleRequirementDelete(row?.id);
                     },
                   });
                 },
@@ -169,7 +214,7 @@ const ProjectDetails = ({ location }) => {
 
   return (
     <Container>
-      <Panel styles={{margin: '5.55rem'}}>
+      <Panel styles={{ margin: '5.55rem' }}>
         <PanelHeader title="Detalhes">
           <Zoom in={true}>
             <Fab
@@ -180,30 +225,105 @@ const ProjectDetails = ({ location }) => {
               <MdArrowBack />
             </Fab>
           </Zoom>
+          <ProjectToPdf projectDetails={{project: project, requirements: requirements}} />
         </PanelHeader>
         <Body>
           <Details>
-            <DetailsTitle>{project.name}</DetailsTitle>
+            <DetailsTitle>
+              {loading ? (
+                <Skeleton animation="wave" width={250} />
+              ) : (
+                project?.name
+              )}
+            </DetailsTitle>
             <DetailsCards>
               <Card>
                 <CardTitle>Data de Criação</CardTitle>
-                <CardDescription>{project.createdAt}</CardDescription>
+                <CardDescription>
+                  {loading ? (
+                    <>
+                      <Skeleton
+                        animation="wave"
+                        width={250}
+                        height={10}
+                        style={{ marginBottom: 6 }}
+                      />
+                      <Skeleton
+                        animation="wave"
+                        width={250}
+                        height={10}
+                        width="80%"
+                      />
+                    </>
+                  ) : (
+                    project?.createdAt
+                  )}
+                </CardDescription>
               </Card>
               <Card>
                 <CardTitle>Responsável</CardTitle>
-                <CardDescription>{project.owner.name}</CardDescription>
+                <CardDescription>
+                  {loading ? (
+                    <>
+                      {' '}
+                      <Skeleton
+                        animation="wave"
+                        width={250}
+                        height={10}
+                        style={{ marginBottom: 6 }}
+                      />
+                      <Skeleton
+                        animation="wave"
+                        width={250}
+                        height={10}
+                        width="80%"
+                      />{' '}
+                    </>
+                  ) : (
+                    project?.owner.name
+                  )}
+                </CardDescription>
               </Card>
               <Card>
                 <CardTitle>Previsão de Entrega</CardTitle>
                 <CardDescription>
-                  {project.fromattedDeliveryDate}
+                  {loading ? (
+                    <>
+                      {' '}
+                      <Skeleton
+                        animation="wave"
+                        width={250}
+                        height={10}
+                        style={{ marginBottom: 6 }}
+                      />
+                      <Skeleton
+                        animation="wave"
+                        width={250}
+                        height={10}
+                        width="80%"
+                      />
+                    </>
+                  ) : (
+                    project?.fromattedDeliveryDate
+                  )}
                 </CardDescription>
               </Card>
             </DetailsCards>
 
             <Sparetor />
             <DetailsSubTitle>Descrição</DetailsSubTitle>
-            <DetailsDescription>{project.description}</DetailsDescription>
+            <DetailsDescription>
+              {loading ? (
+                <>
+                  <Skeleton animation="wave" width={'100%'} />
+                  <Skeleton animation="wave" width={'100%'} />
+                  <Skeleton animation="wave" width={'100%'} />
+                  <Skeleton animation="wave" width={'70%'} />
+                </>
+              ) : (
+                project?.description
+              )}
+            </DetailsDescription>
           </Details>
           <section style={{ height: '605px', width: '100%' }}>
             <Sparetor />
@@ -237,9 +357,20 @@ const ProjectDetails = ({ location }) => {
           <NewRequirementModal
             isOpen={isNewRequirementModalOpen}
             onRequestClose={() => setIsNewRequirementModalOpen(false)}
-            fetchRequirements={() => fetchRequirements()}
-            projectId={project.id}
+            fetchRequirements={() => fetchRequirements(project)}
+            projectId={project?.id}
           />
+          {isEditRequirementModalOpen ? (
+            <EditRequirementModal
+              isOpen={isEditRequirementModalOpen}
+              onRequestClose={() => setIsEditRequirementModalOpen(false)}
+              fetchRequirements={() => fetchRequirements(project)}
+              project={project}
+              requirement={selectedRequirement}
+            />
+          ) : (
+            ''
+          )}
         </Body>
       </Panel>
     </Container>

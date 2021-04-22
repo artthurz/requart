@@ -25,6 +25,7 @@ class RequirementService {
         'name',
         'description',
         'non_functional',
+        'parent_id',
         'version',
         'latitude',
         'longitude',
@@ -89,7 +90,7 @@ class RequirementService {
     const { project_id, non_functional } = req.body;
 
     const data = await Requirement.findOne({
-      where: { project_id, non_functional, deleted_at: null },
+      where: { project_id, non_functional, latest_version: true, deleted_at: null },
       attributes: ['requirement_id'],
       order: [['createdAt', 'DESC']],
     });
@@ -102,12 +103,24 @@ class RequirementService {
       version: 1,
     });
 
+    await Requirement.update(
+      {
+        parent_id: requirement.id,
+      },
+      {
+        where: {
+          id: requirement.id,
+        },
+      }
+    );
+
     const response = await Requirement.findByPk(requirement.id, {
       attributes: [
         'id',
         'requirement_id',
         'name',
         'description',
+        'parent_id',
         'non_functional',
         'version',
         'created_at',
@@ -168,18 +181,31 @@ class RequirementService {
 
     if (nf !== oldRequirement.non_functional) {
       lastInvertedTypeRequirementId = await Requirement.findOne({
-        where: { project_id, non_functional: nf, deleted_at: null },
+        where: {
+          project_id,
+          parent_id: {
+            [Op.ne]: oldRequirement.parent_id,
+          },
+          latest_version: true,
+          non_functional: nf,
+          deleted_at: null,
+        },
         attributes: ['requirement_id'],
         order: [['requirement_id', 'DESC']],
       });
 
+      console.log('🚀🐱‍🏍🚀🐱‍🏍🚀🐱‍🏍🚀💥💥',lastInvertedTypeRequirementId);
+
       const reqVersion = oldRequirement.version + 1;
 
-      const reqId = lastInvertedTypeRequirementId.requirement_id + 1;
+      const reqId = lastInvertedTypeRequirementId
+        ? lastInvertedTypeRequirementId.requirement_id + 1
+        : 1;
 
       const requirement = await Requirement.create({
         ...req.body,
         requirement_id: reqId,
+        parent_id: oldRequirement.parent_id,
         version: reqVersion,
         created_at: oldRequirement.created_at,
       });
@@ -187,13 +213,14 @@ class RequirementService {
       await Requirement.update(
         {
           requirement_id: requirement.requirement_id,
-          non_functional: nf,
           latest_version: false,
         },
         {
           where: {
-            requirement_id: oldRequirement.requirement_id,
-            non_functional: oldRequirement.non_functional,
+            id: {
+              [Op.lt]: requirement.id,
+            },
+            parent_id: oldRequirement.parent_id,
             project_id: oldRequirement.project_id,
           },
         }
@@ -218,6 +245,7 @@ class RequirementService {
           'requirement_id',
           'name',
           'description',
+          'parent_id',
           'non_functional',
           'version',
           'created_at',
@@ -249,6 +277,7 @@ class RequirementService {
     const requirement = await Requirement.create({
       ...req.body,
       requirement_id: oldRequirement.requirement_id,
+      parent_id: oldRequirement.parent_id,
       version: reqVersion,
       created_at: oldRequirement.created_at,
     });
@@ -259,6 +288,7 @@ class RequirementService {
         'requirement_id',
         'name',
         'description',
+        'parent_id',
         'non_functional',
         'version',
         'created_at',
@@ -299,9 +329,7 @@ class RequirementService {
       { deleted_at: new Date(), requirement_id: null },
       {
         where: {
-          requirement_id: requirement.requirement_id,
-          non_functional: requirement.non_functional,
-          project_id: requirement.project_id,
+          parent_id: requirement.parent_id,
         },
       }
     );

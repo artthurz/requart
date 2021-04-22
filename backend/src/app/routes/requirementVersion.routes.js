@@ -3,6 +3,6 @@ import RequirementVersionService from '../services/RequirementVersionService'
 
 const requirementRoutes = new Router();
 
-requirementRoutes.get('/requirements/:projectId/:requirementId/:nonFunctional', RequirementVersionService.index);
+requirementRoutes.get('/requirements/:projectId/:parentId/', RequirementVersionService.index);
 
 export default requirementRoutes;

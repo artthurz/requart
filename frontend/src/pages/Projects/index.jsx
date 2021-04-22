@@ -12,17 +12,18 @@ import {
   ThemeProvider,
 } from '@material-ui/core/styles';
 import Zoom from '@material-ui/core/Zoom';
-import { DataGrid, ptBR, GridToolbar } from '@material-ui/data-grid';
+import { DataGrid, ptBR } from '@material-ui/data-grid';
 import { format, parseISO } from 'date-fns';
-import { Fab, IconButton } from '@material-ui/core';
+import { Fab } from '@material-ui/core';
 import { Dropdown } from '../../components/Dropdown';
 import OpConfirmation from '../../components/OpConfirmation';
-import { Container, Body } from './styles';
+import { Container, Body, useEnterIconButtonStyle } from './styles';
 
 const Projects = () => {
   let history = useHistory();
   const iconButton = useIconButtonStyle();
   const iconButtonRotated = useRotatedIconButtonStyle();
+  const enterIconButton = useEnterIconButtonStyle();
   const [isNewProjectModalOpen, setIsNewProjectModalOpen] = useState(false);
   const [isEditProjectModalOpen, setIsEditProjectModalOpen] = useState(false);
   const [projects, setProjects] = useState([]);
@@ -64,13 +65,13 @@ const Projects = () => {
       width: 70,
       renderCell: ({ row }) => {
         return (
-          <IconButton
-            color="primary"
-            aria-label="details"
+          <Fab
             onClick={() => history.push('/projects/details', row)}
+            className={enterIconButton.root}
+            color="primary"
           >
             <MdDirections />
-          </IconButton>
+          </Fab>
         );
       },
     },

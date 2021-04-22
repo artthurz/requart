@@ -4,14 +4,36 @@ import Project from '../models/Project';
 import User from '../models/User';
 
 class ProjectService {
-  async index(req, res) {
-    const projects = await Project.findAll({ where: { deleted_at: null },
+  
+  async indexOne(req, res) {
+    const project = await Project.findOne({
+      where: { name: req.params.name, deleted_at: null },
       include: [
-      {
-        model: User,
-        as: 'owner',
-        attributes: ['id', 'name'],
-      }]
+        {
+          model: User,
+          as: 'owner',
+          attributes: ['id', 'name'],
+        },
+      ],
+    });
+
+    if (_.isEmpty(project)) {
+      return res.status(400).json({ error: 'Project not found.' });
+    }
+
+    return res.json(project);
+  }
+
+  async index(req, res) {
+    const projects = await Project.findAll({
+      where: { deleted_at: null },
+      include: [
+        {
+          model: User,
+          as: 'owner',
+          attributes: ['id', 'name'],
+        },
+      ],
     });
 
     if (_.isEmpty(projects)) {
@@ -27,7 +49,7 @@ class ProjectService {
       description: Yup.string().required(),
       delivery_date: Yup.date().required(),
       owner_id: Yup.number().required(),
-      link: Yup.string()
+      link: Yup.string(),
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -43,12 +65,12 @@ class ProjectService {
 
   async update(req, res) {
     const schema = Yup.object().shape({
-        name: Yup.string(),
-        description: Yup.string(),
-        delivery_date: Yup.date(),
-        owner_id: Yup.number(),
-        status: Yup.boolean(),
-        link: Yup.string()
+      name: Yup.string(),
+      description: Yup.string(),
+      delivery_date: Yup.date(),
+      owner_id: Yup.number(),
+      status: Yup.boolean(),
+      link: Yup.string(),
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -66,7 +88,6 @@ class ProjectService {
     return res.json(project);
   }
 
-
   async delete(req, res) {
     const project = await Project.findByPk(req.params.id);
 
@@ -74,7 +95,7 @@ class ProjectService {
       return res.status(400).json({ error: 'Project not found.' });
     }
 
-    project.deleted_at = new Date;
+    project.deleted_at = new Date();
 
     await project.save();
 

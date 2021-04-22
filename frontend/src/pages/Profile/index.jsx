@@ -71,8 +71,11 @@ function Profile() {
 
   return (
     <Container>
-      <Panel>
-        <PanelHeader title="Editar Perfil" />
+      <Panel styles={{ backgroundColor: 'rgb(32, 32, 36)' }}>
+        <PanelHeader
+          title="Editar Perfil"
+          styles={{ backgroundColor: 'rgb(32, 32, 36)', color: '#fff', boxShadowColor: 'rgb(18, 18, 20)'}}
+        />
         <div className="edit-user-body ">
           <button
             className="avatar-button"
@@ -101,7 +104,7 @@ function Profile() {
               type="email"
               id="email"
               name="email"
-              style={{ marginBottom: '20px' }}
+              style={{ marginBottom: '20px'}}
               value={formik.values.email}
               onChange={formik.handleChange}
               error={formik.touched.email && Boolean(formik.errors.email)}

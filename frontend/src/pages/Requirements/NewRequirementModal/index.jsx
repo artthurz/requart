@@ -9,7 +9,6 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
-import Switch from '@material-ui/core/Switch';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { MdClose } from 'react-icons/md';

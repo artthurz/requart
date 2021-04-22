@@ -9,7 +9,7 @@ class RequirementVersionService {
   async index(req, res) {
 
     const requirements = await Requirement.findAll({
-      where: { project_id: req.params.projectId, requirement_id: req.params.requirementId, non_functional: req.params.nonFunctional, deletedAt: null },
+      where: { project_id: req.params.projectId, parent_id: req.params.parentId, deleted_at: null },
       order: [['version', 'DESC']],
       attributes: [
         'id',
@@ -18,6 +18,7 @@ class RequirementVersionService {
         'description',
         'latest_version',
         'non_functional',
+        'parent_id',
         'version',
         'createdAt',
         'updatedAt',
